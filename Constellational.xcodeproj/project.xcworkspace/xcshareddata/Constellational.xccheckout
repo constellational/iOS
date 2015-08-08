@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>035888B3-7298-4D40-92D3-8D4216E5FC80</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Constellational</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>1805EB144F7F9DF399BF7EBC461B23CC6D3EEE4A</key>
+		<string>https://github.com/constellational/ios</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Constellational.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>1805EB144F7F9DF399BF7EBC461B23CC6D3EEE4A</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/constellational/ios</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>1805EB144F7F9DF399BF7EBC461B23CC6D3EEE4A</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>1805EB144F7F9DF399BF7EBC461B23CC6D3EEE4A</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ios</string>
+		</dict>
+	</array>
+</dict>
+</plist>
