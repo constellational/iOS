@@ -9,7 +9,7 @@ var {
   View,
 } = React;
 
-class SettingsPage extends React.component {
+class SettingsPage extends React.Component {
   render() {
     var title = 'Settings';
     var instructions = 'Pick a username';
