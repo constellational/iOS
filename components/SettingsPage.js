@@ -1,5 +1,6 @@
 'use strict'
-var APIURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
+
+var SettingActions = require('../actions/SettingActions');
 var React = require('react-native');
 
 var {
@@ -11,10 +12,9 @@ var {
 
 class SettingsPage extends React.Component {
   constructor() {
-    if (this.props.username) {
-      var title = 'Settings';
-      var instructions = 'Change your username';
-    } else {
+    var title = 'Settings';
+    var instructions = 'Change your username';
+    if (!this.props.username) {
       var title = 'Welcome!';
       var instructions = 'Pick a username';
     }
@@ -24,16 +24,9 @@ class SettingsPage extends React.Component {
     };
   } 
 
-  signup(username) {
-    return fetch(APIURL + '/' + username, {method: 'POST'});
-  }
-
   render() {
-    if (this.props.username) {
-      var returnKeyType = 'done';
-    } else {
-      var returnKeyType = 'join';
-    }
+    if (this.props.username) var returnKeyType = 'done';
+    else var returnKeyType = 'join';
     return (
       <View style={styles.page}>
         <Text style={styles.heading}>{this.state.heading}</Text>
@@ -48,13 +41,13 @@ class SettingsPage extends React.Component {
           placeholder='username' 
           onSubmitEditing={(event) => {
             this.setState({heading: 'Signing you up', subheading: 'Checking your username'});
-            this.signup(event.nativeEvent.text).then((meta) => {
-              this.setState({heading: 'Yay!', subheading: 'Let\'s get you started'});
-            }).catch(() => {
-              this.setState({heading: 'Oops!', subheading: 'That username\'s been taken'});
-            });
-            // this.props.route.data.title = event.nativeEvent.text;
-            // LogActions.edit(this.props.route);
+            SettingActions.signup(event.nativeEvent.text);
+            // how do you catch errors in flux?
+            // if things go well
+            // this.setState({heading: 'Yay!', subheading: 'Let\'s get you started'});
+            // navigator magic
+            // else
+            // this.setState({heading: 'Oops!', subheading: 'That username\'s been taken'});
           }}
         />
       </View>
