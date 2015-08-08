@@ -1,5 +1,5 @@
 'use strict'
-
+var APIURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
 var React = require('react-native');
 
 var {
@@ -10,21 +10,36 @@ var {
 } = React;
 
 class SettingsPage extends React.Component {
-  render() {
+  constructor() {
     if (this.props.username) {
       var title = 'Settings';
       var instructions = 'Change your username';
-      var returnKeyType = 'done';
     } else {
       var title = 'Welcome!';
       var instructions = 'Pick a username';
+    }
+    this.state = {
+      heading = title;
+      subheading = instructions;
+    };
+  } 
+
+  signup(username) {
+    return fetch(APIURL + '/' + username, {method: 'POST'});
+  }
+
+  render() {
+    if (this.props.username) {
+      var returnKeyType = 'done';
+    } else {
       var returnKeyType = 'join';
     }
     return (
       <View style={styles.page}>
-        <Text style={styles.heading}>{title}</Text>
-        <Text style={styles.subheading}>{instructions}</Text>
-        <TextInput 
+        <Text style={styles.heading}>{this.state.heading}</Text>
+        <Text style={styles.subheading}>{this.state.subheading}</Text>
+        <TextInput
+          ref='username'
           keyboardType='url'
           returnKeyType={returnKeyType}
           value={this.props.username}
@@ -32,6 +47,12 @@ class SettingsPage extends React.Component {
           style={styles.input}
           placeholder='username' 
           onSubmitEditing={(event) => {
+            this.setState({heading: 'Signing you up', subheading: 'Checking your username'});
+            this.signup(event.nativeEvent.text).then((meta) => {
+              this.setState({heading: 'Yay!', subheading: 'Let\'s get you started'});
+            }).catch(() => {
+              this.setState({heading: 'Oops!', subheading: 'That username\'s been taken'});
+            });
             // this.props.route.data.title = event.nativeEvent.text;
             // LogActions.edit(this.props.route);
           }}
