@@ -2,8 +2,11 @@
 
 var SettingActions = require('../actions/SettingActions');
 var SettingStore = require('../store/SettingStore');
-var Viewport = require('react-native-viewport');
+
 var React = require('react-native');
+var Viewport = require('react-native-viewport');
+var KeyboardEvents = require('react-native-keyboardevents');
+var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 var {
   StyleSheet,
@@ -17,6 +20,28 @@ class EditPage extends React.Component {
     Viewport.getDimensions((dim) => {
       this.state = {height:dim.height};
     });
+    this.updateKeyboardSpace = this.updateKeyboardSpace.bind(this);
+    this.resetKeyboardSpace = this.resetKeyboardSpace.bind(this);
+  }
+
+  updateKeyboardSpace(frames) {
+    this.setState({height: this.state.height - frames.end.height});
+  }
+
+  resetKeyboardSpace() {
+    Viewport.getDimensions((dim) => {
+      this.setState({height: dim.height});
+    });
+  }
+
+  componentDidMount() {
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, this.updateKeyboardSpace);
+    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.resetKeyboardSpace);
+  }
+
+  componentWillUnmount() {
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardDidShowEvent, this.updateKeyboardSpace);
+    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.resetKeyboardSpace);
   }
 
   render() {
