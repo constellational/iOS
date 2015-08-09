@@ -16,7 +16,8 @@ var {
 } = React;
 
 class EditPage extends React.Component {
-  constructor() {
+  constructor(props, context) {
+    super(props, context);
     Viewport.getDimensions((dim) => {
       this.state = {height:dim.height};
     });

@@ -1,7 +1,7 @@
 'use strict'
 
 var SettingActions = require('../actions/SettingActions');
-var SettingStore = require('../store/SettingStore');
+var SettingStore = require('../stores/SettingStore');
 var React = require('react-native');
 
 var {
@@ -12,7 +12,8 @@ var {
 } = React;
 
 class SettingsPage extends React.Component {
-  constructor() {
+  constructor(props, context) {
+    super(props, context);
     var title = 'Settings';
     var instructions = 'Change your username';
     if (!this.props.username) {
@@ -20,8 +21,8 @@ class SettingsPage extends React.Component {
       var instructions = 'Pick a username';
     }
     this.state = {
-      heading = title;
-      subheading = instructions;
+      heading: title,
+      subheading: instructions
     };
   } 
 

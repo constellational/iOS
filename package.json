@@ -6,6 +6,9 @@
     "start": "node_modules/react-native/packager/packager.sh"
   },
   "dependencies": {
+    "events": "^1.0.2",
+    "flux": "^2.0.3",
+    "object-assign": "^3.0.0",
     "react-native": "^0.8.0",
     "react-native-keyboardevents": "^0.4.5",
     "react-native-viewport": "0.0.2"
