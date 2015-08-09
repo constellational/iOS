@@ -24,6 +24,24 @@ class SettingsPage extends React.Component {
     };
   } 
 
+  componentDidMount() {
+    SettingStore.addChangeListener(this.onChange);
+  }
+
+  componentWillUnmount() {
+    SettingStore.removeChangeListener(this.onChange);
+  }
+
+  onChange() {
+    var stat = SettingStore.getUsernameStatus();
+    if (stat == 'unavailable') {
+      this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
+    } else if (stat == 'available') {
+      this.setState({heading: 'Yay! You\'re all set', subheading: 'Time to write something'});
+      // go somewhere?;
+    }
+  }
+
   render() {
     if (this.props.username) var returnKeyType = 'done';
     else var returnKeyType = 'join';
@@ -42,12 +60,6 @@ class SettingsPage extends React.Component {
           onSubmitEditing={(event) => {
             this.setState({heading: 'Signing you up', subheading: 'Checking your username'});
             SettingActions.signup(event.nativeEvent.text);
-            // how do you catch errors in flux?
-            // if things go well
-            // this.setState({heading: 'Yay!', subheading: 'Let\'s get you started'});
-            // navigator magic
-            // else
-            // this.setState({heading: 'Oops!', subheading: 'That username\'s been taken'});
           }}
         />
       </View>

@@ -8,9 +8,15 @@ var assign = require('object-assign');
 var CHANGE_EVENT = 'change';
 
 var _settings = {};
+var _usernameStatus = '';
 
 function update(settings) {
   _settings = settings;
+  SettingStore.emitChange();
+}
+
+function updateUsernameStatus(usernameStatus) {
+  _usernameStatus = usernameStatus;
   SettingStore.emitChange();
 }
 
@@ -21,6 +27,10 @@ var SettingStore = assign({}, EventEmitter.prototype, {
 
   getUsername: function() {
     return _settings.username;
+  },
+  
+  getUsernameStatus: function() {
+    return _usernameStatus;
   },
 
   emitChange: function() {
@@ -39,12 +49,13 @@ var SettingStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case 'signup':
+      updateUsernameStatus('checking');
       fetch(APIURL + '/' + action.username, {method: 'POST'}).then((meta) => {
+        updateUsernameStatus('available');
         update(meta);
         AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(meta))
       }).catch((err) => {
-        //how does error handling work in flux???
-        //error could be that username is in use
+        updateUsernameStatus('unavailable');
       });
       break;
   }
