@@ -1,6 +1,7 @@
 'use strict'
 
 var SettingActions = require('../actions/SettingActions');
+var SettingStore = require('../store/SettingStore');
 var React = require('react-native');
 
 var {
