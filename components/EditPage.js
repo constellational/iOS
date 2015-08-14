@@ -71,4 +71,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = SettingsPage;
+module.exports = EditPage;

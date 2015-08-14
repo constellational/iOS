@@ -2,6 +2,7 @@
 
 var ArticleActions = require('../actions/ArticleActions');
 var ArticleStore = require('../stores/ArticleStore');
+var Article = require('./Article');
 var React = require('react-native');
 
 var {
@@ -50,4 +51,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = SettingsPage;
+module.exports = ArticlesPage;

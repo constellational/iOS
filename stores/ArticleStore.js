@@ -21,7 +21,7 @@ function load() {
 }
 
 
-var SettingStore = assign({}, EventEmitter.prototype, {
+var ArticleStore = assign({}, EventEmitter.prototype, {
   getAll: function() {
     if (!_articleIDs) load();
     return _articleIDs.map(id => _articles[id]);
@@ -74,4 +74,4 @@ AppDispatcher.register(function(action) {
   }
 });
 
-module.exports = SettingStore;
+module.exports = ArticleStore;
