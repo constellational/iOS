@@ -2,6 +2,9 @@
 
 var SettingActions = require('../actions/SettingActions');
 var SettingStore = require('../store/SettingStore');
+var NavBar = require('./NavBar');
+var PostButton = require('./PostButton');
+var CancelButton = require('./CancelButton');
 
 var React = require('react-native');
 var Viewport = require('react-native-viewport');
@@ -23,6 +26,8 @@ class EditPage extends React.Component {
     });
     this.updateKeyboardSpace = this.updateKeyboardSpace.bind(this);
     this.resetKeyboardSpace = this.resetKeyboardSpace.bind(this);
+    this.cancelButton = (<CancelButton />);
+    this.postButton = (<PostButton />);
   }
 
   updateKeyboardSpace(frames) {
@@ -48,6 +53,7 @@ class EditPage extends React.Component {
   render() {
     return (
       <View style={styles.page}>
+        <NavBar leftButton={this.cancelButton} rightButton={this.postButton}/>
         <TextInput
           ref='editor'
           multiline={true}

@@ -2,6 +2,8 @@
 
 var ArticleActions = require('../actions/ArticleActions');
 var ArticleStore = require('../stores/ArticleStore');
+var NavBar = require('./NavBar');
+var CreateButton = require('./CreateButton');
 var Article = require('./Article');
 var React = require('react-native');
 
@@ -15,6 +17,7 @@ class ArticlesPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.createButton = (<CreateButton />);
     this.state = {
       articles: dataSource.cloneWithRows(ArticleStore.getAll());
     };
@@ -36,6 +39,7 @@ class ArticlesPage extends React.Component {
 
   render() {
     return (
+      <NavBar rightButton={this.createButton}/>
       <ListView
         automaticallyAdjustContentInsets={false}
         dataSource={this.state.articles}
