@@ -4,6 +4,9 @@ var SettingActions = require('../actions/SettingActions');
 var SettingStore = require('../stores/SettingStore');
 var React = require('react-native');
 
+var Heading = require('./Heading');
+var Subheading = require('./Subheading');
+
 var {
   StyleSheet,
   Text,
@@ -43,8 +46,8 @@ class WelcomePage extends React.Component {
   render() {
     return (
       <View style={styles.page}>
-        <Text style={styles.heading}>{this.state.heading}</Text>
-        <Text style={styles.subheading}>{this.state.subheading}</Text>
+        <Heading text={this.state.heading} />
+        <Subheading text={this.state.subheading} />
         <TextInput
           ref='username'
           keyboardType='url'
@@ -67,14 +70,6 @@ var styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  heading: {
-    fontSize: 42,
-    padding: 10,
-  },
-  subheading: {
-    fontSize: 24,
-    padding: 8,
   },
   input: {
     alignSelf: 'center',
