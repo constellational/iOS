@@ -2,53 +2,34 @@
 
 var React = require('react-native');
 
-var SettingsPage = require('./components/SettingsPage');
+var WelcomePage = require('./components/WelcomePage');
+var EditPage = require('./components/EditPage');
+var ArticlesPage = require('./components/ArticlesPage');
 
 var {
   AppRegistry,
-  StyleSheet,
-  Text,
-  View,
+  Navigator
 } = React;
 
-var Constellational = React.createClass({
-//      <View style={styles.container}>
-//        <Text style={styles.welcome}>
-//          Welcome to React Native!
-//        </Text>
-//        <Text style={styles.instructions}>
-//          To get started, edit index.ios.js
-//        </Text>
-//        <Text style={styles.instructions}>
-//          Press Cmd+R to reload,{'\n'}
-//          Cmd+D or shake for dev menu
-//        </Text>
-//      </View>
- 
-  render: function() {
-    return (
-      <SettingsPage />
-   );
+class Constellational extends React.Component {
+  renderScene(route, nav) {
+    switch (route.id) {
+      case 'welcome':
+        return <WelcomePage navigator={nav} />;
+      case 'articles':
+        return <ArticlesPage navigator={nav} />;
+      default:
+        return <EditPage route={route} navigator={nav} />;
+    }
   }
-});
 
-var styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+  render() {
+    return (<Navigator
+      initialRoute={{id: 'welcome'}}
+      renderScene={this.renderScene}
+      configureScene={() => Navigator.SceneConfigs.FloatFromRight}
+    />);
+  }
+}
 
 AppRegistry.registerComponent('Constellational', () => Constellational);
