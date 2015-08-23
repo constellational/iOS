@@ -1,0 +1,23 @@
+'use strict'
+
+var React = require('react-native');
+
+var {
+  StyleSheet,
+  Text,
+} = React;
+
+class Heading extends React.Component {
+  render() {
+    return (<Text style={styles.heading} allowFontScaling={true}>{this.props.text}</Text>);
+  }
+}
+
+var styles = StyleSheet.create({
+  heading: {
+    font: -apple-system-headline1,
+    padding: 10,
+  }
+});
+
+module.exports = Heading;
