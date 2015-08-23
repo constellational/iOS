@@ -11,15 +11,11 @@ var {
   View,
 } = React;
 
-class SettingsPage extends React.Component {
+class WelcomePage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    var title = 'Settings';
-    var instructions = 'Change your username';
-    if (!this.props.username) {
-      var title = 'Welcome!';
-      var instructions = 'Pick a username';
-    }
+    var title = 'Welcome!';
+    var instructions = 'Pick a username';
     this.state = {
       heading: title,
       subheading: instructions
@@ -35,18 +31,16 @@ class SettingsPage extends React.Component {
   }
 
   onChange() {
-    var stat = SettingStore.getUsernameStatus();
-    if (stat == 'unavailable') {
+    var usernameStatus = SettingStore.getUsernameStatus();
+    if (usernameStatus == 'unavailable') {
       this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
-    } else if (stat == 'available') {
+    } else if (usernameStatus == 'available') {
       this.setState({heading: 'Yay! You\'re all set', subheading: 'Time to write something'});
       // go somewhere?;
     }
   }
 
   render() {
-    if (this.props.username) var returnKeyType = 'done';
-    else var returnKeyType = 'join';
     return (
       <View style={styles.page}>
         <Text style={styles.heading}>{this.state.heading}</Text>
@@ -54,8 +48,7 @@ class SettingsPage extends React.Component {
         <TextInput
           ref='username'
           keyboardType='url'
-          returnKeyType={returnKeyType}
-          value={this.props.username}
+          returnKeyType='join'
           autofocus={true}
           style={styles.input}
           placeholder='username' 
@@ -96,4 +89,4 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = SettingsPage;
+module.exports = WelcomePage;
