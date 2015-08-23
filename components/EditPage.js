@@ -1,7 +1,7 @@
 'use strict'
 
 var SettingActions = require('../actions/SettingActions');
-var SettingStore = require('../store/SettingStore');
+var SettingStore = require('../stores/SettingStore');
 var NavBar = require('./NavBar');
 var PostButton = require('./PostButton');
 var CancelButton = require('./CancelButton');

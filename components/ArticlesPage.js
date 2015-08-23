@@ -39,18 +39,23 @@ class ArticlesPage extends React.Component {
 
   render() {
     return (
-      <NavBar rightButton={this.createButton}/>
-      <ListView
-        automaticallyAdjustContentInsets={false}
-        dataSource={this.state.articles}
-        renderRow={article => (<Article article={article} />)}
-        style={styles.list}
-      />
+      <View style={styles.page}>
+        <NavBar rightButton={this.createButton}/>
+        <ListView
+          automaticallyAdjustContentInsets={false}
+          dataSource={this.state.articles}
+          renderRow={article => (<Article article={article} />)}
+          style={styles.list}
+        />
+      </View>
     );
   }
 }
 
 var styles = StyleSheet.create({
+  page: {
+    flex: 1,
+  },
   list: {
   },
 });

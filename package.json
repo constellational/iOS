@@ -10,6 +10,8 @@
     "flux": "^2.0.3",
     "object-assign": "^3.0.0",
     "react-native": "^0.8.0",
+    "react-native-button": "^1.2.1",
+    "react-native-icons": "^0.3.4",
     "react-native-keyboardevents": "^0.4.5",
     "react-native-viewport": "0.0.2"
   }

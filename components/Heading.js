@@ -15,7 +15,8 @@ class Heading extends React.Component {
 
 var styles = StyleSheet.create({
   heading: {
-    font: -apple-system-headline1,
+    fontSize: 42,
+    fontWeight: '100',
     padding: 10,
   }
 });
