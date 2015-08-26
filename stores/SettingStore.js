@@ -50,12 +50,14 @@ AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case 'signup':
       updateUsernameStatus('checking');
-      fetch(APIURL + '/' + action.username, {method: 'POST'}).then((meta) => {
-        updateUsernameStatus('available');
-        update(meta);
-        AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(meta))
-      }).catch((err) => {
-        updateUsernameStatus('unavailable');
+      fetch(APIURL + '/' + action.username, {method: 'POST'}).then(res => {
+        if (res.status === 403) updateUsernameStatus('unavailable');
+        else res.json().then(data => {
+          console.log(data);
+          updateUsernameStatus('available');
+          update(data);
+          AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+        });
       });
       break;
   }

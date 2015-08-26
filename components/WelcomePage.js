@@ -23,6 +23,7 @@ class WelcomePage extends React.Component {
       heading: title,
       subheading: instructions
     };
+    this.onChange = this.onChange.bind(this);
   } 
 
   componentDidMount() {
