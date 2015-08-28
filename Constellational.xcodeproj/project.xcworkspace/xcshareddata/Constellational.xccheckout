@@ -7,20 +7,16 @@
 	<key>IDESourceControlProjectIdentifier</key>
 	<string>035888B3-7298-4D40-92D3-8D4216E5FC80</string>
 	<key>IDESourceControlProjectName</key>
-	<string>project</string>
+	<string>Constellational</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>1455A357FB239B0FBBA5D84B79AD87019449AD05</key>
-		<string>https://github.com/logworks/ios</string>
 		<key>1805EB144F7F9DF399BF7EBC461B23CC6D3EEE4A</key>
 		<string>https://github.com/constellational/ios</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>Constellational.xcodeproj/project.xcworkspace</string>
+	<string>Constellational.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>1455A357FB239B0FBBA5D84B79AD87019449AD05</key>
-		<string>../../../../logworks/ios</string>
 		<key>1805EB144F7F9DF399BF7EBC461B23CC6D3EEE4A</key>
 		<string>../..</string>
 	</dict>
@@ -37,14 +33,6 @@
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
 			<string>1805EB144F7F9DF399BF7EBC461B23CC6D3EEE4A</string>
-			<key>IDESourceControlWCCName</key>
-			<string>ios</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>1455A357FB239B0FBBA5D84B79AD87019449AD05</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ios</string>
 		</dict>

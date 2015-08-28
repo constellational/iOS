@@ -7,7 +7,6 @@ var PostButton = require('./PostButton');
 var CancelButton = require('./CancelButton');
 
 var React = require('react-native');
-var Viewport = require('react-native-viewport');
 var KeyboardEvents = require('react-native-keyboardevents');
 var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
@@ -21,23 +20,10 @@ var {
 class EditPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    Viewport.getDimensions((dim) => {
-      this.state = {height:dim.height};
-    });
-    this.updateKeyboardSpace = this.updateKeyboardSpace.bind(this);
-    this.resetKeyboardSpace = this.resetKeyboardSpace.bind(this);
+    this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
+    this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
     this.cancelButton = (<CancelButton />);
     this.postButton = (<PostButton />);
-  }
-
-  updateKeyboardSpace(frames) {
-    this.setState({height: this.state.height - frames.end.height});
-  }
-
-  resetKeyboardSpace() {
-    Viewport.getDimensions((dim) => {
-      this.setState({height: dim.height});
-    });
   }
 
   componentDidMount() {
@@ -52,7 +38,12 @@ class EditPage extends React.Component {
 
   render() {
     return (
-      <View style={styles.page}>
+      <View 
+        style={styles.page} 
+        onLayout={(ev) => {
+          var fullHeight = ev.nativeEvent.layout.height;
+          this.setState({height: fullHeight, fullHeight: fullHeight});
+      }}>
         <NavBar leftButton={this.cancelButton} rightButton={this.postButton}/>
         <TextInput
           ref='editor'

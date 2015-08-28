@@ -25,7 +25,6 @@
 		251164E71B8A1B9F00E67555 /* libReactNativeIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 251164E61B8A1B9100E67555 /* libReactNativeIcons.a */; };
 		251164E91B8A1C0100E67555 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 251164E81B8A1C0100E67555 /* ionicons.ttf */; };
 		25F9C21B1B77924400D4A996 /* libRNKeyboardEvents.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F9C21A1B77923100D4A996 /* libRNKeyboardEvents.a */; };
-		25F9C2221B77A29500D4A996 /* libViewport.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F9C2211B77A23B00D4A996 /* libViewport.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 /* End PBXBuildFile section */
 
@@ -107,13 +106,6 @@
 			remoteGlobalIDString = F12AFB9B1ADAF8F800E0535D;
 			remoteInfo = RNKeyboardEvents;
 		};
-		25F9C2201B77A23B00D4A996 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 25F9C21C1B77A23B00D4A996 /* Viewport.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = Viewport;
-		};
 		78C398B81ACF4ADC00677621 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */;
@@ -153,7 +145,6 @@
 		251164E11B8A1B9100E67555 /* ReactNativeIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeIcons.xcodeproj; path = "node_modules/react-native-icons/ios/ReactNativeIcons.xcodeproj"; sourceTree = "<group>"; };
 		251164E81B8A1C0100E67555 /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = ionicons.ttf; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/ionicons.ttf"; sourceTree = "<group>"; };
 		25F9C2151B77923100D4A996 /* RNKeyboardEvents.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNKeyboardEvents.xcodeproj; path = "node_modules/react-native-keyboardevents/RNKeyboardEvents.xcodeproj"; sourceTree = "<group>"; };
-		25F9C21C1B77A23B00D4A996 /* Viewport.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Viewport.xcodeproj; path = "node_modules/react-native-viewport/Viewport.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -171,7 +162,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				251164E71B8A1B9F00E67555 /* libReactNativeIcons.a in Frameworks */,
-				25F9C2221B77A29500D4A996 /* libViewport.a in Frameworks */,
 				25F9C21B1B77924400D4A996 /* libRNKeyboardEvents.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -300,14 +290,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		25F9C21D1B77A23B00D4A996 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				25F9C2211B77A23B00D4A996 /* libViewport.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		78C398B11ACF4ADC00677621 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -320,7 +302,6 @@
 			isa = PBXGroup;
 			children = (
 				251164E11B8A1B9100E67555 /* ReactNativeIcons.xcodeproj */,
-				25F9C21C1B77A23B00D4A996 /* Viewport.xcodeproj */,
 				25F9C2151B77923100D4A996 /* RNKeyboardEvents.xcodeproj */,
 				146833FF1AC3E56700842450 /* React.xcodeproj */,
 				00C302A71ABCB8CE00DB3ED1 /* RCTActionSheet.xcodeproj */,
@@ -479,10 +460,6 @@
 					ProductGroup = 25F9C2161B77923100D4A996 /* Products */;
 					ProjectRef = 25F9C2151B77923100D4A996 /* RNKeyboardEvents.xcodeproj */;
 				},
-				{
-					ProductGroup = 25F9C21D1B77A23B00D4A996 /* Products */;
-					ProjectRef = 25F9C21C1B77A23B00D4A996 /* Viewport.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -561,13 +538,6 @@
 			fileType = archive.ar;
 			path = libRNKeyboardEvents.a;
 			remoteRef = 25F9C2191B77923100D4A996 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		25F9C2211B77A23B00D4A996 /* libViewport.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libViewport.a;
-			remoteRef = 25F9C2201B77A23B00D4A996 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		78C398B91ACF4ADC00677621 /* libRCTLinking.a */ = {
