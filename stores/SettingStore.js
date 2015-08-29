@@ -20,12 +20,20 @@ function updateUsernameStatus(usernameStatus) {
   SettingStore.emitChange();
 }
 
+function load() {
+  return AsyncStore.getItems(STORAGE_KEY).then(str => {
+    return JSON.parse(str);
+  }).then(update);
+}
+
 var SettingStore = assign({}, EventEmitter.prototype, {
   getToken: function() {
+    if (!_settings) load();
     return _settings.token;
   },
 
   getUsername: function() {
+    if (!_settings) load();
     return _settings.username;
   },
   

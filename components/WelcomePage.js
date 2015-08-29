@@ -40,7 +40,7 @@ class WelcomePage extends React.Component {
       this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
     } else if (usernameStatus == 'available') {
       this.setState({heading: 'Yay! You\'re all set', subheading: 'Time to write something'});
-      // go somewhere?;
+      this.props.navigator.push('edit');
     }
   }
 
