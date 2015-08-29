@@ -2,7 +2,7 @@
 
 var SettingActions = require('../actions/SettingActions');
 var SettingStore = require('../stores/SettingStore');
-var EntryActions = require('../actions/EntryActions');
+var ArticleActions = require('../actions/ArticleActions');
 var NavBar = require('./NavBar');
 var PostButton = require('./PostButton');
 var CancelButton = require('./CancelButton');
@@ -41,7 +41,7 @@ class EditPage extends React.Component {
     KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.resetKeyboardSpace);
   }
 
-  saveEntry() {
+  saveArticle() {
     if (this.route.article) ArticleActions.edit(this.state.article);
     else ArticleActions.create(this.state.article);
     this.props.navigator.pop();
