@@ -21,7 +21,9 @@ var {
 class EditPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    this.setState({article: this.props.initialArticle});
+    var initialArticle = this.route.article;
+    if (!initialArticle) initialArticle = {data:''};
+    this.setState({article: initialArticle});
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
     this.saveEntry = this.saveEntry.bind(this);
@@ -40,18 +42,16 @@ class EditPage extends React.Component {
   }
 
   saveEntry() {
-    if (this.props.initialArticle) ArticleActions.edit(this.state.article);
+    if (this.route.article) ArticleActions.edit(this.state.article);
     else ArticleActions.create(this.state.article);
     this.props.navigator.pop();
   }
 
   render() {
     return (
-      <View 
-        style={styles.page} 
-        onLayout={(ev) => {
-          var fullHeight = ev.nativeEvent.layout.height;
-          this.setState({height: fullHeight, fullHeight: fullHeight});
+      <View style={styles.page} onLayout={(ev) => {
+        var fullHeight = ev.nativeEvent.layout.height;
+        this.setState({height: fullHeight, fullHeight: fullHeight});
       }}>
         <NavBar leftButton={this.cancelButton} rightButton={this.postButton}/>
         <TextInput
