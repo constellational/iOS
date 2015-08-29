@@ -27,7 +27,7 @@ class EditPage extends React.Component {
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
     this.saveEntry = this.saveEntry.bind(this);
-    this.cancelButton = (<CancelButton />);
+    this.cancelButton = (<CancelButton onPress={this.props.navigator.pop()} />);
     this.postButton = (<PostButton edit={this.props.article} onPress={this.saveArticle}/>);
   }
 
