@@ -8,8 +8,10 @@ var {
 } = React;
 
 class PostButton extends React.Component {
+  var text = 'Post';
+  if (this.props.edit) text = 'Save';
   render() {
-    return (<Button onPress={this.props.onPress} style={styles.postButton}>Post</Button>);
+    return (<Button onPress={this.props.onPress} style={styles.postButton}>{text}</Button>);
   }
 }
 

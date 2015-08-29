@@ -2,6 +2,7 @@
 
 var SettingActions = require('../actions/SettingActions');
 var SettingStore = require('../stores/SettingStore');
+var EntryActions = require('../actions/EntryActions');
 var NavBar = require('./NavBar');
 var PostButton = require('./PostButton');
 var CancelButton = require('./CancelButton');
@@ -20,10 +21,12 @@ var {
 class EditPage extends React.Component {
   constructor(props, context) {
     super(props, context);
+    this.setState({article: this.props.initialArticle});
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
+    this.saveEntry = this.saveEntry.bind(this);
     this.cancelButton = (<CancelButton />);
-    this.postButton = (<PostButton />);
+    this.postButton = (<PostButton edit={this.props.article} onPress={this.saveArticle}/>);
   }
 
   componentDidMount() {
@@ -34,6 +37,12 @@ class EditPage extends React.Component {
   componentWillUnmount() {
     KeyboardEventEmitter.off(KeyboardEvents.KeyboardDidShowEvent, this.updateKeyboardSpace);
     KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.resetKeyboardSpace);
+  }
+
+  saveEntry() {
+    if (this.props.initialArticle) ArticleActions.edit(this.state.article);
+    else ArticleActions.create(this.state.article);
+    this.props.navigator.pop();
   }
 
   render() {
@@ -48,7 +57,7 @@ class EditPage extends React.Component {
         <TextInput
           ref='editor'
           multiline={true}
-          value={this.props.value}
+          value={this.state.article.data}
           autofocus={true}
           style={[styles.input, {height:this.state.height}]}
         />

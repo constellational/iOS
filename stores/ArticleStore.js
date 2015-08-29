@@ -56,6 +56,18 @@ AppDispatcher.register(function(action) {
       });
       break;
 
+    case 'edit':
+      var username = SettingStore.getUsername();
+      action.article.token = SettingStore.getToken();
+      fetch(APIURL + '/' + username, {method: 'PUT', body: JSON.stringify(article), HEADERS}).then(article => {
+        _articles[article.id] = article;
+        ArticleStore.emitChange();
+        AsyncStore.setItems('articles', JSON.stringify(_articles));
+      }).catch(err => {
+        alert("couldn't edit article: " + err);
+      });
+      break;
+
     case 'delete':
       var username = SettingStore.getUsername();
       var token = SettingStore.getToken();
