@@ -17,7 +17,7 @@ class ArticlesPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.createButton = (<CreateButton />);
+    this.createButton = (<CreateButton onPress={() => this.props.navigator.push('edit')}/>);
     this.state = {
       articles: dataSource.cloneWithRows(ArticleStore.getAll())
     };
