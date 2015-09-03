@@ -21,7 +21,7 @@ var {
 class EditPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    var initialArticle = this.route.article;
+    var initialArticle = this.props.route.article;
     if (!initialArticle) initialArticle = {data:''};
     this.setState({article: initialArticle});
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
