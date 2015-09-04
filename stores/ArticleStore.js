@@ -1,6 +1,7 @@
 var APIURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
 var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
 
+var SettingStore = require('../stores/SettingStore');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
@@ -45,7 +46,7 @@ AppDispatcher.register(function(action) {
     case 'create':
       var username = SettingStore.getUsername();
       action.article.token = SettingStore.getToken();
-      fetch(APIURL + '/' + username, {method: 'POST', body: JSON.stringify(article), HEADERS}).then(article => {
+      fetch(APIURL + '/' + username, {method: 'POST', body: JSON.stringify(action.article), HEADERS}).then(article => {
         _articleIDs.unshift(article.id);
         _articles[article.id] = article;
         ArticleStore.emitChange();

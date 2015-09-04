@@ -23,7 +23,7 @@ class EditPage extends React.Component {
     super(props, context);
     var initialArticle = this.props.route.article;
     if (!initialArticle) initialArticle = {data:''};
-    this.setState({article: initialArticle});
+    this.state = {article: initialArticle};
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
     this.saveArticle = this.saveArticle.bind(this);
@@ -42,7 +42,7 @@ class EditPage extends React.Component {
   }
 
   saveArticle() {
-    if (this.route.article) ArticleActions.edit(this.state.article);
+    if (this.props.route.article) ArticleActions.edit(this.state.article);
     else ArticleActions.create(this.state.article);
     this.props.navigator.pop();
   }
@@ -69,11 +69,12 @@ class EditPage extends React.Component {
 var styles = StyleSheet.create({
   page: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
   input: {
-    padding: 10,
+    padding: 20,
+    paddingTop: 10,
+    fontSize: 20,
   },
 });
 

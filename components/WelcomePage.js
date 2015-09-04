@@ -16,7 +16,7 @@ var {
 
 class WelcomePage extends React.Component {
   constructor(props, context) {
-    super(props, context);
+    super(props);
     var title = 'Welcome!';
     var instructions = 'Pick a username';
     this.state = {
@@ -35,11 +35,17 @@ class WelcomePage extends React.Component {
   }
 
   onChange() {
+    var foo = () => {
+      console.log("hi");
+      this.props.navigator.replace({id: 'articles'});
+      this.props.navigator.push({id: 'edit'});
+    };
     var usernameStatus = SettingStore.getUsernameStatus();
-    if (usernameStatus == 'unavailable') {
+    if (usernameStatus === 'unavailable') {
       this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
-    } else if (usernameStatus == 'available') {
+    } else if (usernameStatus === 'available') {
       this.setState({heading: 'Yay! You\'re all set', subheading: 'Time to write something'});
+      foo();
       this.props.navigator.replace({id: 'articles'});
       this.props.navigator.push({id: 'edit'});
     }

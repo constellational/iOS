@@ -8,6 +8,7 @@ var Article = require('./Article');
 var React = require('react-native');
 
 var {
+  ListView,
   StyleSheet,
   Text,
   View,
