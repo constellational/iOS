@@ -6,6 +6,7 @@ var React = require('react-native');
 
 var Heading = require('./Heading');
 var Subheading = require('./Subheading');
+var BigButton = require('./BigButton');
 
 var {
   StyleSheet,
@@ -49,33 +50,22 @@ class WelcomePage extends React.Component {
     }
   }
 
-  renderNextButton() {
-    if (this.state.success) {
-      return (<Text 
-        style={[styles.textBox, {padding: 12, fontSize: 18}]} 
-        onPress={this.getStarted}>
-          Get Started
-        </Text>);
-    } 
-  }
-
-  renderUsernameField() {
-    if (!this.state.success) {
-      return (
-        <TextInput
-          ref='username'
-          keyboardType='url'
-          returnKeyType='join'
-          autofocus={true}
-          style={styles.textBox}
-          placeholder='username' 
-          onSubmitEditing={(event) => {
-            this.setState({heading: 'Signing you up', subheading: 'Checking your username'});
-            SettingActions.signup(event.nativeEvent.text);
-          }}
-        />
-      );
-    }
+  renderBottomSection() {
+    if (this.state.success) return(<BigButton onPress={this.getStarted} text={'Get Started'} />);
+    else return (
+      <TextInput
+        ref='username'
+        keyboardType='url'
+        returnKeyType='join'
+        autofocus={true}
+        style={styles.textBox}
+        placeholder='username' 
+        onSubmitEditing={(event) => {
+          this.setState({heading: 'Signing you up', subheading: 'Checking your username'});
+          SettingActions.signup(event.nativeEvent.text);
+        }}
+      />
+    );
   }
 
   render() {
@@ -83,8 +73,9 @@ class WelcomePage extends React.Component {
       <View style={styles.page}>
         <Heading text={this.state.heading} />
         <Subheading text={this.state.subheading} />
-        {this.renderNextButton()}
-        {this.renderUsernameField()}
+        <View style={styles.bottomSection}>
+          {this.renderBottomSection()}
+        </View>
       </View>
     );
   }
@@ -99,7 +90,6 @@ var styles = StyleSheet.create({
   textBox: {
     alignSelf: 'center',
     margin: 10,
-    marginBottom: 120,
     height: 46,
     width: 150,
     textAlign: 'center',
@@ -107,7 +97,9 @@ var styles = StyleSheet.create({
     borderColor: 'black',
     borderRadius: 5,
   },
-
+  bottomSection: {
+    marginBottom: 120,
+  },
 });
 
 module.exports = WelcomePage;
