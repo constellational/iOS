@@ -27,7 +27,8 @@ class EditPage extends React.Component {
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
     this.saveArticle = this.saveArticle.bind(this);
-    this.cancelButton = (<CancelButton onPress={this.props.navigator.pop} />);
+    this.saveDraft = this.saveDraft.bind(this);
+    this.cancelButton = (<CancelButton onPress={this.saveDraft} />);
     this.postButton = (<PostButton edit={this.props.article} onPress={this.saveArticle}/>);
   }
 
@@ -47,6 +48,11 @@ class EditPage extends React.Component {
     this.props.navigator.pop();
   }
 
+  saveDraft() {
+    ArticleActions.saveDraft(this.state.article);
+    this.props.navigator.pop();
+  }
+
   render() {
     return (
       <View style={styles.page} onLayout={(ev) => {
@@ -57,6 +63,9 @@ class EditPage extends React.Component {
         <TextInput
           ref='editor'
           multiline={true}
+          onChangeText={(text) => {
+            this.state.article.data = text;
+          }}
           value={this.state.article.data}
           autofocus={true}
           style={[styles.input, {height:this.state.height}]}

@@ -20,6 +20,13 @@ var ArticleActions = {
       actionType: 'delete',
       article: article
     });
+  },
+
+  saveDraft: function(article) {
+    AppDispatcher.dispatch({
+      actionType: 'saveDraft',
+      article: article
+    });
   }
 
 };

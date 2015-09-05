@@ -22,6 +22,7 @@ class ArticlesPage extends React.Component {
     this.state = {
       articles: dataSource.cloneWithRows(ArticleStore.getAll())
     };
+    this.onChange = this.onChange.bind(this);
   } 
 
   componentDidMount() {

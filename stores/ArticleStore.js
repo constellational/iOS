@@ -5,6 +5,12 @@ var SettingStore = require('../stores/SettingStore');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+var React = require('react-native');
+
+var {
+    AsyncStorage,
+} = React;
+
 
 var CHANGE_EVENT = 'change';
 
@@ -12,9 +18,9 @@ var _articles = {};
 var _articleIDs = [];
 
 function load() {
-  return AsyncStore.getItems('articles').then(str => {
+  return AsyncStorage.getItem('articles').then(str => {
     _articles = JSON.parse(str);
-    return AsyncStore.getItems('articleIDs').then(str => {
+    return AsyncStorage.getItem('articleIDs').then(str => {
       _articleIDs = JSON.parse(str);
       ArticleStore.emitChange();
     });
@@ -50,8 +56,8 @@ AppDispatcher.register(function(action) {
         _articleIDs.unshift(article.id);
         _articles[article.id] = article;
         ArticleStore.emitChange();
-        AsyncStore.setItems('articles', JSON.stringify(_articles));
-        AsyncStore.setItems('articleIDs', JSON.stringify(_articleIDs));
+        AsyncStorage.setItem('articles', JSON.stringify(_articles));
+        AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
       }).catch(err => {
         alert("couldn't store article: " + err);
       });
@@ -63,7 +69,7 @@ AppDispatcher.register(function(action) {
       fetch(APIURL + '/' + username, {method: 'PUT', body: JSON.stringify(article), HEADERS}).then(article => {
         _articles[article.id] = article;
         ArticleStore.emitChange();
-        AsyncStore.setItems('articles', JSON.stringify(_articles));
+        AsyncStorage.setItem('articles', JSON.stringify(_articles));
       }).catch(err => {
         alert("couldn't edit article: " + err);
       });
@@ -77,13 +83,25 @@ AppDispatcher.register(function(action) {
         var i = _articleIDs.indexOf(action.id);
         _articleIDs.splice(i, 1);
         delete _articles[action.id];
-        ArticleStore.emitChange();
-        AsyncStore.setItems('articles', JSON.stringify(_articles));
-        AsyncStore.setItems('articleIDs', JSON.stringify(_articleIDs));
+        ArticleStoe.emitChange();
+        AsyncStorage.setItem('articles', JSON.stringify(_articles));
+        AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
       }).catch(err => {
         alert("Couldn't delete article: " + err);
       });
       break;
+
+    case 'saveDraft':
+      let article = action.article;
+      if (!article.id) article.id = Date.now();
+      article.isDraft = true;
+      _articleIDs.unshift(article.id);
+      _articles[article.id] = article;
+      ArticleStore.emitChange();
+      AsyncStorage.setItem('articles', JSON.stringify(_articles));
+      AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
+      break;
+
   }
 });
 

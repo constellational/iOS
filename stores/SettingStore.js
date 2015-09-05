@@ -4,6 +4,11 @@ var STORAGEKEY = 'settings';
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
 var assign = require('object-assign');
+var React = require('react-native');
+
+var {
+    AsyncStorage,
+} = React;
 
 var CHANGE_EVENT = 'change';
 
@@ -21,7 +26,7 @@ function updateUsernameStatus(usernameStatus) {
 }
 
 function load() {
-  return AsyncStore.getItems(STORAGE_KEY).then(str => {
+  return AsyncStorage.getItem(STORAGE_KEY).then(str => {
     return JSON.parse(str);
   }).then(update);
 }

@@ -24,6 +24,7 @@ class Article extends React.Component {
 
   render() {
     var article = this.props.article;
+    console.log(article);
     return (
       <View style={styles.article} onLongPress={this.showOptions}>
         <Text style={styles.heading}>{article.heading}</Text>
