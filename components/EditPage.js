@@ -22,13 +22,15 @@ class EditPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     var initialArticle = this.props.route.article;
+    let leftButton = null;
+    this.cancelButton = (<CancelButton onPress={this.saveDraft} />);
     if (!initialArticle) initialArticle = {data:''};
-    this.state = {article: initialArticle};
+    else leftButton = this.cancelButton;
+    this.state = {article: initialArticle, leftButton: leftButton};
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
     this.saveArticle = this.saveArticle.bind(this);
     this.saveDraft = this.saveDraft.bind(this);
-    this.cancelButton = (<CancelButton onPress={this.saveDraft} />);
     this.postButton = (<PostButton edit={this.props.article} onPress={this.saveArticle}/>);
   }
 
@@ -53,18 +55,25 @@ class EditPage extends React.Component {
     this.props.navigator.pop();
   }
 
+  toggleCancelButton() {
+    if (this.state.article.data) this.state.leftButton = this.cancelButton;
+    else this.state.leftButton = null;
+  }
+
   render() {
     return (
       <View style={styles.page} onLayout={(ev) => {
         var fullHeight = ev.nativeEvent.layout.height;
         this.setState({height: fullHeight, fullHeight: fullHeight});
       }}>
-        <NavBar leftButton={this.cancelButton} rightButton={this.postButton}/>
+        <NavBar leftButton={this.state.leftButton} rightButton={this.postButton}/>
         <TextInput
           ref='editor'
           multiline={true}
           onChangeText={(text) => {
             this.state.article.data = text;
+            if (text) this.setState({leftButton: this.cancelButton});
+            else this.setState({leftButton: null});
           }}
           value={this.state.article.data}
           autofocus={true}
