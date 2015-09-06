@@ -14,6 +14,7 @@ var CHANGE_EVENT = 'change';
 
 var _settings = {};
 var _usernameStatus = '';
+var _isSignedUp = '';
 
 function update(settings) {
   _settings = settings;
@@ -27,6 +28,7 @@ function updateUsernameStatus(usernameStatus) {
 
 function load() {
   return AsyncStorage.getItem(STORAGE_KEY).then(str => {
+    if (str) _isSignedUp = true;
     return JSON.parse(str);
   }).then(update);
 }
@@ -44,6 +46,10 @@ var SettingStore = assign({}, EventEmitter.prototype, {
   
   getUsernameStatus: function() {
     return _usernameStatus;
+  },
+
+  getSignUpStatus: function() {
+    return _isSignedUp;
   },
 
   emitChange: function() {
