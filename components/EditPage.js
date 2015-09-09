@@ -22,7 +22,8 @@ class EditPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     var initialArticle = this.props.route.article;
-    let leftButton = null;
+    var leftButton = null;
+    this.saveDraft = this.saveDraft.bind(this);
     this.cancelButton = (<CancelButton onPress={this.saveDraft} />);
     if (!initialArticle) initialArticle = {data:''};
     else leftButton = this.cancelButton;
@@ -30,7 +31,6 @@ class EditPage extends React.Component {
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
     this.saveArticle = this.saveArticle.bind(this);
-    this.saveDraft = this.saveDraft.bind(this);
     this.postButton = (<PostButton edit={this.props.article} onPress={this.saveArticle}/>);
   }
 
