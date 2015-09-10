@@ -25,10 +25,10 @@ class Article extends React.Component {
   render() {
     var article = this.props.article;
     console.log(article);
+        //<Text style={styles.heading}>{article.heading}</Text>
     return (
       <View style={styles.article} onLongPress={this.showOptions}>
-        <Text style={styles.heading}>{article.heading}</Text>
-        <Text style={styles.body}>{article.text}</Text>
+        <Text style={styles.body}>{article.data}</Text>
       </View>
     );
   }
