@@ -28,13 +28,17 @@ class Article extends React.Component {
         //<Text style={styles.heading}>{article.heading}</Text>
     return (
       <View style={styles.article} onLongPress={this.showOptions}>
-        <Text style={styles.body}>{article.data}</Text>
+        <Text style={styles.text}>{article.data}</Text>
       </View>
     );
   }
 }
 
 var styles = StyleSheet.create({
+  article: {
+    padding: 10,
+    marginBottom: 20,
+  },
   heading: {
     fontSize: 42,
     padding: 10,
