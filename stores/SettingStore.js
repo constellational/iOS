@@ -1,4 +1,5 @@
 var APIURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
+var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
 var STORAGEKEY = 'settings';
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
@@ -69,7 +70,7 @@ AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case 'signup':
       updateUsernameStatus('checking');
-      fetch(APIURL + '/' + action.username, {method: 'POST'}).then(res => {
+      fetch(APIURL, {method: 'POST', body: JSON.stringify({username: action.username}), HEADERS}).then(res => {
         if (res.status === 403) updateUsernameStatus('unavailable');
         else res.json().then(data => {
           console.log(data);
