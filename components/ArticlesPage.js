@@ -2,6 +2,7 @@
 
 var ArticleActions = require('../actions/ArticleActions');
 var ArticleStore = require('../stores/ArticleStore');
+var SettingStore = require('../stores/SettingStore');
 var NavBar = require('./NavBar');
 var CreateButton = require('./CreateButton');
 var Article = require('./Article');
@@ -23,13 +24,20 @@ class ArticlesPage extends React.Component {
       articles: dataSource.cloneWithRows(ArticleStore.getAll())
     };
     this.onChange = this.onChange.bind(this);
+    this.onSettingStoreChange = () => {
+      var isSignedUp = SettingStore.getSignUpStatus();
+      SettingStore.removeChangeListener(this.onSettingStoreChange);
+      if (isSignedUp == false) this.props.navigator.push({id: 'welcome'});
+    };
   } 
 
   componentDidMount() {
+    SettingStore.addChangeListener(this.onSettingStoreChange);
     ArticleStore.addChangeListener(this.onChange);
   }
 
   componentWillUnmount() {
+    SettingStore.removeChangeListener(this.onSettingStoreChange);
     ArticleStore.removeChangeListener(this.onChange);
   }
 

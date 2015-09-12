@@ -1,6 +1,6 @@
 var APIURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
 var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
-var STORAGEKEY = 'settings';
+var STORAGE_KEY = 'settings';
 
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 var EventEmitter = require('events').EventEmitter;
@@ -30,18 +30,21 @@ function updateUsernameStatus(usernameStatus) {
 function load() {
   return AsyncStorage.getItem(STORAGE_KEY).then(str => {
     if (str) _isSignedUp = true;
+    else _isSignedUp = false;
     return JSON.parse(str);
   }).then(update);
 }
 
 var SettingStore = assign({}, EventEmitter.prototype, {
+  loadSettings: function() {
+    load();
+  },
+
   getToken: function() {
-    if (!_settings) load();
     return _settings.token;
   },
 
   getUsername: function() {
-    if (!_settings) load();
     return _settings.username;
   },
   
