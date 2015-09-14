@@ -51,9 +51,11 @@ AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case 'create':
       var username = SettingStore.getUsername();
+      var url = APIURL + '/' + username;
       action.article.token = SettingStore.getToken();
       console.log(action.article);
-      fetch(APIURL + '/' + username, {method: 'POST', body: JSON.stringify(action.article), headers: HEADERS}).then(article => {
+      var params = {method: 'POST', body: JSON.stringify(action.article), headers: HEADERS};
+      fetch(url, params).then(res => res.json()).then((article) => {
         _articleIDs.unshift(article.id);
         _articles[article.id] = article;
         ArticleStore.emitChange();
