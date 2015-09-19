@@ -72,7 +72,7 @@ describe('update', function() {
   });
 
   it('should support apply', function() {
-    expect(update(2, {$apply: function(x) { return x * 2; }})).toEqual(4);
+    expect(update(2, {$apply: (x) => x * 2})).toEqual(4);
     expect(update.bind(null, 2, {$apply: 123})).toThrow(
       'Invariant Violation: update(): expected spec of $apply to be a ' +
       'function; got 123.'
@@ -82,7 +82,7 @@ describe('update', function() {
   it('should support deep updates', function() {
     expect(update({a: 'b', c: {d: 'e'}}, {c: {d: {$set: 'f'}}})).toEqual({
       a: 'b',
-      c: {d: 'f'}
+      c: {d: 'f'},
     });
   });
 
@@ -96,7 +96,7 @@ describe('update', function() {
 
   it('should perform safe hasOwnProperty check', function() {
     expect(update({}, {'hasOwnProperty': {$set: 'a'}})).toEqual({
-      'hasOwnProperty': 'a'
+      'hasOwnProperty': 'a',
     });
   });
 });

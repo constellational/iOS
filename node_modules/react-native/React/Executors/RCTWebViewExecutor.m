@@ -58,7 +58,7 @@ RCT_EXPORT_MODULE()
   return self;
 }
 
-- (id)init
+- (instancetype)init
 {
   return [self initWithWebView:nil];
 }
@@ -66,10 +66,10 @@ RCT_EXPORT_MODULE()
 - (void)setUp
 {
   if (!_webView) {
-    _webView = [[UIWebView alloc] init];
+    _webView = [UIWebView new];
   }
 
-  _objectsToInject = [[NSMutableDictionary alloc] init];
+  _objectsToInject = [NSMutableDictionary new];
   _commentsRegex = [NSRegularExpression regularExpressionWithPattern:@"(^ *?\\/\\/.*?$|\\/\\*\\*[\\s\\S]*?\\*\\/)" options:NSRegularExpressionAnchorsMatchLines error:NULL],
   _scriptTagsRegex = [NSRegularExpression regularExpressionWithPattern:@"<(\\/?script[^>]*?)>" options:0 error:NULL],
   _webView.delegate = self;
@@ -92,12 +92,11 @@ RCT_EXPORT_MODULE()
 - (void)executeJSCall:(NSString *)name
                method:(NSString *)method
             arguments:(NSArray *)arguments
-              context:(NSNumber *)executorID
              callback:(RCTJavaScriptCallback)onComplete
 {
   RCTAssert(onComplete != nil, @"");
   [self executeBlockOnJavaScriptQueue:^{
-    if (!self.isValid || ![RCTGetExecutorID(self) isEqualToNumber:executorID]) {
+    if (!self.isValid) {
       return;
     }
 

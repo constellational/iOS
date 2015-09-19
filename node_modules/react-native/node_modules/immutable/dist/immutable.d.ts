@@ -28,7 +28,7 @@
  * [ES6]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/New_in_JavaScript/ECMAScript_6_support_in_Mozilla
  */
 
-declare module 'immutable' {
+declare module Immutable {
 
   /**
    * Deeply converts plain JS objects and arrays to Immutable Maps and Lists.
@@ -38,7 +38,7 @@ declare module 'immutable' {
    * and proceeding to the top-level collection itself), along with the key
    * refering to each collection and the parent JS object provided as `this`.
    * For the top level, object, the key will be `""`. This `reviver` is expected
-   * to return a new Immutable Iterable, allowing for custom convertions from
+   * to return a new Immutable Iterable, allowing for custom conversions from
    * deep JS objects.
    *
    * This example converts JSON to List and OrderedMap:
@@ -60,6 +60,25 @@ declare module 'immutable' {
    * `Immutable.fromJS` is conservative in it's conversion. It will only convert
    * arrays which pass `Array.isArray` to Lists, and only raw objects (no custom
    * prototype) to Map.
+   *
+   * Keep in mind, when using JS objects to construct Immutable Maps, that
+   * JavaScript Object properties are always strings, even if written in a
+   * quote-less shorthand, while Immutable Maps accept keys of any type.
+   *
+   * ```js
+   * var obj = { 1: "one" };
+   * Object.keys(obj); // [ "1" ]
+   * obj["1"]; // "one"
+   * obj[1];   // "one"
+   *
+   * var map = Map(obj);
+   * map.get("1"); // "one"
+   * map.get(1);   // undefined
+   * ```
+   *
+   * Property access for JavaScript Objects first converts the key to a string,
+   * but since Immutable Map keys can be of any type the argument to `get()` is
+   * not altered.
    *
    * [1]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse#Example.3A_Using_the_reviver_parameter
    *      "Using the reviver parameter"
@@ -148,7 +167,7 @@ declare module 'immutable' {
 
     /**
      * Returns a new List which excludes this `index` and with a size 1 less
-     * than this List. Values at indicies above `index` are shifted down by 1 to
+     * than this List. Values at indices above `index` are shifted down by 1 to
      * fill the position.
      *
      * This is synonymous with `list.splice(index, 1)`.
@@ -404,6 +423,24 @@ declare module 'immutable' {
    *     var newMap = Map({key: "value"});
    *     var newMap = Map([["key", "value"]]);
    *
+   * Keep in mind, when using JS objects to construct Immutable Maps, that
+   * JavaScript Object properties are always strings, even if written in a
+   * quote-less shorthand, while Immutable Maps accept keys of any type.
+   *
+   * ```js
+   * var obj = { 1: "one" };
+   * Object.keys(obj); // [ "1" ]
+   * obj["1"]; // "one"
+   * obj[1];   // "one"
+   *
+   * var map = Map(obj);
+   * map.get("1"); // "one"
+   * map.get(1);   // undefined
+   * ```
+   *
+   * Property access for JavaScript Objects first converts the key to a string,
+   * but since Immutable Map keys can be of any type the argument to `get()` is
+   * not altered.
    */
   export function Map<K, V>(): Map<K, V>;
   export function Map<K, V>(iter: KeyedIterable<K, V>): Map<K, V>;
@@ -456,8 +493,8 @@ declare module 'immutable' {
      * each iterable and sets it on this Map.
      *
      * If any of the values provided to `merge` are not Iterable (would return
-     * false for `Immutable.isIterable`) then they are deeply converted via
-     * `Immutable.fromJS` before being merged. However, if the value is an
+     * false for `Immutable.Iterable.isIterable`) then they are deeply converted
+     * via `Immutable.fromJS` before being merged. However, if the value is an
      * Iterable but includes non-iterable JS objects or arrays, those nested
      * values will be preserved.
      *
@@ -1074,7 +1111,7 @@ declare module 'immutable' {
    *       }
    *     }
    *
-   *     var myRecord = new ABRecord(b:3)
+   *     var myRecord = new ABRecord({b: 3})
    *     myRecord.getAB() // 4
    *
    */
@@ -2473,4 +2510,8 @@ declare module 'immutable' {
     next(): { value: T; done: boolean; }
   }
 
+}
+
+declare module "immutable" {
+  export = Immutable
 }

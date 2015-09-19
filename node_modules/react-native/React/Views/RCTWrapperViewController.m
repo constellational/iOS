@@ -52,8 +52,8 @@
   return self;
 }
 
-RCT_NOT_IMPLEMENTED(-initWithNibName:(NSString *)nn bundle:(NSBundle *)nb)
-RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
+RCT_NOT_IMPLEMENTED(- (instancetype)initWithNibName:(NSString *)nn bundle:(NSBundle *)nb)
+RCT_NOT_IMPLEMENTED(- (instancetype)initWithCoder:(NSCoder *)aDecoder)
 
 - (void)viewWillLayoutSubviews
 {
@@ -61,6 +61,20 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
 
   _currentTopLayoutGuide = self.topLayoutGuide;
   _currentBottomLayoutGuide = self.bottomLayoutGuide;
+}
+
+static UIView *RCTFindNavBarShadowViewInView(UIView *view)
+{
+  if ([view isKindOfClass:[UIImageView class]] && view.bounds.size.height <= 1) {
+    return view;
+  }
+  for (UIView *subview in view.subviews) {
+    UIView *shadowView = RCTFindNavBarShadowViewInView(subview);
+    if (shadowView) {
+      return shadowView;
+    }
+  }
+  return nil;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -71,20 +85,18 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
   if ([self.parentViewController isKindOfClass:[UINavigationController class]])
   {
     [self.navigationController
-      setNavigationBarHidden:_navItem.navigationBarHidden
-      animated:animated];
-
-    if (!_navItem) {
-      return;
-    }
+     setNavigationBarHidden:_navItem.navigationBarHidden
+     animated:animated];
 
     UINavigationBar *bar = self.navigationController.navigationBar;
     bar.barTintColor = _navItem.barTintColor;
     bar.tintColor = _navItem.tintColor;
     bar.translucent = _navItem.translucent;
-    if (_navItem.titleTextColor) {
-      [bar setTitleTextAttributes:@{NSForegroundColorAttributeName : _navItem.titleTextColor}];
-    }
+    bar.titleTextAttributes = _navItem.titleTextColor ? @{
+      NSForegroundColorAttributeName: _navItem.titleTextColor
+    } : nil;
+
+    RCTFindNavBarShadowViewInView(bar).hidden = _navItem.shadowHidden;
 
     UINavigationItem *item = self.navigationItem;
     item.title = _navItem.title;
@@ -112,13 +124,13 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
 
 - (void)handleNavLeftButtonTapped
 {
-  [_eventDispatcher sendInputEventWithName:@"topNavLeftButtonTap"
+  [_eventDispatcher sendInputEventWithName:@"navLeftButtonTap"
                                       body:@{@"target":_navItem.reactTag}];
 }
 
 - (void)handleNavRightButtonTapped
 {
-  [_eventDispatcher sendInputEventWithName:@"topNavRightButtonTap"
+  [_eventDispatcher sendInputEventWithName:@"navRightButtonTap"
                                       body:@{@"target":_navItem.reactTag}];
 }
 
@@ -129,7 +141,8 @@ RCT_NOT_IMPLEMENTED(-initWithCoder:(NSCoder *)aDecoder)
   // finishes, be it a swipe to go back or a standard tap on the back button
   [super didMoveToParentViewController:parent];
   if (parent == nil || [parent isKindOfClass:[UINavigationController class]]) {
-    [self.navigationListener wrapperViewController:self didMoveToNavigationController:(UINavigationController *)parent];
+    [self.navigationListener wrapperViewController:self
+                     didMoveToNavigationController:(UINavigationController *)parent];
   }
 }
 

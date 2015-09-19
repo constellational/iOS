@@ -6,8 +6,8 @@
  * LICENSE file in the root directory of this source tree. An additional grant
  * of patent rights can be found in the PATENTS file in the same directory.
  *
-* @providesModule ReactFragment
-*/
+ * @providesModule ReactFragment
+ */
 
 'use strict';
 
@@ -23,10 +23,13 @@ var warning = require('warning');
  * create a keyed fragment. The resulting data structure is opaque, for now.
  */
 
+var fragmentKey;
+var didWarnKey;
+var canWarnForReactFragment;
+
 if (__DEV__) {
-  var fragmentKey = '_reactFragment';
-  var didWarnKey = '_reactDidWarn';
-  var canWarnForReactFragment = false;
+  fragmentKey = '_reactFragment';
+  didWarnKey = '_reactDidWarn';
 
   try {
     // Feature test. Don't even try to issue this warning if we can't use
@@ -49,7 +52,9 @@ if (__DEV__) {
     );
 
     canWarnForReactFragment = true;
-  } catch (x) { }
+  } catch (x) {
+    canWarnForReactFragment = false;
+  }
 
   var proxyPropertyAccessWithWarning = function(obj, key) {
     Object.defineProperty(obj, key, {
@@ -72,7 +77,7 @@ if (__DEV__) {
         );
         this[didWarnKey] = true;
         this[fragmentKey][key] = value;
-      }
+      },
     });
   };
 
@@ -99,7 +104,7 @@ var ReactFragment = {
       if (typeof object !== 'object' || !object || Array.isArray(object)) {
         warning(
           false,
-          'React.addons.createFragment only accepts a single object.',
+          'React.addons.createFragment only accepts a single object. Got: %s',
           object
         );
         return object;
@@ -116,12 +121,12 @@ var ReactFragment = {
         var proxy = {};
         Object.defineProperty(proxy, fragmentKey, {
           enumerable: false,
-          value: object
+          value: object,
         });
         Object.defineProperty(proxy, didWarnKey, {
           writable: true,
           enumerable: false,
-          value: false
+          value: false,
         });
         for (var key in object) {
           proxyPropertyAccessWithWarning(proxy, key);
@@ -175,7 +180,7 @@ var ReactFragment = {
       }
     }
     return fragment;
-  }
+  },
 };
 
 module.exports = ReactFragment;

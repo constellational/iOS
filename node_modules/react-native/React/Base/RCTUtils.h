@@ -15,16 +15,15 @@
 #import "RCTAssert.h"
 #import "RCTDefines.h"
 
-// Utility functions for JSON object <-> string serialization/deserialization
+// JSON serialization/deserialization
 RCT_EXTERN NSString *RCTJSONStringify(id jsonObject, NSError **error);
 RCT_EXTERN id RCTJSONParse(NSString *jsonString, NSError **error);
 RCT_EXTERN id RCTJSONParseMutable(NSString *jsonString, NSError **error);
-RCT_EXTERN id RCTJSONParseWithOptions(NSString *jsonString, NSError **error, NSJSONReadingOptions options);
 
 // Strip non JSON-safe values from an object graph
 RCT_EXTERN id RCTJSONClean(id object);
 
-// Get MD5 hash of a string (TODO: currently unused. Remove?)
+// Get MD5 hash of a string
 RCT_EXTERN NSString *RCTMD5Hash(NSString *string);
 
 // Get screen metrics in a thread-safe way
@@ -47,6 +46,7 @@ RCT_EXTERN BOOL RCTClassOverridesInstanceMethod(Class cls, SEL selector);
 // Creates a standardized error object
 RCT_EXTERN NSDictionary *RCTMakeError(NSString *message, id toStringify, NSDictionary *extraData);
 RCT_EXTERN NSDictionary *RCTMakeAndLogError(NSString *message, id toStringify, NSDictionary *extraData);
+RCT_EXTERN NSDictionary *RCTJSErrorFromNSError(NSError *error);
 
 // Returns YES if React is running in a test environment
 RCT_EXTERN BOOL RCTRunningInTestEnvironment(void);
@@ -58,7 +58,11 @@ RCT_EXTERN BOOL RCTImageHasAlpha(CGImageRef image);
 RCT_EXTERN NSError *RCTErrorWithMessage(NSString *message);
 
 // Convert nil values to NSNull, and vice-versa
-RCT_EXTERN id RCTNullIfNil(id value);
 RCT_EXTERN id RCTNilIfNull(id value);
+RCT_EXTERN id RCTNullIfNil(id value);
 
-RCT_EXTERN NSDictionary *RCTJSErrorFromNSError(NSError *error);
+// Convert data to a Base64-encoded data URL
+RCT_EXTERN NSURL *RCTDataURL(NSString *mimeType, NSData *data);
+
+// Gzip functionality - compression level in range 0 - 1 (-1 for default)
+RCT_EXTERN NSData *RCTGzipData(NSData *data, float level);

@@ -30,13 +30,17 @@ typedef void (^RCTJavaScriptCallback)(id json, NSError *error);
 - (void)setUp;
 
 /**
+ * Whether the executor has been invalidated
+ */
+@property (nonatomic, readonly, getter=isValid) BOOL valid;
+
+/**
  * Executes given method with arguments on JS thread and calls the given callback
  * with JSValue and JSContext as a result of the JS module call.
  */
 - (void)executeJSCall:(NSString *)name
                method:(NSString *)method
             arguments:(NSArray *)arguments
-              context:(NSNumber *)executorID
              callback:(RCTJavaScriptCallback)onComplete;
 
 /**
@@ -66,6 +70,3 @@ typedef void (^RCTJavaScriptCallback)(id json, NSError *error);
 - (void)executeAsyncBlockOnJavaScriptQueue:(dispatch_block_t)block;
 
 @end
-
-void RCTSetExecutorID(id<RCTJavaScriptExecutor> executor);
-NSNumber *RCTGetExecutorID(id<RCTJavaScriptExecutor> executor);

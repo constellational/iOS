@@ -47,7 +47,15 @@ var ReactCSSTransitionGroupChild = React.createClass({
   displayName: 'ReactCSSTransitionGroupChild',
 
   transition: function(animationType, finishCallback) {
-    var node = this.getDOMNode();
+    var node = React.findDOMNode(this);
+
+    if (!node) {
+      if (finishCallback) {
+        finishCallback();
+      }
+      return;
+    }
+
     var className = this.props.name + '-' + animationType;
     var activeClassName = className + '-active';
     var noEventTimeout = null;
@@ -95,7 +103,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
   flushClassNameQueue: function() {
     if (this.isMounted()) {
       this.classNameQueue.forEach(
-        CSSCore.addClass.bind(CSSCore, this.getDOMNode())
+        CSSCore.addClass.bind(CSSCore, React.findDOMNode(this))
       );
     }
     this.classNameQueue.length = 0;
@@ -138,7 +146,7 @@ var ReactCSSTransitionGroupChild = React.createClass({
 
   render: function() {
     return onlyChild(this.props.children);
-  }
+  },
 });
 
 module.exports = ReactCSSTransitionGroupChild;
