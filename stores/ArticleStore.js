@@ -14,8 +14,8 @@ var {
 
 var CHANGE_EVENT = 'change';
 
-var _articles = {};
-var _articleIDs = [];
+var _articles = null;
+var _articleIDs = null;
 
 function load() {
   return AsyncStorage.getItem('articles').then(str => {
@@ -30,8 +30,12 @@ function load() {
 
 var ArticleStore = assign({}, EventEmitter.prototype, {
   getAll: function() {
-    if (!_articleIDs) load();
-    return _articleIDs.map(id => _articles[id]);
+    if (!_articleIDs) {
+      load();
+      return [];
+    } else {
+      return _articleIDs.map(id => _articles[id]);
+    }
   },
 
   emitChange: function() {
@@ -59,8 +63,9 @@ AppDispatcher.register(function(action) {
         _articleIDs.unshift(article.id);
         _articles[article.id] = article;
         ArticleStore.emitChange();
-        AsyncStorage.setItem('articles', JSON.stringify(_articles));
-        AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
+        return AsyncStorage.setItem('articles', JSON.stringify(_articles)).then(() => {
+          return AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
+        });
       }).catch(err => {
         alert("couldn't store article: " + err);
       });
@@ -69,10 +74,10 @@ AppDispatcher.register(function(action) {
     case 'edit':
       var username = SettingStore.getUsername();
       action.article.token = SettingStore.getToken();
-      fetch(APIURL + '/' + username, {method: 'PUT', body: JSON.stringify(article), HEADERS}).then(article => {
+      fetch(APIURL + '/' + username, {method: 'PUT', body: JSON.stringify(action.article), HEADERS}).then(article => {
         _articles[article.id] = article;
         ArticleStore.emitChange();
-        AsyncStorage.setItem('articles', JSON.stringify(_articles));
+        return AsyncStorage.setItem('articles', JSON.stringify(_articles));
       }).catch(err => {
         alert("couldn't edit article: " + err);
       });
@@ -86,9 +91,10 @@ AppDispatcher.register(function(action) {
         var i = _articleIDs.indexOf(action.id);
         _articleIDs.splice(i, 1);
         delete _articles[action.id];
-        ArticleStoe.emitChange();
-        AsyncStorage.setItem('articles', JSON.stringify(_articles));
-        AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
+        ArticleStore.emitChange();
+        return AsyncStorage.setItem('articles', JSON.stringify(_articles)).then(() => {
+          return AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
+        });
       }).catch(err => {
         alert("Couldn't delete article: " + err);
       });
@@ -101,8 +107,11 @@ AppDispatcher.register(function(action) {
       _articleIDs.unshift(article.id);
       _articles[article.id] = article;
       ArticleStore.emitChange();
-      AsyncStorage.setItem('articles', JSON.stringify(_articles));
-      AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
+      return AsyncStorage.setItem('articles', JSON.stringify(_articles)).then(() => {
+        return AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
+      }).catch(err => {
+        alert("Couldn't save draft: " + err);
+      });
       break;
 
   }
