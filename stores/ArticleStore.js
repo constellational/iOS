@@ -1,5 +1,7 @@
 var APIURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
 var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
+var USER_URL = 'https://s3.amazonaws.com/constellational-store';
+var POST_URL = 'https://d2nxl7qthm5fu1.cloudfront.net';
 
 var SettingStore = require('../stores/SettingStore');
 var AppDispatcher = require('../dispatcher/AppDispatcher');
@@ -17,7 +19,7 @@ var CHANGE_EVENT = 'change';
 var _articles = null;
 var _articleIDs = null;
 
-function load() {
+function loadAsyncStore() {
   return AsyncStorage.getItem('articles').then(str => {
     _articles = JSON.parse(str);
     return AsyncStorage.getItem('articleIDs').then(str => {
@@ -27,11 +29,39 @@ function load() {
   });
 }
 
+function fetchUser(username) {
+  return fetch(USER_URL + '/' + username).then(res => res.json());
+}
 
+function fetchPost(username, url) {
+  return fetch(POST_URL + '/' + username + '/' + url).then(res => res.json());
+}
+
+function fetchFromServer() {
+  var username = SettingStore.getUsername();
+  return fetchUser(username).then((user) => {
+    _articleIDs = user.posts;
+    return user.posts.map(url => fetchPost(username, url));
+  }).then(Promise.all).then((posts) => {
+    posts.map((post) => {
+      _articles[post.id] = post;
+    });
+    ArticleStore.emitChange();
+  });
+} 
+
+function updateAsyncStore() {
+  return AsyncStorage.setItem('articles', JSON.stringify(_articles)).then(() => {
+    if (articleIDs) return AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
+  }).catch(err => {
+    console.log("couldn't store article: " + err);
+  });
+}
+   
 var ArticleStore = assign({}, EventEmitter.prototype, {
   getAll: function() {
     if (!_articleIDs) {
-      load();
+      loadAsyncStore().then(fetchFromServer).then(updateAsyncStore);
       return [];
     } else {
       return _articleIDs.map(id => _articles[id]);
@@ -63,11 +93,7 @@ AppDispatcher.register(function(action) {
         _articleIDs.unshift(article.id);
         _articles[article.id] = article;
         ArticleStore.emitChange();
-        return AsyncStorage.setItem('articles', JSON.stringify(_articles)).then(() => {
-          return AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
-        });
-      }).catch(err => {
-        alert("couldn't store article: " + err);
+        updateAsyncStore();
       });
       break;
 
@@ -77,9 +103,7 @@ AppDispatcher.register(function(action) {
       fetch(APIURL + '/' + username, {method: 'PUT', body: JSON.stringify(action.article), HEADERS}).then(article => {
         _articles[article.id] = article;
         ArticleStore.emitChange();
-        return AsyncStorage.setItem('articles', JSON.stringify(_articles));
-      }).catch(err => {
-        alert("couldn't edit article: " + err);
+        updateAsyncStore();
       });
       break;
 
@@ -92,11 +116,7 @@ AppDispatcher.register(function(action) {
         _articleIDs.splice(i, 1);
         delete _articles[action.id];
         ArticleStore.emitChange();
-        return AsyncStorage.setItem('articles', JSON.stringify(_articles)).then(() => {
-          return AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
-        });
-      }).catch(err => {
-        alert("Couldn't delete article: " + err);
+        updateAsyncStore();
       });
       break;
 
@@ -107,11 +127,7 @@ AppDispatcher.register(function(action) {
       _articleIDs.unshift(article.id);
       _articles[article.id] = article;
       ArticleStore.emitChange();
-      return AsyncStorage.setItem('articles', JSON.stringify(_articles)).then(() => {
-        return AsyncStorage.setItem('articleIDs', JSON.stringify(_articleIDs));
-      }).catch(err => {
-        alert("Couldn't save draft: " + err);
-      });
+      updateAsyncStore();
       break;
 
   }
