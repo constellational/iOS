@@ -1,6 +1,6 @@
 'use strict'
 
-var ArticleActions = require('../actions/ArticleActions');
+var PostActions = require('../actions/PostActions');
 var React = require('react-native');
 
 var {
@@ -10,32 +10,32 @@ var {
   ActionSheetIOS,
 } = React;
 
-class Article extends React.Component {
+class Post extends React.Component {
   showOptions() {
     ActionSheetIOS.showActionSheetWithOptions({
       options: ['Edit', 'Delete', 'Cancel'],
       destructiveButtonIndex: 1,
       cancelButtonIndex: 2
     }, (buttonIndex) => {
-      if (buttonIndex == 0) this.props.navigator.push({id: 'edit', article: this.props.article});
-      else ArticleActions.del(article);
+      if (buttonIndex == 0) this.props.navigator.push({id: 'edit', post: this.props.post});
+      else PostActions.del(post);
     });
   }
 
   render() {
-    var article = this.props.article;
-    console.log(article);
-        //<Text style={styles.heading}>{article.heading}</Text>
+    var post = this.props.post;
+    console.log(post);
+        //<Text style={styles.heading}>{post.heading}</Text>
     return (
-      <View style={styles.article} onLongPress={this.showOptions}>
-        <Text style={styles.text}>{article.data}</Text>
+      <View style={styles.post} onLongPress={this.showOptions}>
+        <Text style={styles.text}>{post.data}</Text>
       </View>
     );
   }
 }
 
 var styles = StyleSheet.create({
-  article: {
+  post: {
     padding: 10,
     marginBottom: 20,
   },
@@ -49,4 +49,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = Article;
+module.exports = Post;

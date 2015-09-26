@@ -37,7 +37,7 @@ class WelcomePage extends React.Component {
   }
 
   getStarted() {
-    this.props.navigator.immediatelyResetRouteStack([{id: 'articles'},{id: 'edit'}]);
+    this.props.navigator.immediatelyResetRouteStack([{id: 'posts'},{id: 'edit'}]);
   }
 
   onChange() {

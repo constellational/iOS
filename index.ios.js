@@ -4,7 +4,7 @@ var React = require('react-native');
 var SettingStore = require('./stores/SettingStore');
 var WelcomePage = require('./components/WelcomePage');
 var EditPage = require('./components/EditPage');
-var ArticlesPage = require('./components/ArticlesPage');
+var PostsPage = require('./components/PostsPage');
 
 var {
   AsyncStorage,
@@ -17,8 +17,8 @@ class Constellational extends React.Component {
     switch (route.id) {
       case 'welcome':
         return <WelcomePage navigator={nav} />;
-      case 'articles':
-        return <ArticlesPage navigator={nav} />;
+      case 'posts':
+        return <PostsPage navigator={nav} />;
       default:
         return <EditPage route={route} navigator={nav} />;
     }
@@ -27,7 +27,7 @@ class Constellational extends React.Component {
   render() {
     SettingStore.loadSettings();
     return (<Navigator
-      initialRoute={{id: 'articles'}}
+      initialRoute={{id: 'posts'}}
       renderScene={this.renderScene}
       configureScene={() => Navigator.SceneConfigs.FloatFromRight}
     />);

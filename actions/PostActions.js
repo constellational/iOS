@@ -1,34 +1,34 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 
-var ArticleActions = {
-  create: function(article) {
+var PostActions = {
+  create: function(post) {
     AppDispatcher.dispatch({
       actionType: 'create',
-      article: article
+      post: post
     });
   },
   
-  edit: function(article) {
+  edit: function(post) {
     AppDispatcher.dispatch({
       actionType: 'edit',
-      article: article
+      post: post
     });
   },
 
-  del: function(article) {
+  del: function(post) {
     AppDispatcher.dispatch({
       actionType: 'delete',
-      article: article
+      post: post
     });
   },
 
-  saveDraft: function(article) {
+  saveDraft: function(post) {
     AppDispatcher.dispatch({
       actionType: 'saveDraft',
-      article: article
+      post: post
     });
   }
 
 };
 
-module.exports = ArticleActions;
+module.exports = PostActions;
