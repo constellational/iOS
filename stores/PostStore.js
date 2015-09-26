@@ -17,13 +17,13 @@ var {
 var CHANGE_EVENT = 'change';
 
 var _posts = null;
-var _postIDs = null;
+var _postURLs = null;
 
 function loadAsyncStore() {
   return AsyncStorage.getItem('posts').then(str => {
     _posts = JSON.parse(str);
-    return AsyncStorage.getItem('postIDs').then(str => {
-      _postIDs = JSON.parse(str);
+    return AsyncStorage.getItem('postURLs').then(str => {
+      _postURLs = JSON.parse(str);
       PostStore.emitChange();
     });
   });
@@ -40,11 +40,11 @@ function fetchPost(username, url) {
 function fetchFromServer() {
   var username = SettingStore.getUsername();
   return fetchUser(username).then((user) => {
-    _postIDs = user.posts;
+    _postURLs = user.posts;
     return user.posts.map(url => fetchPost(username, url));
   }).then(Promise.all).then((posts) => {
     posts.map((post) => {
-      _posts[post.id] = post;
+      _posts[post.url] = post;
     });
     PostStore.emitChange();
   });
@@ -52,7 +52,7 @@ function fetchFromServer() {
 
 function updateAsyncStore() {
   return AsyncStorage.setItem('posts', JSON.stringify(_posts)).then(() => {
-    if (postIDs) return AsyncStorage.setItem('postIDs', JSON.stringify(_postIDs));
+    if (postURLs) return AsyncStorage.setItem('postURLs', JSON.stringify(_postURLs));
   }).catch(err => {
     console.log("couldn't store post: " + err);
   });
@@ -60,11 +60,11 @@ function updateAsyncStore() {
    
 var PostStore = assign({}, EventEmitter.prototype, {
   getAll: function() {
-    if (!_postIDs) {
+    if (!_postURLs) {
       loadAsyncStore().then(fetchFromServer).then(updateAsyncStore);
       return [];
     } else {
-      return _postIDs.map(id => _posts[id]);
+      return _postURLs.map(url => _posts[url]);
     }
   },
 
@@ -90,8 +90,8 @@ AppDispatcher.register(function(action) {
       console.log(action.post);
       var params = {method: 'POST', body: JSON.stringify(action.post), headers: HEADERS};
       fetch(url, params).then(res => res.json()).then((post) => {
-        _postIDs.unshift(post.id);
-        _posts[post.id] = post;
+        _postURLs.unshift(post.url);
+        _posts[post.url] = post;
         PostStore.emitChange();
         updateAsyncStore();
       });
@@ -101,7 +101,7 @@ AppDispatcher.register(function(action) {
       var username = SettingStore.getUsername();
       action.post.token = SettingStore.getToken();
       fetch(APIURL + '/' + username, {method: 'PUT', body: JSON.stringify(action.post), HEADERS}).then(post => {
-        _posts[post.id] = post;
+        _posts[post.url] = post;
         PostStore.emitChange();
         updateAsyncStore();
       });
@@ -110,11 +110,11 @@ AppDispatcher.register(function(action) {
     case 'delete':
       var username = SettingStore.getUsername();
       var token = SettingStore.getToken();
-      var body = JSON.stringify({id: action.id, token: token});
+      var body = JSON.stringify({url: action.url, token: token});
       fetch(APIURL + '/' + username, {method: 'DELETE', body: body, HEADERS}).then(res => {
-        var i = _postIDs.indexOf(action.id);
-        _postIDs.splice(i, 1);
-        delete _posts[action.id];
+        var i = _postURLs.indexOf(action.url);
+        _postURLs.splice(i, 1);
+        delete _posts[action.url];
         PostStore.emitChange();
         updateAsyncStore();
       });
@@ -122,10 +122,10 @@ AppDispatcher.register(function(action) {
 
     case 'saveDraft':
       let post = action.post;
-      if (!post.id) post.id = Date.now();
+      if (!post.url) post.url = Date.now();
       post.isDraft = true;
-      _postIDs.unshift(post.id);
-      _posts[post.id] = post;
+      _postURLs.unshift(post.url);
+      _posts[post.url] = post;
       PostStore.emitChange();
       updateAsyncStore();
       break;
