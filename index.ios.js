@@ -1,5 +1,4 @@
 'use strict';
-var STORAGE_KEY = 'settings';
 
 var React = require('react-native');
 var SettingStore = require('./stores/SettingStore');
