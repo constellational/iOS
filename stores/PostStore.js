@@ -21,9 +21,11 @@ var _postURLs = null;
 
 function loadAsyncStore() {
   return AsyncStorage.getItem('posts').then(str => {
-    _posts = JSON.parse(str);
+    if (!str) _posts = {};
+    else _posts = JSON.parse(str);
     return AsyncStorage.getItem('postURLs').then(str => {
-      _postURLs = JSON.parse(str);
+      if (!str) _postURLs = [];
+      else _postURLs = JSON.parse(str);
       PostStore.emitChange();
     });
   });
@@ -34,7 +36,10 @@ function fetchUser(username) {
 }
 
 function fetchPost(username, url) {
-  return fetch(POST_URL + '/' + username + '/' + url).then(res => res.json());
+  return fetch(POST_URL + '/' + username + '/' + url).then(res => res.json()).then((post) => {
+    post.url = url;
+    return post;
+  });
 }
 
 function fetchFromServer() {
@@ -43,6 +48,7 @@ function fetchFromServer() {
     _postURLs = user.posts;
     return user.posts.map(url => fetchPost(username, url));
   }).then(Promise.all).then((posts) => {
+    console.log(posts);
     posts.map((post) => {
       _posts[post.url] = post;
     });
