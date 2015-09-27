@@ -8,6 +8,7 @@ var {
   Text,
   View,
   ActionSheetIOS,
+  TouchableOpacity
 } = React;
 
 class Post extends React.Component {
@@ -30,9 +31,11 @@ class Post extends React.Component {
   render() {
     var post = this.props.post;
     return (
-      <View style={styles.post} onLongPress={this.showOptions}>
-        <Text style={styles.text}>{post.data}</Text>
-      </View>
+      <TouchableOpacity onLongPress={this.showOptions}>
+        <View style={styles.post} onLongPress={this.showOptions}>
+          <Text style={styles.text}>{post.data}</Text>
+        </View>
+      </TouchableOpacity>
     );
   }
 }
