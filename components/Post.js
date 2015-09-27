@@ -24,7 +24,7 @@ class Post extends React.Component {
       cancelButtonIndex: 2
     }, (buttonIndex) => {
       if (buttonIndex == 0) this.props.nav.push({id: 'edit', post: this.props.post});
-      else PostActions.del(post);
+      else PostActions.del(this.props.post);
     });
   }
 
