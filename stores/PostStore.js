@@ -58,7 +58,7 @@ function fetchFromServer() {
 
 function updateAsyncStore() {
   return AsyncStorage.setItem('posts', JSON.stringify(_posts)).then(() => {
-    if (postURLs) return AsyncStorage.setItem('postURLs', JSON.stringify(_postURLs));
+    if (_postURLs) return AsyncStorage.setItem('postURLs', JSON.stringify(_postURLs));
   }).catch(err => {
     console.log("couldn't store post: " + err);
   });
