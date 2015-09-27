@@ -11,21 +11,24 @@ var {
 } = React;
 
 class Post extends React.Component {
+  constructor(props, context) {
+    super(props, context);
+    this.showOptions = this.showOptions.bind(this);
+  }
+
   showOptions() {
     ActionSheetIOS.showActionSheetWithOptions({
       options: ['Edit', 'Delete', 'Cancel'],
       destructiveButtonIndex: 1,
       cancelButtonIndex: 2
     }, (buttonIndex) => {
-      if (buttonIndex == 0) this.props.navigator.push({id: 'edit', post: this.props.post});
+      if (buttonIndex == 0) this.props.nav.push({id: 'edit', post: this.props.post});
       else PostActions.del(post);
     });
   }
 
   render() {
     var post = this.props.post;
-    console.log(post);
-        //<Text style={styles.heading}>{post.heading}</Text>
     return (
       <View style={styles.post} onLongPress={this.showOptions}>
         <Text style={styles.text}>{post.data}</Text>
