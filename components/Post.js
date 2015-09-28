@@ -32,7 +32,7 @@ class Post extends React.Component {
     var post = this.props.post;
     return (
       <TouchableOpacity onLongPress={this.showOptions}>
-        <View style={styles.post} onLongPress={this.showOptions}>
+        <View style={styles.post}>
           <Text style={styles.text}>{post.data}</Text>
         </View>
       </TouchableOpacity>
