@@ -105,8 +105,10 @@ AppDispatcher.register(function(action) {
 
     case 'edit':
       var username = SettingStore.getUsername();
+      var key = action.post.key;
+      if (!key) key = action.post.created + action.post.id;
       action.post.token = SettingStore.getToken();
-      fetch(APIURL + '/' + username + '/' + action.post.key, {method: 'PUT', body: JSON.stringify(action.post), HEADERS}).then(post => {
+      fetch(APIURL + '/' + username + '/' + key, {method: 'PUT', body: JSON.stringify(action.post), HEADERS}).then(post => {
         _posts[post.url] = post;
         PostStore.emitChange();
         updateAsyncStore();
@@ -117,7 +119,9 @@ AppDispatcher.register(function(action) {
       var username = SettingStore.getUsername();
       var token = SettingStore.getToken();
       var body = JSON.stringify({token: token});
-      fetch(APIURL + '/' + username + '/' + action.post.key, {method: 'DELETE', body: body, HEADERS}).then(res => {
+      var key = action.post.key;
+      if (!key) key = action.post.created + action.post.id;
+      fetch(APIURL + '/' + username + '/' + key, {method: 'DELETE', body: body, HEADERS}).then(res => {
         var i = _postURLs.indexOf(action.post.url);
         _postURLs.splice(i, 1);
         delete _posts[action.post.url];
