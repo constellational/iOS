@@ -46,9 +46,9 @@ function fetchFromServer() {
   var username = SettingStore.getUsername();
   return fetchUser(username).then((user) => {
     _postURLs = user.posts;
-    return user.posts.map(url => fetchPost(username, url));
-  }).then(Promise.all).then((posts) => {
-    console.log(posts);
+    var promiseArr = user.posts.map(url => fetchPost(username, url));
+    return Promise.all(promiseArr);
+  }).then((posts) => {
     posts.map((post) => {
       _posts[post.url] = post;
     });
