@@ -48,8 +48,17 @@ class EditPage extends React.Component {
   }
 
   savePost() {
-    if (this.props.route.post) PostActions.edit(this.state.post);
-    else PostActions.create(this.state.post);
+    if (this.isEditing) {
+      if (this.state.post.isDraft) {
+        this.state.post.isDraft = false;
+        DraftActions.del(this.state.post);
+        PostActions.create(this.state.post);
+      } else {
+        PostActions.edit(this.state.post);
+      }
+    } else {
+      PostActions.crate(this.state.post);
+    }
     this.props.navigator.pop();
   }
 
