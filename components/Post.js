@@ -3,6 +3,7 @@
 var PostActions = require('../actions/PostActions');
 var DraftActions = require('../actions/DraftActions');
 var React = require('react-native');
+var moment = require('moment');
 
 var {
   StyleSheet,
@@ -36,8 +37,9 @@ class Post extends React.Component {
     return (
       <TouchableOpacity onLongPress={this.showOptions}>
         <View style={styles.post}>
-          <Text style={styles.text}>{this.props.post.data}</Text>
           <Text style={styles.draft}>{draftText}</Text>
+          <Text style={styles.text}>{this.props.post.data}</Text>
+          <Text style={styles.time}>{moment(this.props.post.updated).format('LLLL')}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -46,20 +48,27 @@ class Post extends React.Component {
 
 var styles = StyleSheet.create({
   post: {
-    padding: 10,
-    marginBottom: 20,
+    padding: 10
   },
   heading: {
     fontSize: 42,
-    padding: 10,
+    padding: 10
   },
   text: {
-    fontSize: 24,
-    padding: 8,
+    fontSize: 21,
+    padding: 8
   },
   draft: {
+    fontSize: 14,
     padding: 8,
-    color: 'grey'
+    color: 'grey',
+    alignSelf: 'flex-end'
+  },
+  time: {
+    color: 'grey',
+    fontSize: 14,
+    padding: 8,
+    alignSelf: 'flex-start'
   }
 });
 
