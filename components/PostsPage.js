@@ -20,10 +20,15 @@ class PostsPage extends React.Component {
     super(props, context);
     var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.createButton = (<CreateButton onPress={() => this.props.navigator.push('edit')}/>);
+    this.getAll = this.getAll.bind(this);
     this.state = {
-      posts: dataSource.cloneWithRows(PostStore.getAll())
+      posts: dataSource.cloneWithRows(this.getAll())
     };
-    this.onChange = this.onChange.bind(this);
+    this.onChange = () => {
+      this.setState({
+        posts: dataSource.cloneWithRows(this.getAll())
+      });
+    };
     this.onSettingStoreChange = () => {
       var isSignedUp = SettingStore.getSignUpStatus();
       SettingStore.removeChangeListener(this.onSettingStoreChange);
@@ -43,7 +48,7 @@ class PostsPage extends React.Component {
     DraftStore.removeChangeListener(this.onChange);
   }
 
-  onChange() {
+  getAll() {
     var posts = PostStore.getAll();
     var drafts = DraftStore.getAll();
     var all = posts.concat(drafts);
@@ -52,9 +57,7 @@ class PostsPage extends React.Component {
       else if (a.updated < b.updated) return 1;
       else return 0;
     });
-    this.setState({
-      posts: this.state.posts.cloneWithRows(sorted)
-    });
+    return sorted;
   }
 
   render() {
