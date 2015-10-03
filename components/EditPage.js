@@ -34,7 +34,7 @@ class EditPage extends React.Component {
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
     this.savePost = this.savePost.bind(this);
-    this.postButton = (<PostButton edit={this.isEditing} onPress={this.savePost}/>);
+    this.postButton = (<PostButton edit={this.isEditing} isDraft={initialPost.isDraft} onPress={this.savePost}/>);
   }
 
   componentDidMount() {
