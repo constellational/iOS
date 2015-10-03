@@ -3,6 +3,7 @@
 var SettingActions = require('../actions/SettingActions');
 var SettingStore = require('../stores/SettingStore');
 var PostActions = require('../actions/PostActions');
+var DraftActions = require('../actions/DraftActions');
 var NavBar = require('./NavBar');
 var PostButton = require('./PostButton');
 var CancelButton = require('./CancelButton');
@@ -22,8 +23,8 @@ class EditPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     var initialPost = this.props.route.post;
-    if (initialPost) var isEditing = true;
-    else var isEditing = false;
+    if (initialPost) this.isEditing = true;
+    else this.isEditing = false;
     var leftButton = null;
     this.saveDraft = this.saveDraft.bind(this);
     this.cancelButton = (<CancelButton onPress={this.saveDraft} />);
@@ -33,7 +34,7 @@ class EditPage extends React.Component {
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
     this.savePost = this.savePost.bind(this);
-    this.postButton = (<PostButton edit={isEditing} onPress={this.savePost}/>);
+    this.postButton = (<PostButton edit={this.isEditing} onPress={this.savePost}/>);
   }
 
   componentDidMount() {
@@ -53,7 +54,17 @@ class EditPage extends React.Component {
   }
 
   saveDraft() {
-    PostActions.saveDraft(this.state.post);
+    if (this.isEditing) {
+      if (!this.state.post.isDraft) {
+        PostActions.del(this.state.post);
+        DraftActions.create(this.state.post);
+      } else {
+        DraftActions.edit(this.state.post);
+      }
+    } else {
+      this.state.post.isDraft = true;
+      DraftActions.create(this.state.post);
+    }
     this.props.navigator.pop();
   }
 

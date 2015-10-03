@@ -8,6 +8,7 @@
   "dependencies": {
     "events": "^1.0.2",
     "flux": "^2.1.1",
+    "moment": "^2.10.6",
     "object-assign": "^3.0.0",
     "react-native": "^0.11.0",
     "react-native-button": "^1.2.1",

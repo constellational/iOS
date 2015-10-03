@@ -89,7 +89,7 @@ var PostStore = assign({}, EventEmitter.prototype, {
 
 AppDispatcher.register(function(action) {
   switch(action.actionType) {
-    case 'create':
+    case 'create-post':
       var username = SettingStore.getUsername();
       var url = APIURL + '/' + username;
       action.post.token = SettingStore.getToken();
@@ -103,7 +103,7 @@ AppDispatcher.register(function(action) {
       });
       break;
 
-    case 'edit':
+    case 'edit-post':
       var username = SettingStore.getUsername();
       var key = action.post.key;
       if (!key) key = action.post.created + action.post.id;
@@ -115,7 +115,7 @@ AppDispatcher.register(function(action) {
       });
       break;
 
-    case 'delete':
+    case 'delete-post':
       var username = SettingStore.getUsername();
       var token = SettingStore.getToken();
       var body = JSON.stringify({token: token});
@@ -128,16 +128,6 @@ AppDispatcher.register(function(action) {
         PostStore.emitChange();
         updateAsyncStore();
       });
-      break;
-
-    case 'saveDraft':
-      let post = action.post;
-      if (!post.url) post.url = Date.now();
-      post.isDraft = true;
-      _postURLs.unshift(post.url);
-      _posts[post.url] = post;
-      PostStore.emitChange();
-      updateAsyncStore();
       break;
 
   }

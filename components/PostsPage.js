@@ -1,7 +1,7 @@
 'use strict'
 
-var PostActions = require('../actions/PostActions');
 var PostStore = require('../stores/PostStore');
+var DraftStore = require('../stores/DraftStore');
 var SettingStore = require('../stores/SettingStore');
 var NavBar = require('./NavBar');
 var CreateButton = require('./CreateButton');
@@ -34,16 +34,26 @@ class PostsPage extends React.Component {
   componentDidMount() {
     SettingStore.addChangeListener(this.onSettingStoreChange);
     PostStore.addChangeListener(this.onChange);
+    DraftStore.addChangeListener(this.onChange);
   }
 
   componentWillUnmount() {
     SettingStore.removeChangeListener(this.onSettingStoreChange);
     PostStore.removeChangeListener(this.onChange);
+    DraftStore.removeChangeListener(this.onChange);
   }
 
   onChange() {
+    var posts = PostStore.getAll();
+    var drafts = DraftStore.getAll();
+    var all = posts.concat(drafts);
+    var sorted = all.sort((a, b) => {
+      if (a.updated > b.updated) return -1;
+      else if (a.updated < b.updated) return 1;
+      else return 0;
+    });
     this.setState({
-      posts: this.state.posts.cloneWithRows(PostStore.getAll())
+      posts: this.state.posts.cloneWithRows(sorted)
     });
   }
 
