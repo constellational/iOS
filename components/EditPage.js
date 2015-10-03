@@ -22,19 +22,19 @@ var {
 class EditPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    var initialPost = this.props.route.post;
-    if (initialPost) this.isEditing = true;
-    else this.isEditing = false;
-    var leftButton = null;
+    if (!this.props.route.post) {
+      this.state = {post: {data: ''}};
+      this.isEditing = false;
+    } else {
+      this.state = {post: this.props.route.post};
+      this.isEditing = true;
+    }
     this.saveDraft = this.saveDraft.bind(this);
     this.cancelButton = (<CancelButton onPress={this.saveDraft} />);
-    if (!initialPost) initialPost = {data:''};
-    else leftButton = this.cancelButton;
-    this.state = {post: initialPost, leftButton: leftButton};
+    this.savePost = this.savePost.bind(this);
+    this.postButton = (<PostButton edit={this.isEditing} isDraft={this.state.post.isDraft} onPress={this.savePost}/>);
     this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
-    this.savePost = this.savePost.bind(this);
-    this.postButton = (<PostButton edit={this.isEditing} isDraft={initialPost.isDraft} onPress={this.savePost}/>);
   }
 
   componentDidMount() {
@@ -48,38 +48,29 @@ class EditPage extends React.Component {
   }
 
   savePost() {
-    if (this.isEditing) {
-      if (this.state.post.isDraft) {
-        this.state.post.isDraft = false;
-        DraftActions.del(this.state.post);
-        PostActions.create(this.state.post);
-      } else {
-        PostActions.edit(this.state.post);
-      }
+    if (this.isEditing && this.state.post.isDraft) {
+      this.state.post.isDraft = false;
+      DraftActions.del(this.state.post);
+      PostActions.create(this.state.post);
+    } else if (this.isEditing && !this.state.post.isDraft) {
+      PostActions.edit(this.state.post);
     } else {
-      PostActions.crate(this.state.post);
+      PostActions.create(this.state.post);
     }
     this.props.navigator.pop();
   }
 
   saveDraft() {
-    if (this.isEditing) {
-      if (!this.state.post.isDraft) {
-        PostActions.del(this.state.post);
-        DraftActions.create(this.state.post);
-      } else {
+    if (this.state.post.data !== this.props.route.post.data) {
+      if (this.state.post.isDraft) {
         DraftActions.edit(this.state.post);
+      } else {
+        if (this.isEditing) PostActions.del(this.state.post);
+        this.state.post.isDraft = true;
+        DraftActions.create(this.state.post);
       }
-    } else {
-      this.state.post.isDraft = true;
-      DraftActions.create(this.state.post);
     }
     this.props.navigator.pop();
-  }
-
-  toggleCancelButton() {
-    if (this.state.post.data) this.state.leftButton = this.cancelButton;
-    else this.state.leftButton = null;
   }
 
   render() {
@@ -88,7 +79,7 @@ class EditPage extends React.Component {
         var fullHeight = ev.nativeEvent.layout.height;
         this.setState({height: fullHeight, fullHeight: fullHeight});
       }}>
-        <NavBar leftButton={this.state.leftButton} rightButton={this.postButton}/>
+        <NavBar leftButton={this.cancelButton} rightButton={this.postButton}/>
         <TextInput
           ref='editor'
           multiline={true}

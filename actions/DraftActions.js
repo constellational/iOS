@@ -15,7 +15,7 @@ var DraftActions = {
     });
   },
 
-  del: function(post) {
+  del: function(draft) {
     AppDispatcher.dispatch({
       actionType: 'delete-draft',
       draft: draft

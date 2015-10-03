@@ -82,7 +82,7 @@ AppDispatcher.register(function(action) {
     case 'delete-draft':
       var index = _draftIDs.indexOf(action.draft.id);
       _draftIDs.splice(index, 1);
-      delete drafts[action.draft.id];
+      delete _drafts[action.draft.id];
       DraftStore.emitChange();
       updateAsyncStore();
       break;

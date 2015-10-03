@@ -39,7 +39,7 @@ function fetchPost(username, url) {
   return fetch(POST_URL + '/' + username + '/' + url).then(res => res.json()).then((post) => {
     post.url = url;
     return post;
-  });
+  }).catch(() => {});
 }
 
 function fetchFromServer() {

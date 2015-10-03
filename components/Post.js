@@ -1,6 +1,7 @@
 'use strict'
 
 var PostActions = require('../actions/PostActions');
+var DraftActions = require('../actions/DraftActions');
 var React = require('react-native');
 
 var {
@@ -24,16 +25,19 @@ class Post extends React.Component {
       cancelButtonIndex: 2
     }, (buttonIndex) => {
       if (buttonIndex == 0) this.props.nav.push({id: 'edit', post: this.props.post});
+      else if (this.props.post.isDraft) DraftActions.del(this.props.post);
       else PostActions.del(this.props.post);
     });
   }
 
   render() {
-    var post = this.props.post;
+    var draftText = '';
+    if (this.props.post.isDraft) draftText = 'Draft';
     return (
       <TouchableOpacity onLongPress={this.showOptions}>
         <View style={styles.post}>
-          <Text style={styles.text}>{post.data}</Text>
+          <Text style={styles.text}>{this.props.post.data}</Text>
+          <Text style={styles.draft}>{draftText}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -52,6 +56,10 @@ var styles = StyleSheet.create({
   text: {
     fontSize: 24,
     padding: 8,
+  },
+  draft: {
+    padding: 8,
+    color: 'grey'
   }
 });
 
