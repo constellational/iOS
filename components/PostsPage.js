@@ -2,6 +2,7 @@
 
 var PostStore = require('../stores/PostStore');
 var DraftStore = require('../stores/DraftStore');
+var EditStore = require('../stores/EditStore');
 var SettingStore = require('../stores/SettingStore');
 var NavBar = require('./NavBar');
 var CreateButton = require('./CreateButton');
@@ -40,16 +41,26 @@ class PostsPage extends React.Component {
     SettingStore.addChangeListener(this.onSettingStoreChange);
     PostStore.addChangeListener(this.onChange);
     DraftStore.addChangeListener(this.onChange);
+    EditStore.addChangeListener(this.onChange);
   }
 
   componentWillUnmount() {
     SettingStore.removeChangeListener(this.onSettingStoreChange);
     PostStore.removeChangeListener(this.onChange);
     DraftStore.removeChangeListener(this.onChange);
+    EditStore.removeChangeListener(this.onChange);
   }
 
   getAll() {
     var posts = PostStore.getAll();
+    posts = posts.map((post) => {
+      var unpublishedEdits = EditStore.get(post.id);
+      if (unpublishedEdits) {
+        post = unpublishedEdits;
+        post.hasUnpublishedEdits = true;
+      }
+      return post;
+    });
     var drafts = DraftStore.getAll();
     var all = posts.concat(drafts);
     var sorted = all.sort((a, b) => {

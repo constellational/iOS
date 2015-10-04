@@ -32,12 +32,13 @@ class Post extends React.Component {
   }
 
   render() {
-    var draftText = '';
-    if (this.props.post.isDraft) draftText = 'Draft';
+    var noteText = '';
+    if (this.props.post.isDraft) noteText = 'Draft';
+    if (this.props.post.hasUnpublishedEdits) noteText = 'Editing';
     return (
       <TouchableOpacity onLongPress={this.showOptions}>
         <View style={styles.post}>
-          <Text style={styles.draft}>{draftText}</Text>
+          <Text style={styles.note}>{noteText}</Text>
           <Text style={styles.text}>{this.props.post.data}</Text>
           <Text style={styles.time}>{moment(this.props.post.updated).format('LLLL')}</Text>
         </View>
@@ -58,7 +59,7 @@ var styles = StyleSheet.create({
     fontSize: 21,
     padding: 8
   },
-  draft: {
+  note: {
     fontSize: 14,
     padding: 8,
     color: 'grey',

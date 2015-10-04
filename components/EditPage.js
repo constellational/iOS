@@ -4,6 +4,8 @@ var SettingActions = require('../actions/SettingActions');
 var SettingStore = require('../stores/SettingStore');
 var PostActions = require('../actions/PostActions');
 var DraftActions = require('../actions/DraftActions');
+var EditActions = require('../actions/EditActions');
+var EditStore = require('../stores/EditStore');
 var NavBar = require('./NavBar');
 var PostButton = require('./PostButton');
 var CancelButton = require('./CancelButton');
@@ -23,9 +25,11 @@ class EditPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     if (!this.props.route.post) {
+      this.initialData = '';
       this.state = {post: {data: ''}};
       this.isEditing = false;
     } else {
+      this.initialData = this.props.route.post.data;
       this.state = {post: this.props.route.post};
       this.isEditing = true;
     }
@@ -53,6 +57,7 @@ class EditPage extends React.Component {
       DraftActions.del(this.state.post);
       PostActions.create(this.state.post);
     } else if (this.isEditing && !this.state.post.isDraft) {
+      if (EditStore.get(this.state.post.id)) EditActions.del(this.state.post);
       PostActions.edit(this.state.post);
     } else {
       PostActions.create(this.state.post);
@@ -61,13 +66,18 @@ class EditPage extends React.Component {
   }
 
   saveDraft() {
-    if (this.state.post.data !== this.props.route.post.data) {
+    if (this.state.post.data !== this.initialData) {
       if (this.state.post.isDraft) {
         DraftActions.edit(this.state.post);
       } else {
-        if (this.isEditing) PostActions.del(this.state.post);
-        this.state.post.isDraft = true;
-        DraftActions.create(this.state.post);
+        if (this.isEditing) {
+          this.state.post.hasUnpublishedEdits = true;
+          console.log(this.state.post);
+          EditActions.save(this.state.post);
+        } else {
+          this.state.post.isDraft = true;
+          DraftActions.create(this.state.post);
+        }
       }
     }
     this.props.navigator.pop();
