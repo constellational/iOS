@@ -95,8 +95,6 @@ class EditPage extends React.Component {
           multiline={true}
           onChangeText={(text) => {
             this.state.post.data = text;
-            if (text) this.setState({leftButton: this.cancelButton});
-            else this.setState({leftButton: null});
           }}
           value={this.state.post.data}
           autofocus={true}
