@@ -57,7 +57,10 @@ class EditPage extends React.Component {
       DraftActions.del(this.state.post);
       PostActions.create(this.state.post);
     } else if (this.isEditing && !this.state.post.isDraft) {
-      if (EditStore.get(this.state.post.id)) EditActions.del(this.state.post);
+      if (this.state.post.hasUnpublishedEdits) {
+        this.state.post.hasUnpublishedEdits = false;
+        EditActions.del(this.state.post);
+      }
       PostActions.edit(this.state.post);
     } else {
       PostActions.create(this.state.post);
