@@ -37,7 +37,12 @@ class EditPage extends React.Component {
     this.cancelButton = (<CancelButton onPress={this.saveDraft} />);
     this.savePost = this.savePost.bind(this);
     this.postButton = (<PostButton edit={this.isEditing} isDraft={this.state.post.isDraft} onPress={this.savePost}/>);
-    this.updateKeyboardSpace = (frames) => this.setState({height: this.state.height - frames.end.height});
+    this.updateKeyboardSpace = (frames) => {
+      var change;
+      if (frames.endCoordinates) change = frames.endCoordinates.height;
+      else change = frames.end.height;
+      this.setState({height: this.state.height - change});
+    };
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
   }
 
@@ -102,7 +107,7 @@ class EditPage extends React.Component {
              else this.setState({leftButton: null});
           }}
           value={this.state.post.data}
-          autofocus={true}
+          autoFocus={true}
           style={[styles.input, {height:this.state.height}]}
         />
       </View>
