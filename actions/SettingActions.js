@@ -1,10 +1,11 @@
 var AppDispatcher = require('../dispatcher/AppDispatcher');
 
 var SettingActions = {
-  signup: function(username) {
+  signup: function(username, email) {
     AppDispatcher.dispatch({
       actionType: 'signup',
-      username: username
+      username: username,
+      email: email
     });
   },
 };

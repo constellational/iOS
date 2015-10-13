@@ -1,5 +1,7 @@
 'use strict'
 
+var URL = 'https://d1w3fhkxysfgcn.cloudfront.net';
+
 var SettingActions = require('../actions/SettingActions');
 var SettingStore = require('../stores/SettingStore');
 var React = require('react-native');
@@ -37,7 +39,26 @@ class WelcomePage extends React.Component {
   }
 
   getStarted() {
-    this.props.navigator.immediatelyResetRouteStack([{id: 'posts'},{id: 'edit'}]);
+    this.props.navigator.immediatelyResetRouteStack([{id: 'posts'}, {id: 'edit'}]);
+  }
+
+  checkUsername() {
+    return fetch(URL + '/' + this.state.username).then((res) => {
+      if (res.status === 404) {
+        this.setState({isUsernameAvailable: true});
+        Promise.resolve();
+      }
+      else Promise.reject();
+    }).catch(() => {
+      this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
+    });
+  }
+
+  signup() {
+    if (this.state.username && this.state.email && this.state.isUsernameAvailable) {
+      this.setState({heading: 'Signing you up'});
+      SettingActions.signup(this.state.username, this.state.email);
+    }
   }
 
   onChange() {
@@ -50,18 +71,31 @@ class WelcomePage extends React.Component {
   }
 
   renderBottomSection() {
+    var usernameReturnKeyType = 'next';
     if (this.state.success) return(<BigButton onPress={this.getStarted} text={'Get Started'} />);
+    if (this.state.email) usernameReturnKeyType = 'join';
     else return (
       <TextInput
         ref='username'
         keyboardType='url'
-        returnKeyType='join'
-        autofocus={true}
+        returnKeyType={usernameReturnKeyType}
+        autoFocus={true}
         style={styles.textBox}
         placeholder='username' 
         onSubmitEditing={(event) => {
-          this.setState({heading: 'Signing you up', subheading: 'Checking your username'});
-          SettingActions.signup(event.nativeEvent.text);
+          this.setState({username: event.nativeEvent.text, subheading: 'Checking your username'});
+          this.checkUsername().then(this.signup);
+        }}
+      />
+      <TextInput
+        ref='email'
+        keyboardType='email-address'
+        returnKeyType='join'
+        style={styles.textBox}
+        placeholder='email address'
+        onSubmitEditing={(event) => {
+          this.setState({email: event.nativeEvent.text});
+          this.checkUsername().then(this.signup);
         }}
       />
     );

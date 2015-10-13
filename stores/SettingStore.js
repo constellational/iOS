@@ -73,7 +73,8 @@ AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case 'signup':
       updateUsernameStatus('checking');
-      fetch(APIURL, {method: 'POST', body: JSON.stringify({username: action.username}), HEADERS}).then(res => {
+      var body = JSON.stringify({username: action.username, email: action.email});
+      fetch(APIURL, {method: 'POST', body: body, HEADERS}).then(res => {
         if (res.status === 403) updateUsernameStatus('unavailable');
         else res.json().then(data => {
           console.log(data);
