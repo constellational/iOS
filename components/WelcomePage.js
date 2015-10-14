@@ -75,29 +75,31 @@ class WelcomePage extends React.Component {
     if (this.state.success) return(<BigButton onPress={this.getStarted} text={'Get Started'} />);
     if (this.state.email) usernameReturnKeyType = 'join';
     else return (
-      <TextInput
-        ref='username'
-        keyboardType='url'
-        returnKeyType={usernameReturnKeyType}
-        autoFocus={true}
-        style={styles.textBox}
-        placeholder='username' 
-        onSubmitEditing={(event) => {
-          this.setState({username: event.nativeEvent.text, subheading: 'Checking your username'});
-          this.checkUsername().then(this.signup);
-        }}
-      />
-      <TextInput
-        ref='email'
-        keyboardType='email-address'
-        returnKeyType='join'
-        style={styles.textBox}
-        placeholder='email address'
-        onSubmitEditing={(event) => {
-          this.setState({email: event.nativeEvent.text});
-          this.checkUsername().then(this.signup);
-        }}
-      />
+      <View>
+        <TextInput
+          ref='username'
+          keyboardType='url'
+          returnKeyType={usernameReturnKeyType}
+          autoFocus={true}
+          style={styles.textBox}
+          placeholder='username' 
+          onSubmitEditing={(event) => {
+            this.setState({username: event.nativeEvent.text, subheading: 'Checking your username'});
+            this.checkUsername().then(this.signup);
+          }}
+        />
+        <TextInput
+          ref='email'
+          keyboardType='email-address'
+          returnKeyType='join'
+          style={styles.textBox}
+          placeholder='email address'
+          onSubmitEditing={(event) => {
+            this.setState({email: event.nativeEvent.text});
+            this.checkUsername().then(this.signup);
+          }}
+        />
+      </View>
     );
   }
 
