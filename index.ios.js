@@ -27,7 +27,7 @@ class Constellational extends React.Component {
   render() {
     SettingStore.loadSettings();
     return (<Navigator
-      initialRoute={{id: 'posts'}}
+      initialRoute={{id: 'welcome'}}
       renderScene={this.renderScene}
       configureScene={() => Navigator.SceneConfigs.FloatFromRight}
     />);

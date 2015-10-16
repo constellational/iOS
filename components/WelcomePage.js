@@ -26,8 +26,10 @@ class WelcomePage extends React.Component {
       heading: title,
       subheading: instructions,
     };
+    this.signup = this.signup.bind(this);
     this.onChange = this.onChange.bind(this);
     this.getStarted = this.getStarted.bind(this);
+    this.renderBottomSection = this.renderBottomSection.bind(this);
   } 
 
   componentDidMount() {
@@ -46,19 +48,20 @@ class WelcomePage extends React.Component {
     return fetch(URL + '/' + this.state.username).then((res) => {
       if (res.status === 404) {
         this.setState({isUsernameAvailable: true});
-        Promise.resolve();
       }
-      else Promise.reject();
-    }).catch(() => {
-      this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
+      else {
+        this.setState({
+          isUsernameAvailable: false,
+          heading: 'Try another username', 
+          subheading: 'This one seems to be taken!'
+        });
+      }
     });
   }
 
   signup() {
-    if (this.state.username && this.state.email && this.state.isUsernameAvailable) {
-      this.setState({heading: 'Signing you up'});
-      SettingActions.signup(this.state.username, this.state.email);
-    }
+    this.setState({heading: 'Signing you up'});
+    SettingActions.signup(this.state.username, this.state.email);
   }
 
   onChange() {
@@ -71,35 +74,31 @@ class WelcomePage extends React.Component {
   }
 
   renderBottomSection() {
-    var usernameReturnKeyType = 'next';
     if (this.state.success) return(<BigButton onPress={this.getStarted} text={'Get Started'} />);
-    if (this.state.email) usernameReturnKeyType = 'join';
+    else if (this.state.username && this.state.isAvailable) return (
+      <TextInput
+        keyboardType='email-address'
+        returnKeyType='join'
+        style={styles.textBox}
+        placeholder='email address'
+        autoFocus={true}
+        onSubmitEditing={(event) => {
+          this.setState({email: event.nativeEvent.text});
+          this.signup();
+        }}
+      />);
     else return (
-      <View>
-        <TextInput
-          ref='username'
-          keyboardType='url'
-          returnKeyType={usernameReturnKeyType}
-          autoFocus={true}
-          style={styles.textBox}
-          placeholder='username' 
-          onSubmitEditing={(event) => {
-            this.setState({username: event.nativeEvent.text, subheading: 'Checking your username'});
-            this.checkUsername().then(this.signup);
-          }}
-        />
-        <TextInput
-          ref='email'
-          keyboardType='email-address'
-          returnKeyType='join'
-          style={styles.textBox}
-          placeholder='email address'
-          onSubmitEditing={(event) => {
-            this.setState({email: event.nativeEvent.text});
-            this.checkUsername().then(this.signup);
-          }}
-        />
-      </View>
+      <TextInput
+        keyboardType='url'
+        returnKeyType='next'
+        autoFocus={true}
+        style={styles.textBox}
+        placeholder='username' 
+        onSubmitEditing={(event) => {
+          this.setState({username: event.nativeEvent.text, subheading: 'Checking your username'});
+          this.checkUsername();
+        }}
+      />
     );
   }
 
