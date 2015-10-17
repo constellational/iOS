@@ -47,7 +47,10 @@ class WelcomePage extends React.Component {
   checkUsername() {
     return fetch(URL + '/' + this.state.username).then((res) => {
       if (res.status === 404) {
-        this.setState({isUsernameAvailable: true});
+        this.setState({
+          isUsernameAvailable: true,
+          subheading: "What's your email address?"
+        });
       }
       else {
         this.setState({
@@ -74,9 +77,11 @@ class WelcomePage extends React.Component {
   }
 
   renderBottomSection() {
-    if (this.state.success) return(<BigButton onPress={this.getStarted} text={'Get Started'} />);
-    else if (this.state.username && this.state.isAvailable) return (
-      <TextInput
+    if (this.state.success) {
+      return(<BigButton onPress={this.getStarted} text={'Get Started'} />);
+    } else if (this.state.username && this.state.isUsernameAvailable) {
+      return (<TextInput
+        key='email'
         keyboardType='email-address'
         returnKeyType='join'
         style={styles.textBox}
@@ -87,8 +92,9 @@ class WelcomePage extends React.Component {
           this.signup();
         }}
       />);
-    else return (
-      <TextInput
+    } else {
+      return (<TextInput
+        key='username'
         keyboardType='url'
         returnKeyType='next'
         autoFocus={true}
@@ -98,8 +104,8 @@ class WelcomePage extends React.Component {
           this.setState({username: event.nativeEvent.text, subheading: 'Checking your username'});
           this.checkUsername();
         }}
-      />
-    );
+      />);
+    }
   }
 
   render() {
