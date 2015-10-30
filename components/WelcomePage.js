@@ -15,41 +15,52 @@ var {
   Text,
   TextInput,
   View,
+  LinkingIOS,
 } = React;
 
 class WelcomePage extends React.Component {
   constructor(props, context) {
     super(props);
-    var title = 'Welcome!';
-    var instructions = 'Pick a username';
     this.state = {
-      heading: title,
-      subheading: instructions,
+      heading: 'Constellational',
+      subheading: 'Welcome!'
     };
+    var url = LinkingIOS.popInitialURL();
+    if (url) this.handleOpenURL({url});
     this.signup = this.signup.bind(this);
-    this.onChange = this.onChange.bind(this);
+    this.onSettingStoreChange = this.onSettingStoreChange.bind(this);
     this.getStarted = this.getStarted.bind(this);
     this.renderBottomSection = this.renderBottomSection.bind(this);
   } 
 
   componentDidMount() {
-    SettingStore.addChangeListener(this.onChange);
+    SettingStore.addChangeListener(this.onSettingStoreChange);
+    LinkingIOS.addEventListener('url', this.handleOpenURL);
   }
 
   componentWillUnmount() {
-    SettingStore.removeChangeListener(this.onChange);
+    SettingStore.removeChangeListener(this.onSettingStoreChange);
+    LinkingIOS.removeEventListener('url', this.handleOpenURL);
   }
 
   getStarted() {
     this.props.navigator.immediatelyResetRouteStack([{id: 'posts'}, {id: 'edit'}]);
   }
 
+  getBackIn() {
+  }
+
+  handleOpenURL(event) {
+    var b64 = event.url.split('token=')[1];
+    var token = JSON.parse(base64url.decode(b64));
+    SettingActions.authenticate(token);
+  }
+
   checkUsername() {
     return fetch(URL + '/' + this.state.username).then((res) => {
       if (res.status === 404) {
         this.setState({
-          isUsernameAvailable: true,
-          subheading: "What's your email address?"
+          isUsernameAvailable: true
         });
       }
       else {
@@ -67,19 +78,34 @@ class WelcomePage extends React.Component {
     SettingActions.signup(this.state.username, this.state.email);
   }
 
-  onChange() {
-    var usernameStatus = SettingStore.getUsernameStatus();
-    if (usernameStatus === 'unavailable') {
-      this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
-    } else if (usernameStatus === 'available') {
-      this.setState({heading: 'Yay! You\'re all set', subheading: 'Time to write something', success: true});
+  signin() {
+    this.setState({heading: 'Sending you a signin email!', subheading: 'Please click the link in the email to sign in'});
+    SettingActions.signin(this.state.username, this.state.email);
+  }
+
+  onSettingStoreChange() {
+    if (this.state.isSigningUp) {
+      var usernameStatus = SettingStore.getUsernameStatus();
+      if (usernameStatus === 'unavailable') {
+        this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
+      } else if (usernameStatus === 'available') {
+        this.setState({heading: 'Yay! You\'re all set', subheading: 'Time to write something', success: true});
+      }
+    } else {
+      var emailStatus = SettingStore.getEmailStatus();
+      if (emailStatus !== 'sent') this.signin();
+      else {
+        var token = SettingStore.getToken();
+        if (token) this.props.navigator.immediatelyResetRouteStack([{id: 'posts'}]);
+      }
     }
   }
 
   renderBottomSection() {
     if (this.state.success) {
       return(<BigButton onPress={this.getStarted} text={'Get Started'} />);
-    } else if (this.state.username && this.state.isUsernameAvailable) {
+    } else if (this.state.username && (this.state.isSigningIn || this.state.isUsernameAvailable)) {
+      this.setState({subheading: "What's your email address?"});
       return (<TextInput
         key='email'
         keyboardType='email-address'
@@ -89,10 +115,11 @@ class WelcomePage extends React.Component {
         autoFocus={true}
         onSubmitEditing={(event) => {
           this.setState({email: event.nativeEvent.text});
-          this.signup();
+          if (this.state.isSigningUp) this.signup();
+          else this.signin();
         }}
       />);
-    } else {
+    } else if (this.state.isSigningIn || this.state.isSigningUp) {
       return (<TextInput
         key='username'
         keyboardType='url'
@@ -101,10 +128,20 @@ class WelcomePage extends React.Component {
         style={styles.textBox}
         placeholder='username' 
         onSubmitEditing={(event) => {
-          this.setState({username: event.nativeEvent.text, subheading: 'Checking your username'});
-          this.checkUsername();
+          this.setState({username: event.nativeEvent.text});
+          if (this.state.isSigningUp) {
+            this.setState({subheading: 'Checking your username'});
+            this.checkUsername();
+          }
         }}
       />);
+    } else {
+      var signupState = {isSigningUp: true, heading: 'Welcome!', subheading: 'Pick a username'};
+      var signinState = {isSigningIn: true, heading: 'Welcome Back!', subheading: "What's your username?"};
+      return (<View>
+        <BigButton onPress={() => this.setState(signupState)} text={'Sign up'} />
+        <Text onPress={() => this.setState(signinState)}>Already Signed Up?</Text>
+      </View>);
     }
   }
 
