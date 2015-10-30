@@ -9,7 +9,7 @@ var {
 
 class Heading extends React.Component {
   render() {
-    return (<Text style={styles.heading} allowFontScaling={true}>{this.props.text}</Text>);
+    return (<Text style={styles.heading} allowFontScaling={true} onPress={this.props.onPress}>{this.props.text}</Text>);
   }
 }
 

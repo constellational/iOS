@@ -9,7 +9,7 @@ var {
 
 class Subheading extends React.Component {
   render() {
-    return (<Text style={styles.subheading} allowFontScaling={true}>{this.props.text}</Text>);
+    return (<Text style={styles.subheading} allowFontScaling={true} onPress={this.props.onPress}>{this.props.text}</Text>);
   }
 }
 
