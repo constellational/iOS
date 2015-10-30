@@ -73,14 +73,14 @@ class WelcomePage extends React.Component {
     });
   }
 
-  signup() {
+  signup(email) {
     this.setState({heading: 'Signing you up'});
-    SettingActions.signup(this.state.username, this.state.email);
+    SettingActions.signup(this.state.username, email);
   }
 
-  signin() {
+  signin(email) {
     this.setState({heading: 'Sending you a signin email!', subheading: 'Please click the link in the email to sign in'});
-    SettingActions.signin(this.state.username, this.state.email);
+    SettingActions.signin(this.state.username, email);
   }
 
   onSettingStoreChange() {
@@ -113,9 +113,9 @@ class WelcomePage extends React.Component {
         placeholder='email address'
         autoFocus={true}
         onSubmitEditing={(event) => {
-          this.setState({email: event.nativeEvent.text});
-          if (this.state.isSigningUp) this.signup();
-          else this.signin();
+          var e = event.nativeEvent.text;
+          if (this.state.isSigningUp) this.signup(e);
+          else this.signin(e);
         }}
       />);
     } else if (this.state.isSigningIn || this.state.isSigningUp) {
