@@ -84,6 +84,31 @@ AppDispatcher.register(function(action) {
         });
       });
       break;
+
+    case 'signin':
+      var data = {username: action.username, email: action.email};
+      var body = JSON.stringify(data);
+      fetch(APIURL + '/signin', {method: 'POST', body: body, HEADERS}).then((res) => {
+        if (res.status !== 200) updateEmailStatus('error');
+        else res.json().then(resObj => {
+          updateEmailStatus(resObj.status);
+          update(data);
+          AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        });
+      });
+      break;
+
+    case 'authenticate':
+      var body = JSON.stringify({username: _settings.username, token: action.token});
+      fetch(APIURL + '/tokens', {method: 'POST', body: body, HEADERS}).then((res) => {
+        if (res.status === 200) res.json().then(data => {
+          console.log(data);
+          _settings.token = data.token;
+          update(_settings);
+          AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(_settings));
+        });
+      });
+      break;
   }
 });
 

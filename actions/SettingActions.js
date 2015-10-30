@@ -8,6 +8,21 @@ var SettingActions = {
       email: email
     });
   },
+  
+  signin: function(username, email) {
+    AppDispatcher.dispatch({
+      actionType: 'signin',
+      username: username,
+      email: email
+    });
+  },
+  
+  authenticate: function(token) {
+    AppDispatcher.dispatch({
+      actionType: 'authenticate',
+      token: token
+    });
+  }
 };
 
 module.exports = SettingActions;

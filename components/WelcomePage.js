@@ -47,28 +47,23 @@ class WelcomePage extends React.Component {
     this.props.navigator.immediatelyResetRouteStack([{id: 'posts'}, {id: 'edit'}]);
   }
 
-  getBackIn() {
-  }
-
   handleOpenURL(event) {
     var b64 = event.url.split('token=')[1];
     var token = JSON.parse(base64url.decode(b64));
+    this.setState({heading: 'Welcome Back!', subheading: 'Signing you in'});
     SettingActions.authenticate(token);
   }
 
   checkUsername() {
     return fetch(URL + '/' + this.state.username).then((res) => {
-      if (res.status === 404) {
-        this.setState({
-          isUsernameAvailable: true
-        });
-      }
-      else {
+      if (res.status !== 404) {
         this.setState({
           isUsernameAvailable: false,
           heading: 'Try another username', 
           subheading: 'This one seems to be taken!'
         });
+      } else {
+        this.setState({isUsernameAvailable: true});
       }
     });
   }
@@ -140,7 +135,7 @@ class WelcomePage extends React.Component {
       var signinState = {isSigningIn: true, heading: 'Welcome Back!', subheading: "What's your username?"};
       return (<View>
         <BigButton onPress={() => this.setState(signupState)} text={'Sign up'} />
-        <Text onPress={() => this.setState(signinState)}>Already Signed Up?</Text>
+        <Subheading onPress={() => this.setState(signinState)} text={'Already Signed Up?'} />
       </View>);
     }
   }
