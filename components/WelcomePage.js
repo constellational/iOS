@@ -8,6 +8,7 @@ var React = require('react-native');
 
 var Heading = require('./Heading');
 var Subheading = require('./Subheading');
+var BodyText = require('./BodyText');
 var BigButton = require('./BigButton');
 
 var {
@@ -63,7 +64,11 @@ class WelcomePage extends React.Component {
           subheading: 'This one seems to be taken!'
         });
       } else {
-        this.setState({isUsernameAvailable: true});
+        this.setState({
+          isUsernameAvailable: true,
+          heading: 'Almost Done!',
+          subheading: 'What\'s your email address?'
+        });
       }
     });
   }
@@ -84,7 +89,7 @@ class WelcomePage extends React.Component {
       if (usernameStatus === 'unavailable') {
         this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
       } else if (usernameStatus === 'available') {
-        this.setState({heading: 'Yay! You\'re all set', subheading: 'Time to write something', success: true});
+        this.setState({heading: 'Yay! All set', subheading: 'Time to write something', success: true});
       }
     } else {
       var emailStatus = SettingStore.getEmailStatus();
@@ -100,7 +105,6 @@ class WelcomePage extends React.Component {
     if (this.state.success) {
       return(<BigButton onPress={this.getStarted} text={'Get Started'} />);
     } else if (this.state.username && (this.state.isSigningIn || this.state.isUsernameAvailable)) {
-      this.setState({subheading: "What's your email address?"});
       return (<TextInput
         key='email'
         keyboardType='email-address'
@@ -127,6 +131,8 @@ class WelcomePage extends React.Component {
           if (this.state.isSigningUp) {
             this.setState({subheading: 'Checking your username'});
             this.checkUsername();
+          } else {
+            this.setState({subheading: 'Please enter your email address'});
           }
         }}
       />);
@@ -135,7 +141,7 @@ class WelcomePage extends React.Component {
       var signinState = {isSigningIn: true, heading: 'Welcome Back!', subheading: "What's your username?"};
       return (<View>
         <BigButton onPress={() => this.setState(signupState)} text={'Sign up'} />
-        <Subheading onPress={() => this.setState(signinState)} text={'Already Signed Up?'} />
+        <BodyText onPress={() => this.setState(signinState)} text={'Already Signed Up?'} />
       </View>);
     }
   }
@@ -160,10 +166,12 @@ var styles = StyleSheet.create({
     alignItems: 'center',
   },
   textBox: {
+    fontSize: 18,
+    fontWeight: '200',
     alignSelf: 'center',
     margin: 10,
     height: 46,
-    width: 150,
+    width: 200,
     textAlign: 'center',
     borderWidth: 0.5,
     borderColor: 'black',
