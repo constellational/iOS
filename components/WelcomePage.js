@@ -30,6 +30,7 @@ class WelcomePage extends React.Component {
     if (url) this.handleOpenURL({url});
     this.signup = this.signup.bind(this);
     this.onSettingStoreChange = this.onSettingStoreChange.bind(this);
+    this.handleOpenURL = this.handleOpenURL.bind(this);
     this.getStarted = this.getStarted.bind(this);
     this.renderBottomSection = this.renderBottomSection.bind(this);
   } 
@@ -49,8 +50,8 @@ class WelcomePage extends React.Component {
   }
 
   handleOpenURL(event) {
-    var b64 = event.url.split('token=')[1];
-    var token = JSON.parse(base64url.decode(b64));
+    var uriComponent = event.url.split('token=')[1];
+    var token = JSON.parse(decodeURIComponent(uriComponent));
     console.log(token);
     this.setState({heading: 'Welcome Back!', subheading: 'Signing you in'});
     SettingActions.authenticate(token);
