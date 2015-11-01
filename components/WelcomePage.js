@@ -84,7 +84,7 @@ class WelcomePage extends React.Component {
   }
 
   signin(email) {
-    this.setState({heading: 'Sending you a signin email!', subheading: 'Please click the link in the email to sign in'});
+    this.setState({heading: 'Sending you a signin email', subheading: 'Please click the link in the email to sign in'});
     SettingActions.signin(this.state.username, email);
   }
 
@@ -110,10 +110,12 @@ class WelcomePage extends React.Component {
     if (this.state.success) {
       return(<BigButton onPress={this.getStarted} text={'Get Started'} />);
     } else if (this.state.username && (this.state.isSigningIn || this.state.isUsernameAvailable)) {
+      var returnKeyType = 'join';
+      if (this.state.isSigningIn) returnKeyType = 'done';
       return (<TextInput
         key='email'
         keyboardType='email-address'
-        returnKeyType='join'
+        returnKeyType={returnKeyType}
         style={styles.textBox}
         placeholder='email address'
         autoFocus={true}
@@ -137,7 +139,7 @@ class WelcomePage extends React.Component {
             this.setState({subheading: 'Checking your username'});
             this.checkUsername(event.nativeEvent.text);
           } else {
-            this.setState({subheading: 'Please enter your email address'});
+            this.setState({subheading: 'What\'s your email address?'});
           }
         }}
       />);
