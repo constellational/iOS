@@ -96,6 +96,7 @@ AppDispatcher.register(function(action) {
       console.log(action.post);
       var params = {method: 'POST', body: JSON.stringify(action.post), headers: HEADERS};
       fetch(url, params).then(res => res.json()).then((post) => {
+        console.log(post);
         _postURLs.unshift(post.url);
         _posts[post.url] = post;
         PostStore.emitChange();

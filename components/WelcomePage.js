@@ -55,13 +55,18 @@ class WelcomePage extends React.Component {
     SettingActions.authenticate(token);
   }
 
-  checkUsername() {
-    return fetch(URL + '/' + this.state.username).then((res) => {
+  checkUsername(username) {
+    this.setState({username: username});
+    var url = URL + '/' + username;
+    return fetch(url).then((res) => {
+      console.log(this.state.username);
+      console.log(url);
+      console.log(res.status);
       if (res.status !== 404) {
         this.setState({
           isUsernameAvailable: false,
           heading: 'Try another username', 
-          subheading: 'This one seems to be taken!'
+          subheading: 'This one\'s taken!'
         });
       } else {
         this.setState({
@@ -87,7 +92,7 @@ class WelcomePage extends React.Component {
     if (this.state.isSigningUp) {
       var usernameStatus = SettingStore.getUsernameStatus();
       if (usernameStatus === 'unavailable') {
-        this.setState({heading: 'Try another username', subheading: 'This one seems to be taken!'});
+        this.setState({username: '', heading: 'Try another username', subheading: 'This one\'s taken!'});
       } else if (usernameStatus === 'available') {
         this.setState({heading: 'Yay! All set', subheading: 'Time to write something', success: true});
       }
@@ -130,7 +135,7 @@ class WelcomePage extends React.Component {
           this.setState({username: event.nativeEvent.text});
           if (this.state.isSigningUp) {
             this.setState({subheading: 'Checking your username'});
-            this.checkUsername();
+            this.checkUsername(event.nativeEvent.text);
           } else {
             this.setState({subheading: 'Please enter your email address'});
           }
