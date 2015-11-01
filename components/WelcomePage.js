@@ -51,6 +51,7 @@ class WelcomePage extends React.Component {
   handleOpenURL(event) {
     var b64 = event.url.split('token=')[1];
     var token = JSON.parse(base64url.decode(b64));
+    console.log(token);
     this.setState({heading: 'Welcome Back!', subheading: 'Signing you in'});
     SettingActions.authenticate(token);
   }
