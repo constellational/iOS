@@ -10,6 +10,7 @@ var {
   Text,
   View,
   ActionSheetIOS,
+  AlertIOS,
   TouchableOpacity
 } = React;
 
@@ -17,6 +18,15 @@ class Post extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.showOptions = this.showOptions.bind(this);
+  }
+
+  shareFailure() {
+    AlertIOS.alert('Couldn\'t share post');
+  }
+
+  shareSuccess(success, method) {
+    console.log(success);
+    console.log(method);
   }
 
   showOptions() {
@@ -28,7 +38,7 @@ class Post extends React.Component {
       if (this.props.post.isDraft || this.props.post.hasUnpublishedEdits) var options = {message: this.props.post.data};
       else var options = {url: this.props.post.url};
 
-      if (buttonIndex === 0) ActionSheetIOS.showShareActionSheetWithOptions(options);
+      if (buttonIndex === 0) ActionSheetIOS.showShareActionSheetWithOptions(options, this.shareFailure, this.shareSuccess);
       else if (buttonIndex === 1) this.props.nav.push({id: 'edit', post: this.props.post});
       else if (this.props.post.isDraft) DraftActions.del(this.props.post);
       else PostActions.del(this.props.post);
