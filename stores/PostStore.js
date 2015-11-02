@@ -137,7 +137,7 @@ AppDispatcher.register(function(action) {
       var key = action.post.key;
       if (!key) key = action.post.created + action.post.id;
       var url = APIURL + '/' + username + '/' + key;
-      var params = {method: 'DELETE', body: body, headers};
+      var params = {method: 'DELETE', body: body, headers: HEADERS};
       fetch(url, params).then(() => deletePost(action.post));
       break;
 
