@@ -21,11 +21,15 @@ class Post extends React.Component {
 
   showOptions() {
     ActionSheetIOS.showActionSheetWithOptions({
-      options: ['Edit', 'Delete', 'Cancel'],
-      destructiveButtonIndex: 1,
-      cancelButtonIndex: 2
+      options: ['Share', 'Edit', 'Delete', 'Cancel'],
+      destructiveButtonIndex: 2,
+      cancelButtonIndex: 3
     }, (buttonIndex) => {
-      if (buttonIndex == 0) this.props.nav.push({id: 'edit', post: this.props.post});
+      if (this.props.post.isDraft || this.props.post.hasUnpublishedEdits) var options = {message: this.props.post.data};
+      else var options = {url: this.props.post.url};
+
+      if (buttonIndex === 0) ActionSheetIOS.showShareActionSheetWithOptions(options);
+      else if (buttonIndex === 1) this.props.nav.push({id: 'edit', post: this.props.post});
       else if (this.props.post.isDraft) DraftActions.del(this.props.post);
       else PostActions.del(this.props.post);
     });
