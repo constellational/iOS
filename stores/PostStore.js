@@ -31,6 +31,28 @@ function loadAsyncStore() {
   });
 }
 
+function createPost(post) {
+  _postURLs.unshift(post.url);
+  _posts[post.url] = post;
+  PostStore.emitChange();
+  return updateAsyncStore();
+}
+      
+
+function editPost(post) {
+  _posts[post.url] = post;
+  PostStore.emitChange();
+  return updateAsyncStore();
+}
+
+function deletePost(post) {
+  var i = _postURLs.indexOf(action.post.url);
+  _postURLs.splice(i, 1);
+  delete _posts[action.post.url];
+  PostStore.emitChange();
+  return updateAsyncStore();
+}
+
 function fetchUser(username) {
   return fetch(USER_URL + '/' + username).then(res => res.json());
 }
@@ -70,6 +92,7 @@ var PostStore = assign({}, EventEmitter.prototype, {
       loadAsyncStore().then(fetchFromServer).then(updateAsyncStore);
       return [];
     } else {
+      _postURLs = _postURLs.filter(url => (!!url));
       return _postURLs.map(url => _posts[url]);
     }
   },
@@ -93,27 +116,18 @@ AppDispatcher.register(function(action) {
       var username = SettingStore.getUsername();
       var url = APIURL + '/' + username;
       action.post.token = SettingStore.getToken();
-      console.log(action.post);
       var params = {method: 'POST', body: JSON.stringify(action.post), headers: HEADERS};
-      fetch(url, params).then(res => res.json()).then((post) => {
-        console.log(post);
-        _postURLs.unshift(post.url);
-        _posts[post.url] = post;
-        PostStore.emitChange();
-        updateAsyncStore();
-      });
+      fetch(url, params).then(res => res.json()).then(createPost);
       break;
 
     case 'edit-post':
       var username = SettingStore.getUsername();
       var key = action.post.key;
       if (!key) key = action.post.created + action.post.id;
+      var url = APIURL + '/' + username + '/' + key;
       action.post.token = SettingStore.getToken();
-      fetch(APIURL + '/' + username + '/' + key, {method: 'PUT', body: JSON.stringify(action.post), HEADERS}).then(post => {
-        _posts[post.url] = post;
-        PostStore.emitChange();
-        updateAsyncStore();
-      });
+      var params = {method: 'PUT', body: JSON.stringify(action.post), headers: HEADERS};
+      fetch(url, params).then(res => res.json()).then(editPost);
       break;
 
     case 'delete-post':
@@ -122,13 +136,9 @@ AppDispatcher.register(function(action) {
       var body = JSON.stringify({token: token});
       var key = action.post.key;
       if (!key) key = action.post.created + action.post.id;
-      fetch(APIURL + '/' + username + '/' + key, {method: 'DELETE', body: body, HEADERS}).then(res => {
-        var i = _postURLs.indexOf(action.post.url);
-        _postURLs.splice(i, 1);
-        delete _posts[action.post.url];
-        PostStore.emitChange();
-        updateAsyncStore();
-      });
+      var url = APIURL + '/' + username + '/' + key;
+      var params = {method: 'DELETE', body: body, headers};
+      fetch(url, params).then(() => deletePost(action.post));
       break;
 
   }
