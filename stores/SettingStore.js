@@ -15,11 +15,13 @@ var CHANGE_EVENT = 'change';
 
 var _settings = {};
 var _usernameStatus = '';
+var _emailStatus = '';
 var _isSignedUp = '';
 
 function update(settings) {
   _settings = settings;
   SettingStore.emitChange();
+  return AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(_settings));
 }
 
 function updateUsernameStatus(usernameStatus) {
@@ -27,12 +29,18 @@ function updateUsernameStatus(usernameStatus) {
   SettingStore.emitChange();
 }
 
+function updateEmailStatus(emailStatus) {
+  _emailStatus = emailStatus;
+  SettingStore.emitChange();
+}
+
 function load() {
   return AsyncStorage.getItem(STORAGE_KEY).then(str => {
     if (str) _isSignedUp = true;
     else _isSignedUp = false;
-    return JSON.parse(str);
-  }).then(update);
+    _settings = JSON.parse(str);
+    SettingStore.emitChange();
+  });
 }
 
 var SettingStore = assign({}, EventEmitter.prototype, {
@@ -50,6 +58,10 @@ var SettingStore = assign({}, EventEmitter.prototype, {
   
   getUsernameStatus: function() {
     return _usernameStatus;
+  },
+
+  getEmailStatus: function() {
+    return _emailStatus;
   },
 
   getSignUpStatus: function() {
@@ -80,32 +92,34 @@ AppDispatcher.register(function(action) {
           console.log(data);
           updateUsernameStatus('available');
           update(data);
-          AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data))
         });
       });
       break;
 
     case 'signin':
       var data = {username: action.username, email: action.email};
-      var body = JSON.stringify(data);
-      fetch(APIURL + '/signin', {method: 'POST', body: body, HEADERS}).then((res) => {
-        if (res.status !== 200) updateEmailStatus('error');
-        else res.json().then(resObj => {
-          updateEmailStatus(resObj.status);
-          update(data);
-          AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      update(data).then(() => {
+        console.log(_settings);
+        var body = JSON.stringify(data);
+        fetch(APIURL + '/signin', {method: 'POST', body: body, HEADERS}).then((res) => {
+          if (res.status !== 200) updateEmailStatus('error');
+          else res.json().then(resObj => {
+            updateEmailStatus(resObj.status);
+          });
         });
       });
       break;
 
     case 'authenticate':
-      var body = JSON.stringify({username: _settings.username, token: action.token});
-      fetch(APIURL + '/tokens', {method: 'POST', body: body, HEADERS}).then((res) => {
-        if (res.status === 200) res.json().then(data => {
-          console.log(data);
-          _settings.token = data.token;
-          update(_settings);
-          AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(_settings));
+      load().then(() => {
+        console.log(_settings);
+        var body = JSON.stringify({username: _settings.username, token: action.token});
+        fetch(APIURL + '/tokens', {method: 'POST', body: body, HEADERS}).then((res) => {
+          if (res.status === 200) res.json().then(data => {
+            console.log(data);
+            _settings.token = data.token;
+            update(_settings);
+          });
         });
       });
       break;

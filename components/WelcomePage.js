@@ -99,12 +99,8 @@ class WelcomePage extends React.Component {
         this.setState({heading: 'Yay! All set', subheading: 'Time to write something', success: true});
       }
     } else {
-      var emailStatus = SettingStore.getEmailStatus();
-      if (emailStatus !== 'sent') this.signin();
-      else {
-        var token = SettingStore.getToken();
-        if (token) this.props.navigator.immediatelyResetRouteStack([{id: 'posts'}]);
-      }
+      var token = SettingStore.getToken();
+      if (token) this.props.navigator.immediatelyResetRouteStack([{id: 'posts'}]);
     }
   }
 
