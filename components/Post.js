@@ -1,5 +1,8 @@
 'use strict'
 
+var URL = 'https://d1w3fhkxysfgcn.cloudfront.net';
+
+var SettingStore = require('../stores/SettingStore');
 var PostActions = require('../actions/PostActions');
 var DraftActions = require('../actions/DraftActions');
 var React = require('react-native');
@@ -35,8 +38,9 @@ class Post extends React.Component {
       destructiveButtonIndex: 2,
       cancelButtonIndex: 3
     }, (buttonIndex) => {
+      var url = URL + '/' + SettingStore.getUsername() + '/' + this.props.post.url;
       if (this.props.post.isDraft || this.props.post.hasUnpublishedEdits) var options = {message: this.props.post.data};
-      else var options = {url: this.props.post.url};
+      else var options = {url: url};
 
       if (buttonIndex === 0) ActionSheetIOS.showShareActionSheetWithOptions(options, this.shareFailure, this.shareSuccess);
       else if (buttonIndex === 1) this.props.nav.push({id: 'edit', post: this.props.post});
