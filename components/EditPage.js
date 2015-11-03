@@ -103,10 +103,8 @@ class EditPage extends React.Component {
           multiline={true}
           onChangeText={(text) => {
             this.state.post.data = text;
-             if (text) this.setState({leftButton: this.cancelButton});
-             else this.setState({leftButton: null});
           }}
-          value={this.state.post.data}
+          defaultValue={this.state.post.data}
           autoFocus={true}
           style={[styles.input, {height:this.state.height}]}
         />
