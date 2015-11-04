@@ -54,7 +54,7 @@ class Post extends React.Component {
     if (this.props.post.isDraft) noteText = 'Draft';
     if (this.props.post.hasUnpublishedEdits) noteText = 'Editing';
     return (
-      <TouchableOpacity onLongPress={this.showOptions}>
+      <TouchableOpacity onPress={this.showOptions}>
         <View style={styles.post}>
           <Text style={styles.note}>{noteText}</Text>
           <Text style={styles.text}>{this.props.post.data}</Text>
