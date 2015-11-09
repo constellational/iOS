@@ -38,7 +38,7 @@ class Post extends React.Component {
       destructiveButtonIndex: 2,
       cancelButtonIndex: 3
     }, (buttonIndex) => {
-      var url = URL + '/' + SettingStore.getUsername() + '/' + this.props.post.url;
+      var url = URL + '/' + SettingStore.getUsername() + '/' + this.props.post.id;
       if (this.props.post.isDraft || this.props.post.hasUnpublishedEdits) var options = {message: this.props.post.data};
       else var options = {url: url};
 
