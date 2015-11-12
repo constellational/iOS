@@ -44,8 +44,10 @@ class Post extends React.Component {
 
       if (buttonIndex === 0) ActionSheetIOS.showShareActionSheetWithOptions(options, this.shareFailure, this.shareSuccess);
       else if (buttonIndex === 1) this.props.nav.push({id: 'edit', post: this.props.post});
-      else if (this.props.post.isDraft) DraftActions.del(this.props.post);
-      else PostActions.del(this.props.post);
+      else if (buttonIndex === 2) {
+        if (this.props.post.isDraft) DraftActions.del(this.props.post);
+        else PostActions.del(this.props.post);
+      }
     });
   }
 
