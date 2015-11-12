@@ -114,6 +114,8 @@ class WelcomePage extends React.Component {
         key='email'
         keyboardType='email-address'
         returnKeyType={returnKeyType}
+        autoCapitalize='none'
+        autoCorrect={false}
         style={styles.textBox}
         placeholder='email address'
         autoFocus={true}
@@ -131,6 +133,8 @@ class WelcomePage extends React.Component {
         autoFocus={true}
         style={styles.textBox}
         placeholder='username' 
+        autoCapitalize='none'
+        autoCorrect={false}
         onSubmitEditing={(event) => {
           this.setState({username: event.nativeEvent.text});
           if (this.state.isSigningUp) {
