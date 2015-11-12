@@ -46,9 +46,9 @@ function editPost(post) {
 }
 
 function deletePost(post) {
-  var i = _postURLs.indexOf(action.post.url);
+  var i = _postURLs.indexOf(post.url);
   _postURLs.splice(i, 1);
-  delete _posts[action.post.url];
+  delete _posts[post.url];
   PostStore.emitChange();
   return updateAsyncStore();
 }
