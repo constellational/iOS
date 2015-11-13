@@ -94,10 +94,11 @@ class EditPage extends React.Component {
 
   render() {
     return (
-      <View style={styles.page} onLayout={(ev) => {
-        var fullHeight = ev.nativeEvent.layout.height;
-        this.setState({height: fullHeight, fullHeight: fullHeight});
-      }}>
+        <View style={styles.page} onLayout={(ev) => {
+          // 80 is for the navbar on top
+          var fullHeight = ev.nativeEvent.layout.height - 80;
+          this.setState({height: fullHeight, fullHeight: fullHeight});
+        }}>
         <NavBar leftButton={this.cancelButton} rightButton={this.postButton}/>
         <TextInput
           ref='editor'
