@@ -40,6 +40,9 @@ function createPost(post) {
       
 
 function editPost(post) {
+  var i = _postURLs.indexOf(post.url);
+  _postURLs.splice(i, 1);
+  _postURLs.unshift(post.url);
   _posts[post.url] = post;
   PostStore.emitChange();
   return updateAsyncStore();
