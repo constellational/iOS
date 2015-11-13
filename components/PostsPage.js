@@ -78,7 +78,7 @@ class PostsPage extends React.Component {
         <ListView
           automaticallyAdjustContentInsets={false}
           dataSource={this.state.posts}
-          renderRow={post => (<Post post={post} nav={this.props.navigator}/>)}
+          renderRow={post => (<Post post={post} nav={this.props.navigator} key={post.id}/>)}
           style={styles.list}
         />
       </View>
