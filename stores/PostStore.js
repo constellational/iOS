@@ -32,13 +32,21 @@ function loadAsyncStore() {
 }
 
 function createPost(post) {
+  var temporaryURL = new Date.now().toISOString();
+  post.url = temporaryURL;
+  _postURLs.unshift(post.url);
+  _posts[post.url] = post;
+  PostStore.emitChange();
+
   var username = SettingStore.getUsername();
   var url = APIURL + '/' + username;
   post.token = SettingStore.getToken();
   var params = {method: 'POST', body: JSON.stringify(post), headers: HEADERS};
   fetch(url, params).then(res => res.json()).then((post) => {
-    _postURLs.unshift(post.url);
+    var i = _postURLs.indexOf(temporaryURL);
+    _postURLs[i] = post.url;
     _posts[post.url] = post;
+    delete _posts[temporaryURL];
     PostStore.emitChange();
     return updateAsyncStore();
   });
