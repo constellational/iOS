@@ -63,6 +63,11 @@ function editPost(post) {
 }
 
 function deletePost(post) {
+  var i = _postURLs.indexOf(post.url);
+  _postURLs.splice(i, 1);
+  delete _posts[post.url];
+  PostStore.emitChange();
+ 
   var username = SettingStore.getUsername();
   var token = SettingStore.getToken();
   var body = JSON.stringify({token: token});
@@ -70,13 +75,7 @@ function deletePost(post) {
   if (!key) key = post.created + post.id;
   var url = APIURL + '/' + username + '/' + key;
   var params = {method: 'DELETE', body: body, headers: HEADERS};
-  fetch(url, params).then(() => {
-    var i = _postURLs.indexOf(post.url);
-    _postURLs.splice(i, 1);
-    delete _posts[post.url];
-    PostStore.emitChange();
-    return updateAsyncStore();
-  });
+  fetch(url, params).then(updateAsyncStore);
 }
 
 function fetchUser(username) {
