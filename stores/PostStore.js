@@ -32,28 +32,51 @@ function loadAsyncStore() {
 }
 
 function createPost(post) {
-  _postURLs.unshift(post.url);
-  _posts[post.url] = post;
-  PostStore.emitChange();
-  return updateAsyncStore();
+  var username = SettingStore.getUsername();
+  var url = APIURL + '/' + username;
+  post.token = SettingStore.getToken();
+  var params = {method: 'POST', body: JSON.stringify(post), headers: HEADERS};
+  fetch(url, params).then(res => res.json()).then((post) => {
+    _postURLs.unshift(post.url);
+    _posts[post.url] = post;
+    PostStore.emitChange();
+    return updateAsyncStore();
+  });
 }
       
 
 function editPost(post) {
-  var i = _postURLs.indexOf(post.url);
-  _postURLs.splice(i, 1);
-  _postURLs.unshift(post.url);
-  _posts[post.url] = post;
-  PostStore.emitChange();
-  return updateAsyncStore();
+  var username = SettingStore.getUsername();
+  var key = post.key;
+  if (!key) key = post.created + post.id;
+  var url = APIURL + '/' + username + '/' + key;
+  post.token = SettingStore.getToken();
+  var params = {method: 'PUT', body: JSON.stringify(post), headers: HEADERS};
+  fetch(url, params).then(res => res.json()).then((post) => {
+    var i = _postURLs.indexOf(post.url);
+    _postURLs.splice(i, 1);
+    _postURLs.unshift(post.url);
+    _posts[post.url] = post;
+    PostStore.emitChange();
+    return updateAsyncStore();
+  });
 }
 
 function deletePost(post) {
-  var i = _postURLs.indexOf(post.url);
-  _postURLs.splice(i, 1);
-  delete _posts[post.url];
-  PostStore.emitChange();
-  return updateAsyncStore();
+  var username = SettingStore.getUsername();
+  var token = SettingStore.getToken();
+  var body = JSON.stringify({token: token});
+  var key = post.key;
+  if (!key) key = post.created + post.id;
+  var url = APIURL + '/' + username + '/' + key;
+  var params = {method: 'DELETE', body: body, headers: HEADERS};
+  fetch(url, params).then(() => {
+    var i = _postURLs.indexOf(post.url);
+    _postURLs.splice(i, 1);
+    delete _posts[post.url];
+    PostStore.emitChange();
+    return updateAsyncStore();
+  });
 }
 
 function fetchUser(username) {
@@ -116,32 +139,15 @@ var PostStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case 'create-post':
-      var username = SettingStore.getUsername();
-      var url = APIURL + '/' + username;
-      action.post.token = SettingStore.getToken();
-      var params = {method: 'POST', body: JSON.stringify(action.post), headers: HEADERS};
-      fetch(url, params).then(res => res.json()).then(createPost);
+      createPost(action.post);
       break;
 
     case 'edit-post':
-      var username = SettingStore.getUsername();
-      var key = action.post.key;
-      if (!key) key = action.post.created + action.post.id;
-      var url = APIURL + '/' + username + '/' + key;
-      action.post.token = SettingStore.getToken();
-      var params = {method: 'PUT', body: JSON.stringify(action.post), headers: HEADERS};
-      fetch(url, params).then(res => res.json()).then(editPost);
+      editPost(action.post);
       break;
 
     case 'delete-post':
-      var username = SettingStore.getUsername();
-      var token = SettingStore.getToken();
-      var body = JSON.stringify({token: token});
-      var key = action.post.key;
-      if (!key) key = action.post.created + action.post.id;
-      var url = APIURL + '/' + username + '/' + key;
-      var params = {method: 'DELETE', body: body, headers: HEADERS};
-      fetch(url, params).then(() => deletePost(action.post));
+      deletePost(action.post);
       break;
 
   }
