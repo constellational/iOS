@@ -46,6 +46,13 @@ function createPost(post) {
       
 
 function editPost(post) {
+  var i = _postURLs.indexOf(post.url);
+  var initialURL = post.url;
+  _postURLs.splice(i, 1);
+  _postURLs.unshift(post.url);
+  _posts[post.url] = post;
+  PostStore.emitChange();
+
   var username = SettingStore.getUsername();
   var key = post.key;
   if (!key) key = post.created + post.id;
@@ -53,10 +60,10 @@ function editPost(post) {
   post.token = SettingStore.getToken();
   var params = {method: 'PUT', body: JSON.stringify(post), headers: HEADERS};
   fetch(url, params).then(res => res.json()).then((post) => {
-    var i = _postURLs.indexOf(post.url);
+    delete _posts[initialURL];
     _postURLs.splice(i, 1);
     _postURLs.unshift(post.url);
-    _posts[post.url] = post;
+    _posts[url] = post;
     PostStore.emitChange();
     return updateAsyncStore();
   });
