@@ -32,13 +32,25 @@ function loadAsyncStore() {
 }
 
 function createPost(post) {
+  post.created = new Date().toISOString();
+  post.updated = post.created;
+  if (!post.id) post.id = post.created;
+  post.key = post.created;
+  post.url = post.key;
+  _postURLs.unshift(post.url);
+  _posts[post.url] = post;
+  PostStore.emitChange();
+ 
   var username = SettingStore.getUsername();
   var url = APIURL + '/' + username;
   post.token = SettingStore.getToken();
   var params = {method: 'POST', body: JSON.stringify(post), headers: HEADERS};
-  fetch(url, params).then(res => res.json()).then((post) => {
-    _postURLs.unshift(post.url);
-    _posts[post.url] = post;
+  fetch(url, params).then(res => res.json()).then((createdPost) => {
+    delete _posts[post.url];
+    var i = _postURLs.indexOf(post.url);
+    _postURLs.splice(i, 1);
+    _postURLs.unshift(createdPost.url);
+    _posts[createdPost.url] = createdPost;
     PostStore.emitChange();
     return updateAsyncStore();
   });
