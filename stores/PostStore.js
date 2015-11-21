@@ -18,6 +18,31 @@ var CHANGE_EVENT = 'change';
 
 var _posts = null;
 var _postURLs = null;
+var _requests = [];
+
+function retryFailedRequests() {
+  var promiseArr = _requests.map((req) => {
+    if (req.stat !== 'succeeded') {
+      return fetch(req.url, req.params).then(res => res.json()).then(req.callback).then(() => {
+        req.stat = 'succeeded';
+        return req;
+      }).catch(() => {
+        req.stat = 'failed';
+        return req;
+      });
+    } else {
+      return req;
+    }
+  });
+  Promise.all(promiseArr).then((res) => {
+    _requests = res;
+  });
+}
+
+function addRequest(url, params, callback) {
+  _requests.push({url: url, params: params, callback: callback});
+  retryRequests();
+}
 
 function loadAsyncStore() {
   return AsyncStorage.getItem('posts').then(str => {
@@ -45,7 +70,8 @@ function createPost(post) {
   var url = APIURL + '/' + username;
   post.token = SettingStore.getToken();
   var params = {method: 'POST', body: JSON.stringify(post), headers: HEADERS};
-  fetch(url, params).then(res => res.json()).then((createdPost) => {
+
+  var callback = (createdPost) => {
     delete _posts[post.url];
     var i = _postURLs.indexOf(post.url);
     _postURLs.splice(i, 1);
@@ -53,10 +79,11 @@ function createPost(post) {
     _posts[createdPost.url] = createdPost;
     PostStore.emitChange();
     return updateAsyncStore();
-  });
+  };
+
+  addRequest(url, params, callback);
 }
       
-
 function editPost(post) {
   var i = _postURLs.indexOf(post.url);
   var initialURL = post.url;
@@ -71,14 +98,17 @@ function editPost(post) {
   var url = APIURL + '/' + username + '/' + key;
   post.token = SettingStore.getToken();
   var params = {method: 'PUT', body: JSON.stringify(post), headers: HEADERS};
-  fetch(url, params).then(res => res.json()).then((post) => {
+
+  var callback = (post) => {
     delete _posts[initialURL];
     _postURLs.splice(i, 1);
     _postURLs.unshift(post.url);
     _posts[url] = post;
     PostStore.emitChange();
     return updateAsyncStore();
-  });
+  };
+  
+  addRequest(url, params, callback);
 }
 
 function deletePost(post) {
@@ -94,7 +124,8 @@ function deletePost(post) {
   if (!key) key = post.created + post.id;
   var url = APIURL + '/' + username + '/' + key;
   var params = {method: 'DELETE', body: body, headers: HEADERS};
-  fetch(url, params).then(updateAsyncStore);
+  
+  addRequest(url, params, updateAsyncStore);
 }
 
 function fetchUser(username) {
