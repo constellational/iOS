@@ -84,8 +84,9 @@ var SettingStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case 'signup':
+      var username = action.username.toLowerCase();
       updateUsernameStatus('checking');
-      var body = JSON.stringify({username: action.username, email: action.email});
+      var body = JSON.stringify({username: username, email: action.email});
       fetch(APIURL, {method: 'POST', body: body, HEADERS}).then(res => {
         if (res.status === 403) updateUsernameStatus('unavailable');
         else res.json().then(data => {
@@ -97,7 +98,7 @@ AppDispatcher.register(function(action) {
       break;
 
     case 'signin':
-      var data = {username: action.username, email: action.email};
+      var data = {username: action.username.toLowerCase(), email: action.email};
       update(data).then(() => {
         console.log(_settings);
         var body = JSON.stringify(data);

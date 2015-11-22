@@ -58,6 +58,7 @@ class WelcomePage extends React.Component {
   }
 
   checkUsername(username) {
+    var username = username.toLowerCase();
     this.setState({username: username});
     var url = URL + '/' + username;
     return fetch(url).then((res) => {
