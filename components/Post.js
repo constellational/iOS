@@ -76,7 +76,7 @@ var styles = StyleSheet.create({
     padding: 10
   },
   text: {
-    fontSize: 21,
+    fontSize: 18,
     padding: 8
   },
   note: {
