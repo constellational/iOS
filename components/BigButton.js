@@ -21,6 +21,7 @@ class BigButton extends React.Component {
 var styles = StyleSheet.create({
   bigButton: {
     fontSize: 18,
+    fontFamily: 'System',
     fontWeight: '200',
     alignSelf: 'center',
     margin: 10,

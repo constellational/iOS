@@ -16,6 +16,7 @@ class Subheading extends React.Component {
 var styles = StyleSheet.create({
   subheading: {
     fontSize: 24,
+    fontFamily: 'System',
     fontWeight: '200',
     padding: 10,
   }

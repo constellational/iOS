@@ -16,6 +16,7 @@ class BodyText extends React.Component {
 var styles = StyleSheet.create({
   bodyText: {
     fontSize: 18,
+    fontFamily: 'System',
     fontWeight: '200',
     padding: 10,
   }

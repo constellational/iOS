@@ -177,6 +177,7 @@ var styles = StyleSheet.create({
   },
   textBox: {
     fontSize: 18,
+    fontFamily: 'System',
     fontWeight: '200',
     alignSelf: 'center',
     margin: 10,

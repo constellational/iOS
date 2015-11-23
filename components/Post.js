@@ -73,14 +73,17 @@ var styles = StyleSheet.create({
   },
   heading: {
     fontSize: 42,
+    fontFamily: 'System',
     padding: 10
   },
   text: {
     fontSize: 18,
+    fontFamily: 'System',
     padding: 8
   },
   note: {
     fontSize: 14,
+    fontFamily: 'System',
     padding: 8,
     color: 'grey',
     alignSelf: 'flex-end'
@@ -88,6 +91,7 @@ var styles = StyleSheet.create({
   time: {
     color: 'grey',
     fontSize: 14,
+    fontFamily: 'System',
     padding: 8,
     alignSelf: 'flex-start'
   }

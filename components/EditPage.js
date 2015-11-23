@@ -124,6 +124,7 @@ var styles = StyleSheet.create({
     padding: 20,
     paddingTop: 10,
     fontSize: 18,
+    fontFamily: 'System',
   },
 });
 
