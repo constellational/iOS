@@ -41,7 +41,7 @@ function retryFailedRequests() {
 
 function addRequest(url, params, callback) {
   _requests.push({url: url, params: params, callback: callback});
-  retryRequests();
+  retryFailedRequests();
 }
 
 function loadAsyncStore() {
