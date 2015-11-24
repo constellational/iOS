@@ -18,6 +18,7 @@ var {
   StyleSheet,
   Text,
   TextInput,
+  ScrollView,
   View,
 } = React;
 
@@ -94,22 +95,23 @@ class EditPage extends React.Component {
 
   render() {
     return (
-        <View style={styles.page} onLayout={(ev) => {
-          // 80 is for the navbar on top
-          var fullHeight = ev.nativeEvent.layout.height - 80;
-          this.setState({height: fullHeight, fullHeight: fullHeight});
-        }}>
+      <View style={styles.page} onLayout={(ev) => {
+        // 80 is for the navbar on top
+        var fullHeight = ev.nativeEvent.layout.height - 80;
+        this.setState({height: fullHeight, fullHeight: fullHeight});
+      }}>
         <NavBar leftButton={this.cancelButton} rightButton={this.postButton}/>
-        <TextInput
-          ref='editor'
-          multiline={true}
-          onChangeText={(text) => {
-            this.state.post.data = text;
-          }}
-          defaultValue={this.state.post.data}
-          autoFocus={true}
-          style={[styles.input, {height:this.state.height}]}
-        />
+        <ScrollView keyboardDismissMode='interactive'>
+          <TextInput
+            multiline={true}
+            onChangeText={(text) => {
+              this.state.post.data = text;
+            }}
+            defaultValue={this.state.post.data}
+            autoFocus={true}
+            style={[styles.input, {height:this.state.height}]}
+          />
+        </ScrollView>
       </View>
     );
   }
@@ -122,7 +124,7 @@ var styles = StyleSheet.create({
   },
   input: {
     padding: 20,
-    paddingTop: 10,
+    paddingTop: 0,
     fontSize: 18,
     fontFamily: 'System',
   },
