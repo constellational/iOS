@@ -22,17 +22,14 @@ var _requests = [];
 
 function retryFailedRequests() {
   var promiseArr = _requests.map((req) => {
-    if (req.stat !== 'succeeded') {
-      return fetch(req.url, req.params).then(res => res.json()).then(req.callback).then(() => {
-        req.stat = 'succeeded';
-        return req;
-      }).catch(() => {
-        req.stat = 'failed';
-        return req;
-      });
-    } else {
+    if (req.stat === 'succeeded') return req;
+    else return fetch(req.url, req.params).then(res => res.json()).then(req.callback).then(() => {
+      req.stat = 'succeeded';
       return req;
-    }
+    }).catch(() => {
+      req.stat = 'failed';
+      return req;
+    });
   });
   Promise.all(promiseArr).then((res) => {
     _requests = res;
@@ -41,7 +38,9 @@ function retryFailedRequests() {
 
 function addRequest(url, params, callback) {
   _requests.push({url: url, params: params, callback: callback});
+  console.log(_requests);
   retryFailedRequests();
+  console.log(_requests);
 }
 
 function loadAsyncStore() {
@@ -55,6 +54,19 @@ function loadAsyncStore() {
     });
   });
 }
+
+function replacePost(oldPost, newPost) {
+  delete _posts[oldPost.url];
+  var i = _postURLs.indexOf(oldPost.url);
+  _postURLs.splice(i, 1);
+  _postURLs.unshift(newPost.url);
+  _posts[newPost.url] = newPost;
+  PostStore.emitChange();
+  console.log(_posts);
+  console.log(_postURLs);
+  return updateAsyncStore();
+}
+
 
 function createPost(post) {
   post.created = new Date().toISOString();
@@ -71,15 +83,7 @@ function createPost(post) {
   post.token = SettingStore.getToken();
   var params = {method: 'POST', body: JSON.stringify(post), headers: HEADERS};
 
-  var callback = (createdPost) => {
-    delete _posts[post.url];
-    var i = _postURLs.indexOf(post.url);
-    _postURLs.splice(i, 1);
-    _postURLs.unshift(createdPost.url);
-    _posts[createdPost.url] = createdPost;
-    PostStore.emitChange();
-    return updateAsyncStore();
-  };
+  var callback = (createdPost) => replacePost(post, createdPost);
 
   addRequest(url, params, callback);
 }
@@ -99,14 +103,7 @@ function editPost(post) {
   post.token = SettingStore.getToken();
   var params = {method: 'PUT', body: JSON.stringify(post), headers: HEADERS};
 
-  var callback = (post) => {
-    delete _posts[initialURL];
-    _postURLs.splice(i, 1);
-    _postURLs.unshift(post.url);
-    _posts[url] = post;
-    PostStore.emitChange();
-    return updateAsyncStore();
-  };
+  var callback = (createdPost) => replacePost(post, createdPost);
   
   addRequest(url, params, callback);
 }
