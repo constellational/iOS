@@ -38,9 +38,7 @@ function retryFailedRequests() {
 
 function addRequest(url, params, callback) {
   _requests.push({url: url, params: params, callback: callback});
-  console.log(_requests);
   retryFailedRequests();
-  console.log(_requests);
 }
 
 function loadAsyncStore() {
@@ -62,8 +60,6 @@ function replacePost(oldPost, newPost) {
   _postURLs.unshift(newPost.url);
   _posts[newPost.url] = newPost;
   PostStore.emitChange();
-  console.log(_posts);
-  console.log(_postURLs);
   return updateAsyncStore();
 }
 
