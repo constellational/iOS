@@ -45,11 +45,11 @@ class EditPage extends React.Component {
       this.setState({height: this.state.height - change});
     };
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
-    this.wordCount = (text) => this.state.wordCount = text.split(/\s+/).filter(w => !!w).length;
-    this.wordCount(this.state.post.data);
+    this.updateWordCount = (text) => this.setState({wordCount: text.split(/\s+/).filter(w => !!w).length});
   }
 
   componentDidMount() {
+    this.updateWordCount(this.state.post.data);
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, this.updateKeyboardSpace);
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.resetKeyboardSpace);
   }
@@ -96,7 +96,7 @@ class EditPage extends React.Component {
   }
 
   render() {
-    var title = <Text style={title}>{this.state.wordCount}</Text>;
+    var title = <Text style={styles.title}>{this.state.wordCount} words</Text>;
     return (
       <View style={styles.page} onLayout={(ev) => {
         // 80 is for the navbar on top
@@ -109,7 +109,7 @@ class EditPage extends React.Component {
             multiline={true}
             onChangeText={(text) => {
               this.state.post.data = text;
-              this.wordCount(text);
+              this.updateWordCount(text);
             }}
             defaultValue={this.state.post.data}
             autoFocus={true}
@@ -133,8 +133,11 @@ var styles = StyleSheet.create({
     fontFamily: 'System',
   },
   title: {
+    paddingTop: 4,
     fontSize: 18,
     fontFamily: 'System',
+    color: 'grey',
+    textAlign: 'center',
   },
 });
 
