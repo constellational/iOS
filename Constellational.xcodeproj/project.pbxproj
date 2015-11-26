@@ -24,6 +24,9 @@
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		251164E71B8A1B9F00E67555 /* libReactNativeIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 251164E61B8A1B9100E67555 /* libReactNativeIcons.a */; };
 		251164E91B8A1C0100E67555 /* ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 251164E81B8A1C0100E67555 /* ionicons.ttf */; };
+		25EB9E9E1C0762BB00628BC5 /* ShareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EB9E9D1C0762BB00628BC5 /* ShareViewController.m */; };
+		25EB9EA11C0762BB00628BC5 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25EB9E9F1C0762BB00628BC5 /* MainInterface.storyboard */; };
+		25EB9EA51C0762BB00628BC5 /* Constellational Share Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 25EB9E9A1C0762B900628BC5 /* Constellational Share Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		25F9C21B1B77924400D4A996 /* libRNKeyboardEvents.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25F9C21A1B77923100D4A996 /* libRNKeyboardEvents.a */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 /* End PBXBuildFile section */
@@ -99,6 +102,13 @@
 			remoteGlobalIDString = 2F5A3EB81ACDBF8000439386;
 			remoteInfo = ReactNativeIcons;
 		};
+		25EB9EA31C0762BB00628BC5 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 25EB9E991C0762B900628BC5;
+			remoteInfo = "Constellational Share Extension";
+		};
 		25F9C2191B77923100D4A996 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 25F9C2151B77923100D4A996 /* RNKeyboardEvents.xcodeproj */;
@@ -121,6 +131,20 @@
 			remoteInfo = RCTText;
 		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		25EB9EB51C0762BC00628BC5 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				25EB9EA51C0762BB00628BC5 /* Constellational Share Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = main.jsbundle; path = iOS/main.jsbundle; sourceTree = "<group>"; };
@@ -145,6 +169,11 @@
 		2510924F1BFF5B3300C2222F /* Constellational.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Constellational.entitlements; sourceTree = "<group>"; };
 		251164E11B8A1B9100E67555 /* ReactNativeIcons.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = ReactNativeIcons.xcodeproj; path = "node_modules/react-native-icons/ios/ReactNativeIcons.xcodeproj"; sourceTree = "<group>"; };
 		251164E81B8A1C0100E67555 /* ionicons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = ionicons.ttf; path = "node_modules/react-native-icons/ios/ReactNativeIcons/Libraries/FontAwesomeKit/ionicons.ttf"; sourceTree = "<group>"; };
+		25EB9E9A1C0762B900628BC5 /* Constellational Share Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "Constellational Share Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		25EB9E9C1C0762BB00628BC5 /* ShareViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShareViewController.h; sourceTree = "<group>"; };
+		25EB9E9D1C0762BB00628BC5 /* ShareViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShareViewController.m; sourceTree = "<group>"; };
+		25EB9EA01C0762BB00628BC5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
+		25EB9EA21C0762BB00628BC5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		25F9C2151B77923100D4A996 /* RNKeyboardEvents.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNKeyboardEvents.xcodeproj; path = "node_modules/react-native-keyboardevents/RNKeyboardEvents.xcodeproj"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
@@ -174,6 +203,13 @@
 				832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */,
 				00C302EA1ABCBA2D00DB3ED1 /* libRCTVibration.a in Frameworks */,
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		25EB9E971C0762B900628BC5 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -284,6 +320,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		25EB9E9B1C0762BB00628BC5 /* Constellational Share Extension */ = {
+			isa = PBXGroup;
+			children = (
+				25EB9E9C1C0762BB00628BC5 /* ShareViewController.h */,
+				25EB9E9D1C0762BB00628BC5 /* ShareViewController.m */,
+				25EB9E9F1C0762BB00628BC5 /* MainInterface.storyboard */,
+				25EB9EA21C0762BB00628BC5 /* Info.plist */,
+			);
+			path = "Constellational Share Extension";
+			sourceTree = "<group>";
+		};
 		25F9C2161B77923100D4A996 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -334,6 +381,7 @@
 				13B07FAE1A68108700A75B9A /* Constellational */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* ConstellationalTests */,
+				25EB9E9B1C0762BB00628BC5 /* Constellational Share Extension */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 			);
 			indentWidth = 2;
@@ -345,6 +393,7 @@
 			children = (
 				13B07F961A680F5B00A75B9A /* Constellational.app */,
 				00E356EE1AD99517003FC87E /* ConstellationalTests.xctest */,
+				25EB9E9A1C0762B900628BC5 /* Constellational Share Extension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -377,15 +426,34 @@
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
+				25EB9EB51C0762BC00628BC5 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				25EB9EA41C0762BB00628BC5 /* PBXTargetDependency */,
 			);
 			name = Constellational;
 			productName = "Hello World";
 			productReference = 13B07F961A680F5B00A75B9A /* Constellational.app */;
 			productType = "com.apple.product-type.application";
+		};
+		25EB9E991C0762B900628BC5 /* Constellational Share Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 25EB9EB41C0762BC00628BC5 /* Build configuration list for PBXNativeTarget "Constellational Share Extension" */;
+			buildPhases = (
+				25EB9E961C0762B900628BC5 /* Sources */,
+				25EB9E971C0762B900628BC5 /* Frameworks */,
+				25EB9E981C0762B900628BC5 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Constellational Share Extension";
+			productName = "Constellational Share Extension";
+			productReference = 25EB9E9A1C0762B900628BC5 /* Constellational Share Extension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -407,6 +475,10 @@
 								enabled = 1;
 							};
 						};
+					};
+					25EB9E991C0762B900628BC5 = {
+						CreatedOnToolsVersion = 7.1.1;
+						DevelopmentTeam = 5C79KQUVVH;
 					};
 				};
 			};
@@ -475,6 +547,7 @@
 			targets = (
 				13B07F861A680F5B00A75B9A /* Constellational */,
 				00E356ED1AD99517003FC87E /* ConstellationalTests */,
+				25EB9E991C0762B900628BC5 /* Constellational Share Extension */,
 			);
 		};
 /* End PBXProject section */
@@ -585,6 +658,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		25EB9E981C0762B900628BC5 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				25EB9EA11C0762BB00628BC5 /* MainInterface.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -605,6 +686,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		25EB9E961C0762B900628BC5 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				25EB9E9E1C0762BB00628BC5 /* ShareViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -612,6 +701,11 @@
 			isa = PBXTargetDependency;
 			target = 13B07F861A680F5B00A75B9A /* Constellational */;
 			targetProxy = 00E356F41AD99517003FC87E /* PBXContainerItemProxy */;
+		};
+		25EB9EA41C0762BB00628BC5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 25EB9E991C0762B900628BC5 /* Constellational Share Extension */;
+			targetProxy = 25EB9EA31C0762BB00628BC5 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -623,6 +717,14 @@
 			);
 			name = LaunchScreen.xib;
 			path = iOS;
+			sourceTree = "<group>";
+		};
+		25EB9E9F1C0762BB00628BC5 /* MainInterface.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				25EB9EA01C0762BB00628BC5 /* Base */,
+			);
+			name = MainInterface.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -708,6 +810,39 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.constellational;
 				PRODUCT_NAME = Constellational;
 				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
+		25EB9EA61C0762BB00628BC5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Constellational Share Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.constellational.Constellational-Share-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		25EB9EA71C0762BB00628BC5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_NO_COMMON_BLOCKS = YES;
+				INFOPLIST_FILE = "Constellational Share Extension/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.1;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.constellational.Constellational-Share-Extension";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
@@ -818,6 +953,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		25EB9EB41C0762BC00628BC5 /* Build configuration list for PBXNativeTarget "Constellational Share Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				25EB9EA61C0762BB00628BC5 /* Debug */,
+				25EB9EA71C0762BB00628BC5 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Constellational" */ = {
 			isa = XCConfigurationList;
