@@ -97,7 +97,7 @@ class EditPage extends React.Component {
   }
 
   render() {
-    if (!this.state.isKeyboardUp) var title = <Text></Text>;
+    if (this.state.isKeyboardUp) var title = <Text></Text>;
     else var title = <Text style={styles.title}>{this.state.wordCount} words</Text>;
     return (
       <View style={styles.page} onLayout={(ev) => {
@@ -135,7 +135,7 @@ var styles = StyleSheet.create({
     fontFamily: 'System',
   },
   title: {
-    paddingTop: 6,
+    paddingTop: 8,
     fontSize: 16,
     fontFamily: 'System',
     color: 'grey',
