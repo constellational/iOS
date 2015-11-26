@@ -43,8 +43,9 @@ class EditPage extends React.Component {
       if (frames.endCoordinates) change = frames.endCoordinates.height;
       else change = frames.end.height;
       this.setState({height: this.state.height - change});
+      this.setState({isKeyboardUp: true})
     };
-    this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
+    this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight, isKeyboardUp: false});
     this.updateWordCount = (text) => this.setState({wordCount: text.split(/\s+/).filter(w => !!w).length});
   }
 
@@ -96,7 +97,8 @@ class EditPage extends React.Component {
   }
 
   render() {
-    var title = <Text style={styles.title}>{this.state.wordCount} words</Text>;
+    if (!this.state.isKeyboardUp) var title = <Text></Text>;
+    else var title = <Text style={styles.title}>{this.state.wordCount} words</Text>;
     return (
       <View style={styles.page} onLayout={(ev) => {
         // 80 is for the navbar on top
@@ -133,8 +135,8 @@ var styles = StyleSheet.create({
     fontFamily: 'System',
   },
   title: {
-    paddingTop: 4,
-    fontSize: 18,
+    paddingTop: 6,
+    fontSize: 16,
     fontFamily: 'System',
     color: 'grey',
     textAlign: 'center',
