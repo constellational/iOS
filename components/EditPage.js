@@ -42,8 +42,7 @@ class EditPage extends React.Component {
       var change;
       if (frames.endCoordinates) change = frames.endCoordinates.height;
       else change = frames.end.height;
-      this.setState({height: this.state.height - change});
-      this.setState({isKeyboardUp: true})
+      this.setState({height: this.state.height - change, isKeyboardUp: true});
     };
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight, isKeyboardUp: false});
     this.updateWordCount = (text) => this.setState({wordCount: text.split(/\s+/).filter(w => !!w).length});
