@@ -45,6 +45,8 @@ class EditPage extends React.Component {
       this.setState({height: this.state.height - change});
     };
     this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight});
+    this.wordCount = (text) => this.state.wordCount = text.split(/\s+/).filter(w => !!w).length;
+    this.wordCount(this.state.post.data);
   }
 
   componentDidMount() {
@@ -94,18 +96,20 @@ class EditPage extends React.Component {
   }
 
   render() {
+    var title = <Text style={title}>{this.state.wordCount}</Text>;
     return (
       <View style={styles.page} onLayout={(ev) => {
         // 80 is for the navbar on top
         var fullHeight = ev.nativeEvent.layout.height - 80;
         this.setState({height: fullHeight, fullHeight: fullHeight});
       }}>
-        <NavBar leftButton={this.cancelButton} rightButton={this.postButton}/>
+        <NavBar leftButton={this.cancelButton} title={title} rightButton={this.postButton}/>
         <ScrollView keyboardDismissMode='interactive'>
           <TextInput
             multiline={true}
             onChangeText={(text) => {
               this.state.post.data = text;
+              this.wordCount(text);
             }}
             defaultValue={this.state.post.data}
             autoFocus={true}
@@ -125,6 +129,10 @@ var styles = StyleSheet.create({
   input: {
     padding: 20,
     paddingTop: 0,
+    fontSize: 18,
+    fontFamily: 'System',
+  },
+  title: {
     fontSize: 18,
     fontFamily: 'System',
   },
