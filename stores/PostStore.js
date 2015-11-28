@@ -23,7 +23,8 @@ var _requests = [];
 function retryFailedRequests() {
   var promiseArr = _requests.map((req) => {
     if (req.stat === 'succeeded') return req;
-    else return fetch(req.url, req.params).then(res => res.json()).then(req.callback).then(() => {
+    else return fetch(req.url, req.params).then(res => res.json()).then((newPost) => {
+      if (req.temporaryPostURL) replaceTemporaryPost(req.temporaryPostURL, newPost);
       req.stat = 'succeeded';
       return req;
     }).catch(() => {
@@ -36,26 +37,33 @@ function retryFailedRequests() {
   }).then(fetchFromServer).then(updateAsyncStore);
 }
 
-function addRequest(url, params, callback) {
-  _requests.push({url: url, params: params, callback: callback});
-  retryFailedRequests();
+function addRequest(url, params, temporaryPostURL) {
+  var pushRequest = () => _requests.push({url: url, params: params, temporaryPostURL: temporaryPostURL});
+  var storeRequests = () => AsyncStorage.setItem('requests', JSON.stringify(_requests));
+  if (!_requests) loadAsyncStore().then(pushRequest).then(storeRequests).then(retryFailedRequests);
+  else pushRequest().then(storeRequests).then(retryFailedRequests);
 }
 
 function loadAsyncStore() {
-  return AsyncStorage.getItem('posts').then(str => {
+  return AsyncStorage.getItem('posts').then((str) => {
     if (!str) _posts = {};
     else _posts = JSON.parse(str);
-    return AsyncStorage.getItem('postURLs').then(str => {
-      if (!str) _postURLs = [];
-      else _postURLs = JSON.parse(str);
-      PostStore.emitChange();
-    });
-  });
+    return AsyncStorage.getItem('postURLs');
+  }).then((str) => {
+    if (!str) _postURLs = [];
+    else _postURLs = JSON.parse(str);
+    PostStore.emitChange();
+  }).then(() => {
+    return AsyncStorage.getItem('requests');
+  }).then((str) => {
+    if (!str) _requests = [];
+    else _requests = JSON.parse(str);
+  }).then(retryFailedRequests);
 }
 
-function replacePost(oldPost, newPost) {
-  delete _posts[oldPost.url];
-  var i = _postURLs.indexOf(oldPost.url);
+function replaceTemporaryPost(temporaryPostURL, newPost) {
+  delete _posts[temporaryPostURL];
+  var i = _postURLs.indexOf(temporaryPostURL);
   _postURLs.splice(i, 1);
   _postURLs.unshift(newPost.url);
   _posts[newPost.url] = newPost;
@@ -79,14 +87,11 @@ function createPost(post) {
   post.token = SettingStore.getToken();
   var params = {method: 'POST', body: JSON.stringify(post), headers: HEADERS};
 
-  var callback = (createdPost) => replacePost(post, createdPost);
-
-  addRequest(url, params, callback);
+  addRequest(url, params, post.url);
 }
       
 function editPost(post) {
   var i = _postURLs.indexOf(post.url);
-  var initialURL = post.url;
   _postURLs.splice(i, 1);
   _postURLs.unshift(post.url);
   _posts[post.url] = post;
@@ -99,9 +104,7 @@ function editPost(post) {
   post.token = SettingStore.getToken();
   var params = {method: 'PUT', body: JSON.stringify(post), headers: HEADERS};
 
-  var callback = (createdPost) => replacePost(post, createdPost);
-  
-  addRequest(url, params, callback);
+  addRequest(url, params, post.url);
 }
 
 function deletePost(post) {
@@ -118,7 +121,7 @@ function deletePost(post) {
   var url = APIURL + '/' + username + '/' + key;
   var params = {method: 'DELETE', body: body, headers: HEADERS};
   
-  addRequest(url, params, updateAsyncStore);
+  addRequest(url, params);
 }
 
 function fetchUser(username) {
@@ -160,7 +163,7 @@ var PostStore = assign({}, EventEmitter.prototype, {
       loadAsyncStore().then(fetchFromServer).then(updateAsyncStore);
       return [];
     } else {
-      fetchFromServer().then(updateAsyncStore);
+      //fetchFromServer().then(updateAsyncStore);
       _postURLs = _postURLs.filter(url => (!!url));
       return _postURLs.map(url => _posts[url]);
     }
