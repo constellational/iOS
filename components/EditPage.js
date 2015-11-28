@@ -49,7 +49,6 @@ class EditPage extends React.Component {
   }
 
   componentDidMount() {
-    this.updateWordCount(this.state.post.data);
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, this.updateKeyboardSpace);
     KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.resetKeyboardSpace);
   }
