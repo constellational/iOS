@@ -160,6 +160,7 @@ var PostStore = assign({}, EventEmitter.prototype, {
       loadAsyncStore().then(fetchFromServer).then(updateAsyncStore);
       return [];
     } else {
+      fetchFromServer().then(updateAsyncStore);
       _postURLs = _postURLs.filter(url => (!!url));
       return _postURLs.map(url => _posts[url]);
     }
