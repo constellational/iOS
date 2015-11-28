@@ -95,7 +95,7 @@ class EditPage extends React.Component {
   }
 
   render() {
-    if (this.state.isKeyboardUp) var title = <Text></Text>;
+    if (this.state.isKeyboardUp || !this.state.wordCount) var title = <Text></Text>;
     else var title = <Text style={styles.title}>{this.state.wordCount} words</Text>;
     return (
       <View style={styles.page} onLayout={(ev) => {
