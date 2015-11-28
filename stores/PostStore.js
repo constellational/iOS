@@ -18,7 +18,7 @@ var CHANGE_EVENT = 'change';
 
 var _posts = null;
 var _postURLs = null;
-var _requests = [];
+var _requests = null;
 
 function retryFailedRequests() {
   var promiseArr = _requests.map((req) => {
@@ -37,11 +37,24 @@ function retryFailedRequests() {
   }).then(fetchFromServer).then(updateAsyncStore);
 }
 
+function loadRequests() {
+  return AsyncStorage.getItem('requests').then((str) => {
+    if (!str) _requests = [];
+    else _requests = JSON.parse(str);
+  });
+}
+
+function saveRequests() {
+  return AsyncStorage.setItem('requests', JSON.stringify(_requests));
+}
+
 function addRequest(url, params, temporaryPostURL) {
-  var pushRequest = () => _requests.push({url: url, params: params, temporaryPostURL: temporaryPostURL});
-  var storeRequests = () => AsyncStorage.setItem('requests', JSON.stringify(_requests));
-  if (!_requests) loadAsyncStore().then(pushRequest).then(storeRequests).then(retryFailedRequests);
-  else pushRequest().then(storeRequests).then(retryFailedRequests);
+  var req = {url: url, params: params, temporaryPostURL: temporaryPostURL};
+  if (!_requests) loadRequests().then(() => _requests.push(req)).then(saveRequests).then(retryFailedRequests);
+  else {
+    _requests.push(req);
+    saveRequests().then(retryFailedRequests);
+  }
 }
 
 function loadAsyncStore() {
@@ -58,7 +71,7 @@ function loadAsyncStore() {
   }).then((str) => {
     if (!str) _requests = [];
     else _requests = JSON.parse(str);
-  }).then(retryFailedRequests);
+  });
 }
 
 function replaceTemporaryPost(temporaryPostURL, newPost) {
@@ -81,7 +94,7 @@ function createPost(post) {
   _postURLs.unshift(post.url);
   _posts[post.url] = post;
   PostStore.emitChange();
- 
+
   var username = SettingStore.getUsername();
   var url = APIURL + '/' + username;
   post.token = SettingStore.getToken();
@@ -160,10 +173,10 @@ function updateAsyncStore() {
 var PostStore = assign({}, EventEmitter.prototype, {
   getAll: function() {
     if (!_postURLs) {
-      loadAsyncStore().then(fetchFromServer).then(updateAsyncStore);
+      loadAsyncStore().then(fetchFromServer).then(updateAsyncStore).then(retryFailedRequests);
       return [];
     } else {
-      //fetchFromServer().then(updateAsyncStore);
+      fetchFromServer().then(updateAsyncStore);
       _postURLs = _postURLs.filter(url => (!!url));
       return _postURLs.map(url => _posts[url]);
     }
