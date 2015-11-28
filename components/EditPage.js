@@ -44,8 +44,8 @@ class EditPage extends React.Component {
       else change = frames.end.height;
       this.setState({height: this.state.height - change, isKeyboardUp: true});
     };
-    this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight, isKeyboardUp: false});
-    this.updateWordCount = (text) => this.setState({wordCount: text.split(/\s+/).filter(w => !!w).length});
+    var countWords = () => this.state.post.data.split(/\s+/).filter(w => !!w).length;
+    this.resetKeyboardSpace = () => this.setState({height: this.state.fullHeight, isKeyboardUp: false, wordCount: countWords()});
   }
 
   componentDidMount() {
@@ -110,7 +110,6 @@ class EditPage extends React.Component {
             multiline={true}
             onChangeText={(text) => {
               this.state.post.data = text;
-              this.updateWordCount(text);
             }}
             defaultValue={this.state.post.data}
             autoFocus={true}
