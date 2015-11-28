@@ -33,7 +33,7 @@ function retryFailedRequests() {
   });
   Promise.all(promiseArr).then((res) => {
     _requests = res;
-  });
+  }).then(fetchFromServer).then(updateAsyncStore);
 }
 
 function addRequest(url, params, callback) {
