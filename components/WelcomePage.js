@@ -1,7 +1,5 @@
 'use strict'
 
-var URL = 'https://d1w3fhkxysfgcn.cloudfront.net';
-
 var SettingActions = require('../actions/SettingActions');
 var SettingStore = require('../stores/SettingStore');
 var React = require('react-native');
@@ -60,7 +58,7 @@ class WelcomePage extends React.Component {
   checkUsername(username) {
     var username = username.toLowerCase();
     this.setState({username: username});
-    var url = URL + '/' + username;
+    var url = 'constellational.com/' + username;
     return fetch(url).then((res) => {
       console.log(this.state.username);
       console.log(url);
