@@ -176,7 +176,7 @@ var PostStore = assign({}, EventEmitter.prototype, {
       loadAsyncStore().then(fetchFromServer).then(updateAsyncStore).then(retryFailedRequests);
       return [];
     } else {
-      _postURLs = _postURLs.filter(url => (!!url));
+      _postURLs = _postURLs.filter(url => !!url);
       return _postURLs.map(url => _posts[url]);
     }
   },
