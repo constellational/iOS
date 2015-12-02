@@ -3,6 +3,7 @@
 var React = require('react-native');
 var SettingStore = require('./stores/SettingStore');
 var WelcomePage = require('./components/WelcomePage');
+var NavPage = require('./components/NavPage');
 var EditPage = require('./components/EditPage');
 var PostsPage = require('./components/PostsPage');
 
@@ -17,6 +18,8 @@ class Constellational extends React.Component {
     switch (route.id) {
       case 'welcome':
         return <WelcomePage navigator={nav} />;
+      case 'navigation':
+        return <NavPage navigator={nav} />;
       case 'posts':
         return <PostsPage navigator={nav} filter={route.filter} />;
       default:
