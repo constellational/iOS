@@ -29,6 +29,10 @@ function updateAsyncStore() {
 }
    
 var EditStore = assign({}, EventEmitter.prototype, {
+  isEmpty: function() {
+    return !_edits;
+  },
+
   get: function(id) {
     if (!_edits) {
       loadAsyncStore();

@@ -36,6 +36,10 @@ function updateAsyncStore() {
 }
    
 var DraftStore = assign({}, EventEmitter.prototype, {
+  isEmpty: function() {
+    return !_drafts;
+  },
+
   getAll: function() {
     if (!_draftIDs) {
       loadAsyncStore();
