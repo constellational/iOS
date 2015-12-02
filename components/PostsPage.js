@@ -80,7 +80,7 @@ class PostsPage extends React.Component {
   render() {
     return (
       <View style={styles.page}>
-        <NavBar leftButton={this.backButton} rightButton={this.createButton}/>
+        <NavBar leftButton={this.backButton} title={this.props.filter} rightButton={this.createButton}/>
         <ListView
           automaticallyAdjustContentInsets={false}
           dataSource={this.state.posts}
