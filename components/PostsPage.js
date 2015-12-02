@@ -6,6 +6,7 @@ var EditStore = require('../stores/EditStore');
 var SettingStore = require('../stores/SettingStore');
 var NavBar = require('./NavBar');
 var CreateButton = require('./CreateButton');
+var BackButton = require('./BackButton');
 var Post = require('./Post');
 var React = require('react-native');
 
@@ -21,6 +22,7 @@ class PostsPage extends React.Component {
     super(props, context);
     var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.createButton = (<CreateButton onPress={() => this.props.navigator.push('edit')}/>);
+    this.backButton = (<BackButton onPress={this.props.navigator.pop} />);
     this.getAll = this.getAll.bind(this);
     this.state = {
       posts: dataSource.cloneWithRows(this.getAll())
@@ -78,7 +80,7 @@ class PostsPage extends React.Component {
   render() {
     return (
       <View style={styles.page}>
-        <NavBar rightButton={this.createButton}/>
+        <NavBar leftButton={this.backButton} rightButton={this.createButton}/>
         <ListView
           automaticallyAdjustContentInsets={false}
           dataSource={this.state.posts}
