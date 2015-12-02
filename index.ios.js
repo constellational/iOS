@@ -8,7 +8,6 @@ var EditPage = require('./components/EditPage');
 var PostsPage = require('./components/PostsPage');
 
 var {
-  AsyncStorage,
   AppRegistry,
   Navigator
 } = React;
