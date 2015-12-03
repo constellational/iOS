@@ -65,10 +65,10 @@ class PostsPage extends React.Component {
     });
     var drafts = DraftStore.getAll();
     var all = posts.concat(drafts);
+    var filtered = all;
     if (this.props.filter === 'Currently Editing') filtered = all.filter(post => post.hasUnpublishedEdits);
     else if (this.props.filter === 'Drafts') filtered = all.filter(post => post.isDraft);
     else if (this.props.filter === 'Help') filtered = all.filter(post => post.isHelpful);
-    else filtered = all;
     var sorted = filtered.sort((a, b) => {
       if (a.updated > b.updated) return -1;
       else if (a.updated < b.updated) return 1;
