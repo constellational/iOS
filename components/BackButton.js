@@ -16,7 +16,7 @@ class BackButton extends React.Component {
         onPress={this.props.onPress}> 
         <View> 
           <Icon
-            name='ion-ios-arrow-left'
+            name='ion|ios-arrow-left'
             size={32}
             style={styles.navBarLeftButton}
           />
