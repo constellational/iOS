@@ -64,7 +64,9 @@ class PostsPage extends React.Component {
 
   renderRow(filter) {
     var onPress = () => this.props.navigator.push({id: 'posts', filter: filter});
-    return <Text onPress={onPress} style={styles.text}>{filter}</Text>;
+    return <View style={styles.option}>
+      <Text onPress={onPress} style={styles.text}>{filter}</Text>
+    </View>;
   }
 }
 
