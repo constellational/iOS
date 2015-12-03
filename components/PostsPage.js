@@ -78,9 +78,10 @@ class PostsPage extends React.Component {
   }
 
   render() {
+    var title = <Text>{this.props.filter}</Text>;
     return (
       <View style={styles.page}>
-        <NavBar leftButton={this.backButton} title={this.props.filter} rightButton={this.createButton}/>
+        <NavBar leftButton={this.backButton} title={title} rightButton={this.createButton}/>
         <ListView
           automaticallyAdjustContentInsets={false}
           dataSource={this.state.posts}
