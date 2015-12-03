@@ -99,7 +99,7 @@ class WelcomePage extends React.Component {
       }
     } else {
       var token = SettingStore.getToken();
-      if (token) this.props.navigator.immediatelyResetRouteStack([{id: 'posts'}]);
+      if (token) this.props.navigator.immediatelyResetRouteStack([{id: 'navigation'}, {id: 'posts'}]);
     }
   }
 
