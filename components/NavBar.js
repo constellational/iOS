@@ -16,7 +16,7 @@ class NavBar extends React.Component {
           {this.props.leftButton}
         </View>
         <View style={styles.center}>
-          <Text style={title}>{this.props.title}</Text>;
+          <Text style={styles.title}>{this.props.title}</Text>;
         </View>
         <View style={styles.right}>
           {this.props.rightButton}
