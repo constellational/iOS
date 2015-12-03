@@ -78,7 +78,8 @@ class PostsPage extends React.Component {
   }
 
   render() {
-    var title = <Text>{this.props.filter}</Text>;
+    var title = 'All Posts';
+    if (this.props.filter) title = this.props.filter;
     return (
       <View style={styles.page}>
         <NavBar leftButton={this.backButton} title={title} rightButton={this.createButton}/>

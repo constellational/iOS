@@ -3,6 +3,7 @@
 var PostStore = require('../stores/PostStore');
 var DraftStore = require('../stores/DraftStore');
 var EditStore = require('../stores/EditStore');
+var NavBar = require('./NavBar');
 var React = require('react-native');
 
 var {
@@ -51,7 +52,7 @@ class PostsPage extends React.Component {
   render() {
     return (
       <View style={styles.page}>
-        <Text>Constellational</Text>
+        <NavBar leftButton={this.backButton} title='Constellational' rightButton={this.createButton}/>
         <ListView
           automaticallyAdjustContentInsets={false}
           dataSource={this.state.options}
@@ -63,7 +64,7 @@ class PostsPage extends React.Component {
 
   renderRow(filter) {
     var onPress = () => this.props.navigator.push({id: 'posts', filter: filter});
-    return <Text onPress={onPress}>{filter}</Text>;
+    return <Text onPress={onPress} style={styles.text}>{filter}</Text>;
   }
 }
 
@@ -71,6 +72,15 @@ var styles = StyleSheet.create({
   page: {
     flex: 1,
   },
+  option: {
+    padding: 10
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: 'System',
+    padding: 8
+  },
+ 
 });
 
 module.exports = PostsPage;

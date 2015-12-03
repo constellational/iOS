@@ -16,7 +16,7 @@ class NavBar extends React.Component {
           {this.props.leftButton}
         </View>
         <View style={styles.center}>
-          {this.props.title}
+          <Text style={title}>{this.props.title}</Text>;
         </View>
         <View style={styles.right}>
           {this.props.rightButton}
@@ -36,8 +36,12 @@ var styles = StyleSheet.create({
   },
   center: {
     flex: 1,
+    textAlign: 'center',
   },
-
+  title: {
+    fontSize: 18,
+    fontFamily: 'System',
+  },
 });
 
 module.exports = NavBar;
