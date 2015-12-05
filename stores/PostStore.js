@@ -155,6 +155,7 @@ function fetchFromServer(username) {
     var promiseArr = user.posts.map(url => fetchPost(username, url));
     return Promise.all(promiseArr);
   }).then((posts) => {
+    if (!_posts[username]) _posts[username] = {};
     posts.map((post) => {
       _posts[username][post.url] = post;
     });
