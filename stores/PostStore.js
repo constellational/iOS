@@ -17,7 +17,7 @@ var {
 var CHANGE_EVENT = 'change';
 
 var _posts = null;
-var _postURLs = null;
+var _users = null;
 var _requests = null;
 
 function retryFailedRequests() {
@@ -61,10 +61,10 @@ function loadAsyncStore() {
   return AsyncStorage.getItem('posts').then((str) => {
     if (!str) _posts = {};
     else _posts = JSON.parse(str);
-    return AsyncStorage.getItem('postURLs');
+    return AsyncStorage.getItem('users');
   }).then((str) => {
-    if (!str) _postURLs = [];
-    else _postURLs = JSON.parse(str);
+    if (!str) _users = {} 
+    else _users = JSON.parse(str);
     PostStore.emitChange();
   }).then(() => {
     return AsyncStorage.getItem('requests');
@@ -75,27 +75,27 @@ function loadAsyncStore() {
 }
 
 function replaceTemporaryPost(temporaryPostURL, newPost) {
-  delete _posts[temporaryPostURL];
-  var i = _postURLs.indexOf(temporaryPostURL);
-  _postURLs.splice(i, 1);
-  _postURLs.unshift(newPost.url);
-  _posts[newPost.url] = newPost;
+  var username = SettingStore.getUsername();
+  delete _posts[username][temporaryPostURL];
+  var i = _users[username].posts.indexOf(temporaryPostURL);
+  _users[username].posts.splice(i, 1);
+  _users[username].posts.unshift(newPost.url);
+  _posts[username][newPost.url] = newPost;
   PostStore.emitChange();
   return updateAsyncStore();
 }
 
-
 function createPost(post) {
+  var username = SettingStore.getUsername();
   post.created = new Date().toISOString();
   post.updated = post.created;
   if (!post.id) post.id = post.created;
   post.key = post.created;
   post.url = post.key;
-  _postURLs.unshift(post.url);
-  _posts[post.url] = post;
+  _users[username].posts.unshift(post.url);
+  _posts[username][post.url] = post;
   PostStore.emitChange();
 
-  var username = SettingStore.getUsername();
   var url = APIURL + '/' + username;
   post.token = SettingStore.getToken();
   var params = {method: 'POST', body: JSON.stringify(post), headers: HEADERS};
@@ -104,13 +104,13 @@ function createPost(post) {
 }
       
 function editPost(post) {
-  var i = _postURLs.indexOf(post.url);
-  _postURLs.splice(i, 1);
-  _postURLs.unshift(post.url);
-  _posts[post.url] = post;
+  var username = SettingStore.getUsername();
+  var i = _users[username].posts.indexOf(post.url);
+  _users[username].posts.splice(i, 1);
+  _users[username].posts.unshift(post.url);
+  _posts[username][post.url] = post;
   PostStore.emitChange();
 
-  var username = SettingStore.getUsername();
   var key = post.key;
   if (!key) key = post.created + post.id;
   var url = APIURL + '/' + username + '/' + key;
@@ -121,12 +121,12 @@ function editPost(post) {
 }
 
 function deletePost(post) {
-  var i = _postURLs.indexOf(post.url);
-  _postURLs.splice(i, 1);
-  delete _posts[post.url];
+  var username = SettingStore.getUsername();
+  var i = _users[username].posts.indexOf(post.url);
+  _users[username].posts.splice(i, 1);
+  delete _posts[username][post.url];
   PostStore.emitChange();
  
-  var username = SettingStore.getUsername();
   var token = SettingStore.getToken();
   var body = JSON.stringify({token: token});
   var key = post.key;
@@ -148,15 +148,15 @@ function fetchPost(username, url) {
   });
 }
 
-function fetchFromServer() {
-  var username = SettingStore.getUsername();
+function fetchFromServer(username) {
+  if (!username) username = SettingStore.getUsername();
   return fetchUser(username).then((user) => {
-    _postURLs = user.posts;
+    _users[username] = user;
     var promiseArr = user.posts.map(url => fetchPost(username, url));
     return Promise.all(promiseArr);
   }).then((posts) => {
     posts.map((post) => {
-      _posts[post.url] = post;
+      _posts[username][post.url] = post;
     });
     PostStore.emitChange();
   });
@@ -164,20 +164,24 @@ function fetchFromServer() {
 
 function updateAsyncStore() {
   return AsyncStorage.setItem('posts', JSON.stringify(_posts)).then(() => {
-    if (_postURLs) return AsyncStorage.setItem('postURLs', JSON.stringify(_postURLs));
+    if (_users) return AsyncStorage.setItem('users', JSON.stringify(_users));
   }).catch(err => {
-    console.log("couldn't store post: " + err);
+    console.log("couldn't update async store: " + err);
   });
 }
    
 var PostStore = assign({}, EventEmitter.prototype, {
-  getAll: function() {
-    if (!_postURLs) {
+  getAll: function(username) {
+    if (!username) username = SettingStore.getUsername();
+    if (!_users) {
       loadAsyncStore().then(fetchFromServer).then(updateAsyncStore).then(retryFailedRequests);
       return [];
+    } else if (!_users[username]) {
+      fetchFromServer(username).then(updateAsyncStore);
+      return [];
     } else {
-      _postURLs = _postURLs.filter(url => !!url);
-      return _postURLs.map(url => _posts[url]);
+      _users[username].posts = _users[username].posts.filter(url => !!url);
+      return _users[username].posts.map(url => _posts[username][url]);
     }
   },
 
