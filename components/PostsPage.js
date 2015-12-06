@@ -54,21 +54,18 @@ class PostsPage extends React.Component {
   }
 
   getAll() {
-    var posts = PostStore.getAll();
+    var user = PostStore.getUser(this.props.username);
+    var posts = user.posts.map(url => PostStore.getPost(this.props.username, url));
+    var edits = EditStore.getAll();
     posts = posts.map((post) => {
-      var unpublishedEdits = EditStore.get(post.id);
-      if (unpublishedEdits) {
-        post = unpublishedEdits;
-        post.hasUnpublishedEdits = true;
-      }
-      return post;
+      if (edits[post.id]) return edits[post.id];
+      else return post;
     });
     var drafts = DraftStore.getAll();
     var all = posts.concat(drafts);
     var filtered = all;
     if (this.props.filter === 'Currently Editing') filtered = all.filter(post => post.hasUnpublishedEdits);
     else if (this.props.filter === 'Drafts') filtered = all.filter(post => post.isDraft);
-    else if (this.props.filter === 'Help') filtered = all.filter(post => post.isHelpful);
     var sorted = filtered.sort((a, b) => {
       if (a.updated > b.updated) return -1;
       else if (a.updated < b.updated) return 1;

@@ -13,7 +13,6 @@ var {
     AsyncStorage,
 } = React;
 
-
 var CHANGE_EVENT = 'change';
 
 var _posts = null;
@@ -66,12 +65,7 @@ function loadAsyncStore() {
     if (!str) _users = {} 
     else _users = JSON.parse(str);
     PostStore.emitChange();
-  }).then(() => {
-    return AsyncStorage.getItem('requests');
-  }).then((str) => {
-    if (!str) _requests = [];
-    else _requests = JSON.parse(str);
-  });
+  }).then(loadRequests);
 }
 
 function replaceTemporaryPost(temporaryPostURL, newPost) {
@@ -138,30 +132,20 @@ function deletePost(post) {
 }
 
 function fetchUser(username) {
-  return fetch(USER_URL + '/' + username).then(res => res.json());
+  return fetch(USER_URL + '/' + username).then(res => res.json()).then((user) => {
+    _users[username] = user;
+    PostStore.emitChange();
+  });
 }
 
 function fetchPost(username, url) {
   return fetch(POST_URL + '/' + username + '/' + url).then(res => res.json()).then((post) => {
     post.url = url;
-    return post;
-  });
-}
-
-function fetchFromServer(username) {
-  if (!username) username = SettingStore.getUsername();
-  return fetchUser(username).then((user) => {
-    _users[username] = user;
-    var promiseArr = user.posts.map(url => fetchPost(username, url));
-    return Promise.all(promiseArr);
-  }).then((posts) => {
     if (!_posts[username]) _posts[username] = {};
-    posts.map((post) => {
-      _posts[username][post.url] = post;
-    });
+    _posts[username][url] = post;
     PostStore.emitChange();
   });
-} 
+}
 
 function updateAsyncStore() {
   return AsyncStorage.setItem('posts', JSON.stringify(_posts)).then(() => {
@@ -172,17 +156,27 @@ function updateAsyncStore() {
 }
    
 var PostStore = assign({}, EventEmitter.prototype, {
-  getAll: function(username) {
+  getPost: function(username, postURL) {
+    if (!username) username = SettingStore.getUsername();
+    if (!_posts) {
+      loadAsyncStore();
+    } else if (!_posts[username] || !_posts[username][postURL]) {
+      fetchPost(username, postURL);
+    } else {
+      return _posts[username][postURL];
+    }
+  },
+
+  getUser: function(username) {
     if (!username) username = SettingStore.getUsername();
     if (!_users) {
-      loadAsyncStore().then(fetchFromServer).then(updateAsyncStore).then(retryFailedRequests);
-      return [];
+      loadAsyncStore();
+      return {posts: []};
     } else if (!_users[username]) {
-      fetchFromServer(username).then(updateAsyncStore);
-      return [];
+      fetchUser(username);
+      return {posts: []};
     } else {
-      _users[username].posts = _users[username].posts.filter(url => !!url);
-      return _users[username].posts.map(url => _posts[username][url]);
+      return _users[username];
     }
   },
 

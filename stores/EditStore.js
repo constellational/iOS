@@ -33,12 +33,12 @@ var EditStore = assign({}, EventEmitter.prototype, {
     return !_edits;
   },
 
-  get: function(id) {
+  getAll: function() {
     if (!_edits) {
       loadAsyncStore();
-      return null;
+      return {};
     } else {
-      return _edits[id];
+      return _edits;
     }
   },
 
