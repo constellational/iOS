@@ -144,6 +144,7 @@ function fetchPost(username, url) {
     if (!_posts[username]) _posts[username] = {};
     _posts[username][url] = post;
     PostStore.emitChange();
+    updateAsyncStore();
   });
 }
 
@@ -170,7 +171,7 @@ var PostStore = assign({}, EventEmitter.prototype, {
   getUser: function(username) {
     if (!username) username = SettingStore.getUsername();
     if (!_users) {
-      loadAsyncStore();
+      loadAsyncStore().then(() => fetchUser(username));
       return {posts: []};
     } else if (!_users[username]) {
       fetchUser(username);
