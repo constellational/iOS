@@ -46,6 +46,10 @@ class PostsPage extends React.Component {
     if (!EditStore.isEmpty()) list.push('Currently Editing');
     if (!DraftStore.isEmpty()) list.push('Drafts');
     list.push('Help');
+    var history = [];
+    if (!HistoryStore.isEmpty()) history = HistoryStore.getAll();
+    var posts = history.map(visit => PostStore.getPost(visit.username, visit.postURL));
+    list.concat(posts);
     return list;
   }
 
@@ -62,11 +66,18 @@ class PostsPage extends React.Component {
     );
   }
 
-  renderRow(filter) {
-    var onPress = () => this.props.navigator.push({id: 'posts', filter: filter});
-    return <View style={styles.option}>
-      <Text onPress={onPress} style={styles.text}>{filter}</Text>
-    </View>;
+  renderRow(row) {
+    if (typeof row === 'string') {
+      var onPress = () => this.props.navigator.push({id: 'posts', filter: row});
+      return <View style={styles.option}>
+        <Text onPress={onPress} style={styles.text}>{row}</Text>
+      </View>;
+    } else {
+      var onPress = () => this.props.navigator.push({username: row.username, postURL: row.url});
+      return <View style={styles.option}>
+        <Text onPress={onPress} style={styles.text}>{row.data.split('\n')[0]}</Text>
+      </View>;
+    }
   }
 }
 
