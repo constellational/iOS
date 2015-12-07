@@ -56,24 +56,43 @@ class PostsPage extends React.Component {
   }
 
   getAll() {
-    var user = PostStore.getUser(this.props.username);
-    var posts = user.posts.map(url => PostStore.getPost(this.props.username, url));
-    var edits = EditStore.getAll();
-    posts = posts.map((post) => {
-      if (edits[post.id]) return edits[post.id];
-      else return post;
-    });
-    var drafts = DraftStore.getAll();
-    var all = posts.concat(drafts);
-    var filtered = all;
-    if (this.props.filter === 'Currently Editing') filtered = all.filter(post => post.hasUnpublishedEdits);
-    else if (this.props.filter === 'Drafts') filtered = all.filter(post => post.isDraft);
-    var sorted = filtered.sort((a, b) => {
-      if (a.updated > b.updated) return -1;
-      else if (a.updated < b.updated) return 1;
-      else return 0;
-    });
-    return sorted;
+    if (this.props.username) {
+      var user = PostStore.getUser(this.props.username);
+      if (this.props.postID) {
+        // Find the postURL that contains the postID
+        var postURL = user.posts[0];
+        user.posts.forEach((url) => {
+          if (url.indexOf(this.props.postID) > -1) postURL = url;
+        });
+        // Move it to be displayed on top
+        user.posts.splice(user.posts.indexOf(postURL), 1);
+        user.posts.unshift(postURL);
+      }
+      var posts = user.posts.map(url => PostStore.getPost(this.props.username, url));
+      return posts;
+    } else if (this.props.filter === 'Drafts') {
+      var drafts = DraftStore.getAll();
+      return drafts;
+    } else if (this.props.filter === 'Currently Editing') {
+      var edits = EditStore.getAll();
+      return Object.keys(edits).map(id => edits[id]);
+    } else {
+      var user = PostStore.getUser();
+      var posts = user.posts.map(url => PostStore.getPost(null, url));
+      var edits = EditStore.getAll();
+      posts = posts.map((post) => {
+        if (edits[post.id]) return edits[post.id];
+        else return post;
+      });
+      var drafts = DraftStore.getAll();
+      var all = posts.concat(drafts);
+      var sorted = all.sort((a, b) => {
+        if (a.updated > b.updated) return -1;
+        else if (a.updated < b.updated) return 1;
+        else return 0;
+      });
+      return sorted;
+    }
   }
 
   render() {
