@@ -48,8 +48,16 @@ class PostsPage extends React.Component {
     list.push('Help');
     var history = [];
     if (!HistoryStore.isEmpty()) history = HistoryStore.getAll();
-    var posts = history.map(visit => PostStore.getPost(visit.username, visit.postURL));
-    list.concat(posts);
+    history = history.map((visit) => {
+      if (visit.postURL) {
+        var post = PostStore.getPost(visit.username, visit.postURL);
+        post.username = visit.username;
+        return post;
+      } else {
+        return visit;
+      }
+    });
+    list.concat(history);
     return list;
   }
 
@@ -74,8 +82,10 @@ class PostsPage extends React.Component {
       </View>;
     } else {
       var onPress = () => this.props.navigator.push({username: row.username, postURL: row.url});
+      var text = row.username;
+      if (row.url) text = row.data.split('\n')[0];
       return <View style={styles.option}>
-        <Text onPress={onPress} style={styles.text}>{row.data.split('\n')[0]}</Text>
+        <Text onPress={onPress} style={styles.text}>{text}</Text>
       </View>;
     }
   }
