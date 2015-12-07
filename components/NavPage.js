@@ -3,6 +3,7 @@
 var PostStore = require('../stores/PostStore');
 var DraftStore = require('../stores/DraftStore');
 var EditStore = require('../stores/EditStore');
+var HistoryStore = require('../stores/HistoryStore');
 var NavBar = require('./NavBar');
 var React = require('react-native');
 
@@ -47,7 +48,7 @@ class PostsPage extends React.Component {
     if (!DraftStore.isEmpty()) list.push('Drafts');
     list.push('Help');
     var history = [];
-    if (!HistoryStore.isEmpty()) history = HistoryStore.getAll();
+    if (!HistoryStore.isEmpty()) history = HistoryStore.get();
     history = history.map((visit) => {
       if (visit.postURL) {
         var post = PostStore.getPost(visit.username, visit.postURL);
@@ -57,7 +58,7 @@ class PostsPage extends React.Component {
         return visit;
       }
     });
-    list.concat(history);
+    list = list.concat(history);
     return list;
   }
 
