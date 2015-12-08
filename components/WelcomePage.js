@@ -25,10 +25,10 @@ class WelcomePage extends React.Component {
       subheading: 'Welcome!'
     };
     var url = LinkingIOS.popInitialURL();
+    this.handleOpenURL = this.handleOpenURL.bind(this);
     if (url) this.handleOpenURL({url});
     this.signup = this.signup.bind(this);
     this.onSettingStoreChange = this.onSettingStoreChange.bind(this);
-    this.handleOpenURL = this.handleOpenURL.bind(this);
     this.getStarted = this.getStarted.bind(this);
     this.renderBottomSection = this.renderBottomSection.bind(this);
   } 
