@@ -58,18 +58,18 @@ class PostsPage extends React.Component {
   getAll() {
     if (this.props.username) {
       var user = PostStore.getUser(this.props.username);
-      if (this.props.postID) {
+      var postURL = user.posts[0];
+      if (this.props.postURL) postURL = this.props.postURL;
+      else if (this.props.postID) {
         // Find the postURL that contains the postID
-        var postURL = user.posts[0];
         user.posts.forEach((url) => {
           if (url.indexOf(this.props.postID) > -1) postURL = url;
         });
-        // Move it to be displayed on top
-        user.posts.splice(user.posts.indexOf(postURL), 1);
-        user.posts.unshift(postURL);
       }
-      var posts = user.posts.map(url => PostStore.getPost(this.props.username, url));
-      return posts;
+      // Move it to be displayed on top
+      user.posts.splice(user.posts.indexOf(postURL), 1);
+      user.posts.unshift(postURL);
+      return user.posts.map(url => PostStore.getPost(this.props.username, url));
     } else if (this.props.filter === 'Drafts') {
       var drafts = DraftStore.getAll();
       return drafts;

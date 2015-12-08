@@ -12,12 +12,16 @@ var {
   StyleSheet,
   Text,
   View,
+  LinkingIOS,
 } = React;
 
 class PostsPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    this.handleOpenURL = this.handleOpenURL.bind(this);
+    var url = LinkingIOS.popInitialURL();
+    if (url) this.handleOpenURL({url});
     this.getAll = this.getAll.bind(this);
     this.renderRow = this.renderRow.bind(this);
     this.state = {
@@ -34,12 +38,22 @@ class PostsPage extends React.Component {
     PostStore.addChangeListener(this.onChange);
     DraftStore.addChangeListener(this.onChange);
     EditStore.addChangeListener(this.onChange);
+    LinkingIOS.addEventListener('url', this.handleOpenURL);
   }
 
   componentWillUnmount() {
     PostStore.removeChangeListener(this.onChange);
     DraftStore.removeChangeListener(this.onChange);
     EditStore.removeChangeListener(this.onChange);
+    LinkingIOS.removeEventListener('url', this.handleOpenURL);
+  }
+
+  handleOpenURL(event) {
+    var urlPath = event.url.split('constellational.com/')[1];
+    var splitPath = urlPath.split('/');
+    var username = urlPath.shift();
+    var postID = urlPath.shift();
+    this.props.navigator.push({id: 'posts', username: username, postID: postID});
   }
 
   getAll() {
@@ -82,7 +96,7 @@ class PostsPage extends React.Component {
         <Text onPress={onPress} style={styles.text}>{row}</Text>
       </View>;
     } else {
-      var onPress = () => this.props.navigator.push({username: row.username, postURL: row.url});
+      var onPress = () => this.props.navigator.push({id: 'posts', username: row.username, postURL: row.url});
       var text = row.username;
       if (row.url) text = row.data.split('\n')[0];
       return <View style={styles.option}>
