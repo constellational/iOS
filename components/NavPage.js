@@ -15,7 +15,7 @@ var {
   LinkingIOS,
 } = React;
 
-class PostsPage extends React.Component {
+class NavPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
@@ -121,4 +121,4 @@ var styles = StyleSheet.create({
  
 });
 
-module.exports = PostsPage;
+module.exports = NavPage;
