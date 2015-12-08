@@ -80,6 +80,7 @@ class PostsPage extends React.Component {
       var user = PostStore.getUser();
       var posts = user.posts.map(url => PostStore.getPost(null, url));
       var edits = EditStore.getAll();
+      posts = posts.filter(post => !!post);
       posts = posts.map((post) => {
         if (edits[post.id]) return edits[post.id];
         else return post;
