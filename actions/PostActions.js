@@ -20,7 +20,7 @@ var PostActions = {
       actionType: 'delete-post',
       post: post
     });
-  }
+  },
 
   fetchUser: function(username) {
     AppDispatcher.dispatch({
