@@ -1,6 +1,7 @@
 'use strict'
 
 var PostStore = require('../stores/PostStore');
+var PostActions = require('../actions/PostActions');
 var DraftStore = require('../stores/DraftStore');
 var EditStore = require('../stores/EditStore');
 var SettingStore = require('../stores/SettingStore');
@@ -106,6 +107,7 @@ class PostsPage extends React.Component {
           automaticallyAdjustContentInsets={false}
           dataSource={this.state.posts}
           renderRow={post => (<Post post={post} nav={this.props.navigator} key={post.id}/>)}
+          onRefreshStart={() => PostActions.fetchUser(this.props.username)}
           style={styles.list}
         />
       </View>

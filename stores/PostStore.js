@@ -208,6 +208,10 @@ AppDispatcher.register(function(action) {
       deletePost(action.post);
       break;
 
+    case 'fetch-user':
+      fetchUser(action.username);
+      break;
+
   }
 });
 

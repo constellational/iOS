@@ -22,6 +22,13 @@ var PostActions = {
     });
   }
 
+  fetchUser: function(username) {
+    AppDispatcher.dispatch({
+      actionType: 'fetch-user',
+      username: username
+    });
+  }
+
 };
 
 module.exports = PostActions;
