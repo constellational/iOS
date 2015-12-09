@@ -11,8 +11,6 @@ var PostButton = require('./PostButton');
 var CancelButton = require('./CancelButton');
 
 var React = require('react-native');
-var KeyboardEvents = require('react-native-keyboardevents');
-var KeyboardEventEmitter = KeyboardEvents.Emitter;
 
 var {
   StyleSheet,
@@ -20,6 +18,7 @@ var {
   TextInput,
   ScrollView,
   View,
+  DeviceEventEmitter
 } = React;
 
 class EditPage extends React.Component {
@@ -38,10 +37,8 @@ class EditPage extends React.Component {
     this.cancelButton = (<CancelButton onPress={this.saveDraft} />);
     this.savePost = this.savePost.bind(this);
     this.postButton = (<PostButton edit={this.isEditing} isDraft={this.state.post.isDraft} onPress={this.savePost}/>);
-    this.updateKeyboardSpace = (frames) => {
-      var change;
-      if (frames.endCoordinates) change = frames.endCoordinates.height;
-      else change = frames.end.height;
+    this.updateKeyboardSpace = (deviceEvent) => {
+      var change = deviceEvent..endCoordinates.height;
       this.setState({height: this.state.height - change, isKeyboardUp: true});
     };
     var countWords = () => this.state.post.data.split(/\s+/).filter(w => !!w).length;
@@ -49,13 +46,13 @@ class EditPage extends React.Component {
   }
 
   componentDidMount() {
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardDidShowEvent, this.updateKeyboardSpace);
-    KeyboardEventEmitter.on(KeyboardEvents.KeyboardWillHideEvent, this.resetKeyboardSpace);
+    DeviceEventEmitter.addListener('keyboardWillShow', this.updateKeyboardSpace);
+    DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
   }
 
   componentWillUnmount() {
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardDidShowEvent, this.updateKeyboardSpace);
-    KeyboardEventEmitter.off(KeyboardEvents.KeyboardWillHideEvent, this.resetKeyboardSpace);
+    DeviceEventEmitter.removeListener('keyboardWillShow', this.updateKeyboardSpace);
+    DeviceEventEmitter.removeListener('keyboardWillHide', this.resetKeyboardSpace);
   }
 
   savePost() {
