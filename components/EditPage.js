@@ -38,7 +38,7 @@ class EditPage extends React.Component {
     this.savePost = this.savePost.bind(this);
     this.postButton = (<PostButton edit={this.isEditing} isDraft={this.state.post.isDraft} onPress={this.savePost}/>);
     this.updateKeyboardSpace = (deviceEvent) => {
-      var change = deviceEvent..endCoordinates.height;
+      var change = deviceEvent.endCoordinates.height;
       this.setState({height: this.state.height - change, isKeyboardUp: true});
     };
     var countWords = () => this.state.post.data.split(/\s+/).filter(w => !!w).length;
