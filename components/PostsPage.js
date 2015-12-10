@@ -107,7 +107,10 @@ class PostsPage extends React.Component {
           automaticallyAdjustContentInsets={false}
           dataSource={this.state.posts}
           renderRow={post => (<Post post={post} nav={this.props.navigator} key={post.id}/>)}
-          onRefreshStart={() => PostActions.fetchUser(this.props.username)}
+          onRefreshStart={(endRefreshing) => {
+            PostActions.fetchUser(this.props.username);
+            endRefreshing();
+          }}
           style={styles.list}
         />
       </View>
