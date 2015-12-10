@@ -209,7 +209,9 @@ AppDispatcher.register(function(action) {
       break;
 
     case 'fetch-user':
-      fetchUser(action.username);
+      var username = action.username;
+      if (!username) username = SettingStore.getUsername();
+      fetchUser(username);
       break;
 
   }
