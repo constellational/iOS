@@ -50,11 +50,6 @@ class EditPage extends React.Component {
     DeviceEventEmitter.addListener('keyboardWillHide', this.resetKeyboardSpace);
   }
 
-  componentWillUnmount() {
-    DeviceEventEmitter.removeListener('keyboardWillShow', this.updateKeyboardSpace);
-    DeviceEventEmitter.removeListener('keyboardWillHide', this.resetKeyboardSpace);
-  }
-
   savePost() {
     if (this.isEditing && this.state.post.isDraft) {
       this.state.post.isDraft = false;
