@@ -39,8 +39,9 @@ class Post extends React.Component {
       cancelButtonIndex: 3
     }, (buttonIndex) => {
       var url = URL + '/' + SettingStore.getUsername() + '/' + this.props.post.id;
-      if (this.props.post.isDraft || this.props.post.hasUnpublishedEdits) var options = {message: this.props.post.data};
-      else var options = {url: url};
+      var options = {subject: this.props.post.data.split('\n')[0]};
+      if (this.props.post.isDraft || this.props.post.hasUnpublishedEdits) options.message = this.props.post.data;
+      else options.url = url;
 
       if (buttonIndex === 0) ActionSheetIOS.showShareActionSheetWithOptions(options, this.shareFailure, this.shareSuccess);
       else if (buttonIndex === 1) this.props.nav.push({id: 'edit', post: this.props.post});
