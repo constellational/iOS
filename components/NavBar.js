@@ -30,12 +30,14 @@ var styles = StyleSheet.create({
   navBar: {
     paddingTop:30,
     paddingBottom:5,
-    flexDirection: 'row',
-    justifyContent: 'center',
     backgroundColor: 'white',
   },
-  center: {
+  left: {
     flex: 1,
+  },
+  right: {
+    flex: 1,
+    alignItems: 'flex-end',
   },
   title: {
     paddingTop: 6,
