@@ -33,10 +33,11 @@ class EditPage extends React.Component {
       this.state = {post: this.props.route.post};
       this.isEditing = true;
     }
+    this.state.shouldDisablePostButton = true;
+    if (this.state.post.isDraft) this.state.shouldDisablePostButton = false;
     this.saveDraft = this.saveDraft.bind(this);
     this.cancelButton = (<CancelButton onPress={this.saveDraft} />);
     this.savePost = this.savePost.bind(this);
-    this.postButton = (<PostButton edit={this.isEditing} isDraft={this.state.post.isDraft} onPress={this.savePost}/>);
     this.updateKeyboardSpace = (deviceEvent) => {
       var change = deviceEvent.endCoordinates.height;
       this.setState({height: this.state.height - change, isKeyboardUp: true});
@@ -56,14 +57,16 @@ class EditPage extends React.Component {
       DraftActions.del(this.state.post);
       delete this.state.post.id;
       PostActions.create(this.state.post);
-    } else if (this.isEditing && !this.state.post.isDraft) {
-      if (this.state.post.hasUnpublishedEdits) {
-        this.state.post.hasUnpublishedEdits = false;
-        EditActions.del(this.state.post);
+    } else if (this.state.post.data !== this.initialData) {
+      if (this.isEditing && !this.state.post.isDraft) {
+        if (this.state.post.hasUnpublishedEdits) {
+          this.state.post.hasUnpublishedEdits = false;
+          EditActions.del(this.state.post);
+        }
+        PostActions.edit(this.state.post);
+      } else {
+        PostActions.create(this.state.post);
       }
-      PostActions.edit(this.state.post);
-    } else {
-      PostActions.create(this.state.post);
     }
     this.props.navigator.pop();
   }
@@ -87,6 +90,7 @@ class EditPage extends React.Component {
   }
 
   render() {
+    var postButton = <PostButton edit={this.isEditing} isDraft={this.state.post.isDraft} onPress={this.savePost} disabled={this.state.shouldDisablePostButton} />;
     if (this.state.isKeyboardUp || !this.state.wordCount) var title = <Text></Text>;
     else var title = <Text style={styles.title}>{this.state.wordCount} words</Text>;
     return (
@@ -95,12 +99,13 @@ class EditPage extends React.Component {
         var fullHeight = ev.nativeEvent.layout.height - 80;
         this.setState({height: fullHeight, fullHeight: fullHeight});
       }}>
-        <NavBar leftButton={this.cancelButton} title={title} rightButton={this.postButton}/>
+        <NavBar leftButton={this.cancelButton} title={title} rightButton={postButton}/>
         <ScrollView keyboardDismissMode='interactive'>
           <TextInput
             multiline={true}
             onChangeText={(text) => {
               this.state.post.data = text;
+              this.setState({shouldDisablePostButton: (!this.state.post.isDraft && (this.state.post.data === this.initialData))});
             }}
             defaultValue={this.state.post.data}
             autoFocus={true}
