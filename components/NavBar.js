@@ -31,6 +31,7 @@ var styles = StyleSheet.create({
     paddingTop:30,
     paddingBottom:5,
     backgroundColor: 'white',
+    flexDirection: 'row',
   },
   left: {
     flex: 1,
