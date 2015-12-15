@@ -51,8 +51,8 @@ class NavPage extends React.Component {
   handleOpenURL(event) {
     var urlPath = event.url.split('constellational.com/')[1];
     var splitPath = urlPath.split('/');
-    var username = urlPath.shift();
-    var postID = urlPath.shift();
+    var username = splitPath.shift();
+    var postID = splitPath.shift();
     this.props.navigator.push({id: 'posts', username: username, postID: postID});
   }
 
