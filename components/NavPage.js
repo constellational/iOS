@@ -38,6 +38,7 @@ class NavPage extends React.Component {
     PostStore.addChangeListener(this.onChange);
     DraftStore.addChangeListener(this.onChange);
     EditStore.addChangeListener(this.onChange);
+    HistoryStore.addChangeListener(this.onChange);
     LinkingIOS.addEventListener('url', this.handleOpenURL);
   }
 
@@ -45,6 +46,7 @@ class NavPage extends React.Component {
     PostStore.removeChangeListener(this.onChange);
     DraftStore.removeChangeListener(this.onChange);
     EditStore.removeChangeListener(this.onChange);
+    HistoryStore.removeChangeListener(this.onChange);
     LinkingIOS.removeEventListener('url', this.handleOpenURL);
   }
 
@@ -64,9 +66,7 @@ class NavPage extends React.Component {
     if (!EditStore.isEmpty()) list.push('Currently Editing');
     if (!DraftStore.isEmpty()) list.push('Drafts');
     list.push('Help');
-    var history = [];
-    if (!HistoryStore.isEmpty()) history = HistoryStore.get();
-    history = history.map((visit) => {
+    var history = HistoryStore.get().map((visit) => {
       if (visit.postURL) {
         var post = PostStore.getPost(visit.username, visit.postURL);
         post.username = visit.username;

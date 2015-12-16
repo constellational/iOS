@@ -27,11 +27,6 @@ function updateAsyncStore() {
 }
    
 var HistoryStore = assign({}, EventEmitter.prototype, {
-  isEmpty: function() {
-    if (_history) return _history.length;
-    else return false;
-  },
-
   get: function() {
     if (!_history) {
       loadAsyncStore();
