@@ -99,7 +99,6 @@ class NavPage extends React.Component {
         <Text onPress={onPress} style={styles.text}>{row}</Text>
       </View>;
     } else {
-      console.log(row);
       let route = {
         id: 'posts',
         username: row.username,
@@ -107,7 +106,6 @@ class NavPage extends React.Component {
         url: row.username
       };
       if (row.id) route.url = row.username + '/' + row.id;
-      console.log(route);
       let onPress = () => this.props.navigator.push(route);
       let text = row.username;
       if (row.data) text = row.data.split('\n')[0];

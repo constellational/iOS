@@ -28,7 +28,6 @@ function updateAsyncStore() {
    
 var HistoryStore = assign({}, EventEmitter.prototype, {
   get: function() {
-    console.log(_history);
     if (!_history) {
       loadAsyncStore();
       return [];
