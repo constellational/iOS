@@ -14,7 +14,7 @@ var _history = null;
 
 function loadAsyncStore() {
   return AsyncStorage.getItem('history').then(str => {
-    if (!str) _history = [];
+    if (!str) _history = {};
     else _history = JSON.parse(str);
     HistoryStore.emitChange();
   });
@@ -28,11 +28,18 @@ function updateAsyncStore() {
    
 var HistoryStore = assign({}, EventEmitter.prototype, {
   get: function() {
+    console.log(_history);
     if (!_history) {
       loadAsyncStore();
       return [];
     } else {
-      return _history;
+      var history = Object.keys(_history).map(url => _history[url]);
+      var sorted = history.sort((a, b) => {
+        if (a.timestamps[0] > b.timestamps[0]) return -1;
+        else if (a.timestamps[0] < b.timestamps[0]) return 1;
+        else return 0;
+      });
+      return sorted;
     }
   },
 
@@ -52,10 +59,15 @@ var HistoryStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case 'add-to-history':
-      var visit = action.visit;
-      visit.timestamp = new Date().toISOString();
-      if (!_history) _history = [];
-      _history.unshift(visit);
+      let visit = action.visit;
+      let timestamp = new Date().toISOString();
+      if (!_history) _history = {};
+      if (_history[visit.url]) {
+        _history[visit.url].timestamps.unshift(timestamp);
+      } else {
+        visit.timestamps = [timestamp];
+        _history[visit.url] = visit;
+      }
       HistoryStore.emitChange();
       updateAsyncStore();
       break;

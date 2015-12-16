@@ -23,6 +23,7 @@ class Constellational extends React.Component {
         return <PostsPage
           navigator={nav}
           filter={route.filter}
+          url={route.url}
           username={route.username}
           postID={route.postID}
           postURL={route.postURL}/>;

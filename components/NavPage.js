@@ -57,7 +57,7 @@ class NavPage extends React.Component {
     var postID = splitPath.shift();
     this.props.navigator.immediatelyResetRouteStack([
       {id: 'navigation'},
-      {id: 'posts', username: username, postID: postID}
+      {id: 'posts', username: username, postID: postID, url: urlPath}
     ]);
   }
 
@@ -94,14 +94,23 @@ class NavPage extends React.Component {
 
   renderRow(row) {
     if (typeof row === 'string') {
-      var onPress = () => this.props.navigator.push({id: 'posts', filter: row});
+      let onPress = () => this.props.navigator.push({id: 'posts', filter: row});
       return <View style={styles.option}>
         <Text onPress={onPress} style={styles.text}>{row}</Text>
       </View>;
     } else {
-      var onPress = () => this.props.navigator.push({id: 'posts', username: row.username, postURL: row.url});
-      var text = row.username;
-      if (row.url) text = row.data.split('\n')[0];
+      console.log(row);
+      let route = {
+        id: 'posts',
+        username: row.username,
+        postURL: row.url,
+        url: row.username
+      };
+      if (row.id) route.url = row.username + '/' + row.id;
+      console.log(route);
+      let onPress = () => this.props.navigator.push(route);
+      let text = row.username;
+      if (row.data) text = row.data.split('\n')[0];
       return <View style={styles.option}>
         <Text onPress={onPress} style={styles.text}>{text}</Text>
       </View>;

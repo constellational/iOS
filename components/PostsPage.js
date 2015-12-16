@@ -22,7 +22,7 @@ var {
 class PostsPage extends React.Component {
   constructor(props, context) {
     super(props, context);
-    if (this.props.username) HistoryActions.add({username: this.props.username, postURL: this.props.postURL});
+    if (this.props.username) HistoryActions.add({username: this.props.username, postURL: this.props.postURL, url: this.props.url});
     var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
     this.createButton = (<CreateButton onPress={() => this.props.navigator.push('edit')}/>);
     this.backButton = (<BackButton onPress={this.props.navigator.pop} />);
