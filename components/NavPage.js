@@ -55,8 +55,7 @@ class NavPage extends React.Component {
     var postID = splitPath.shift();
     this.props.navigator.immediatelyResetRouteStack([
       {id: 'navigation'},
-      {id: 'posts', username: username, postID: postID},
-      {id: 'edit'}
+      {id: 'posts', username: username, postID: postID}
     ]);
   }
 
