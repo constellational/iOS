@@ -70,7 +70,8 @@ class PostsPage extends React.Component {
       // Move it to be displayed on top
       user.posts.splice(user.posts.indexOf(postURL), 1);
       user.posts.unshift(postURL);
-      return user.posts.map(url => PostStore.getPost(this.props.username, url));
+      var posts = user.posts.map(url => PostStore.getPost(this.props.username, url));
+      return posts.filter(post => !!post);
     } else if (this.props.filter === 'Drafts') {
       var drafts = DraftStore.getAll();
       return drafts;
@@ -100,13 +101,14 @@ class PostsPage extends React.Component {
   render() {
     var title = 'All Posts';
     if (this.props.filter) title = this.props.filter;
+    else if (this.props.username) title = this.props.username;
     return (
       <View style={styles.page}>
         <NavBar leftButton={this.backButton} title={title} rightButton={this.createButton}/>
         <ListView
           automaticallyAdjustContentInsets={false}
           dataSource={this.state.posts}
-          renderRow={post => (<Post post={post} nav={this.props.navigator} key={post.id}/>)}
+          renderRow={post => <Post post={post} nav={this.props.navigator} key={post.id}/>}
           onRefreshStart={(endRefreshing) => {
             PostActions.fetchUser(this.props.username);
             endRefreshing();
