@@ -20,7 +20,12 @@ class Constellational extends React.Component {
       case 'navigation':
         return <NavPage navigator={nav} />;
       case 'posts':
-        return <PostsPage navigator={nav} filter={route.filter} />;
+        return <PostsPage
+          navigator={nav}
+          filter={route.filter}
+          username={route.username}
+          postID={route.postID}
+          postURL={route.postURL}/>;
       default:
         return <EditPage route={route} navigator={nav} />;
     }
