@@ -10,6 +10,8 @@
 #import "AppDelegate.h"
 #import "RCTLinkingManager.h"
 #import "RCTRootView.h"
+#import <GoogleAppIndexing/GoogleAppIndexing.h>
+
 
 @implementation AppDelegate
 
@@ -31,7 +33,7 @@
    * on the same Wi-Fi network.
    */
 
-//  jsCodeLocation = [NSURL URLWithString:@"http://10.0.0.8:8081/index.ios.bundle"];
+//  jsCodeLocation = [NSURL URLWithString:@"http://10.0.0.12:8081/index.ios.bundle"];
 
   /**
    * OPTION 2
@@ -55,6 +57,8 @@
   rootViewController.view = rootView;
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
+  [[GSDAppIndexing sharedInstance] registerApp:1069731309];
+
   return YES;
 }
 
