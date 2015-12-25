@@ -21,6 +21,7 @@ class Post extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.showOptions = this.showOptions.bind(this);
+    this.handleOptions = this.handleOptions.bind(this);
   }
 
   shareFailure() {
@@ -32,30 +33,50 @@ class Post extends React.Component {
     console.log(method);
   }
 
-  showOptions() {
-    ActionSheetIOS.showActionSheetWithOptions({
-      options: ['Share', 'Edit', 'Delete', 'Cancel'],
-      destructiveButtonIndex: 2,
-      cancelButtonIndex: 3
-    }, (buttonIndex) => {
-      var url = URL + '/' + SettingStore.getUsername() + '/' + this.props.post.id;
-      var options = {subject: this.props.post.data.split('\n')[0]};
-      if (this.props.post.isDraft || this.props.post.hasUnpublishedEdits) options.message = this.props.post.data;
-      else options.url = url;
+  handleOptions(selectedOption) {
+    let url = URL + '/' + SettingStore.getUsername() + '/' + this.props.post.id;
+    let options = {subject: this.props.post.data.split('\n')[0]};
+    if (this.props.post.isDraft || this.props.post.hasUnpublishedEdits) options.message = this.props.post.data;
+    else options.url = url;
+    if (selectedOption === 'Star') {
+      let post = {type: 'star', data: {url: this.props.post.url}};
+      PostActions.create(post);
+    } else if (selectedOption === 'Remove Star') {
+      PostActions.del(this.props.post);
+    } else if (selectedOption === 'Share') {
+      ActionSheetIOS.showShareActionSheetWithOptions(options, this.shareFailure, this.shareSuccess);
+    } else if (selectedOption === 'Edit') {
+      this.props.nav.push({id: 'edit', post: this.props.post});
+    } else if (selectedOption === 'Delete') {
+      if (this.props.post.isDraft) DraftActions.del(this.props.post);
+      else PostActions.del(this.props.post);
+    }
+  }
 
-      if (buttonIndex === 0) ActionSheetIOS.showShareActionSheetWithOptions(options, this.shareFailure, this.shareSuccess);
-      else if (buttonIndex === 1) this.props.nav.push({id: 'edit', post: this.props.post});
-      else if (buttonIndex === 2) {
-        if (this.props.post.isDraft) DraftActions.del(this.props.post);
-        else PostActions.del(this.props.post);
+  showOptions() {
+    let username = SettingStore.getUsername();
+    if (username === this.props.post.url.substr(0, username.length)) {
+      let params = {
+        options: ['Share', 'Edit', 'Delete', 'Cancel'],
+        destructiveButtonIndex: 2,
+        cancelButtonIndex: 3
+      };
+    } else {
+      let options = ['Star', 'Share', 'Cancel'];
+      if (this.props.post.type === 'star') options[0] = 'Remove Star';
+      let params = {
+        options: options,
+        cancelButtonIndex: 2
       }
-    });
+    }
+    ActionSheetIOS.showActionSheetWithOptions(params, (buttonIndex) => handleOptions(params.options[buttonIndex]));
   }
 
   render() {
     var noteText = '';
     if (this.props.post.isDraft) noteText = 'Draft';
     if (this.props.post.hasUnpublishedEdits) noteText = 'Editing';
+    if (this.props.post.type === 'star') noteText = 'Starred';
     return (
       <TouchableOpacity onPress={this.showOptions}>
         <View style={styles.post}>

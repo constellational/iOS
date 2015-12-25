@@ -140,11 +140,20 @@ function fetchUser(username) {
 
 function fetchPost(username, url) {
   return fetch(POST_URL + '/' + username + '/' + url).then(res => res.json()).then((post) => {
-    post.url = url;
     if (!_posts[username]) _posts[username] = {};
-    _posts[username][url] = post;
-    PostStore.emitChange();
-    updateAsyncStore();
+    if (post.type === 'star') {
+      fetch(POST_URL + '/' + post.data.url).then(res => res.json()).then((post) => {
+        post.type = 'star';
+        _posts[username][url] = post;
+        PostStore.emitChange();
+        updateAsyncStore();
+      });
+    } else {
+      post.url = url;
+      _posts[username][url] = post;
+      PostStore.emitChange();
+      updateAsyncStore();
+    }
   });
 }
 
