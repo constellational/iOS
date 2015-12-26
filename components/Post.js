@@ -55,8 +55,9 @@ class Post extends React.Component {
 
   showOptions() {
     let username = SettingStore.getUsername();
+    let params = {};
     if (username === this.props.post.url.substr(0, username.length)) {
-      let params = {
+      params = {
         options: ['Share', 'Edit', 'Delete', 'Cancel'],
         destructiveButtonIndex: 2,
         cancelButtonIndex: 3
@@ -64,12 +65,12 @@ class Post extends React.Component {
     } else {
       let options = ['Star', 'Share', 'Cancel'];
       if (this.props.post.type === 'star') options[0] = 'Remove Star';
-      let params = {
+      params = {
         options: options,
         cancelButtonIndex: 2
       }
     }
-    ActionSheetIOS.showActionSheetWithOptions(params, (buttonIndex) => handleOptions(params.options[buttonIndex]));
+    ActionSheetIOS.showActionSheetWithOptions(params, (buttonIndex) => this.handleOptions(params.options[buttonIndex]));
   }
 
   render() {

@@ -87,7 +87,15 @@ function createPost(post) {
   post.key = post.created;
   post.url = post.key;
   _users[username].posts.unshift(post.url);
-  _posts[username][post.url] = post;
+  if (post.type === 'star') {
+    let splitURL = post.data.url.split('/');
+    let starredPostUsername = splitURL.shift();
+    let starredPostURL = splitURL.join('/');
+    _posts[starredPostUsername][starredPostURL].type = 'star';
+    _posts[username][post.url] = _posts[starredPostUsername][starredPostURL];
+  } else {
+    _posts[username][post.url] = post;
+  }
   PostStore.emitChange();
 
   var url = APIURL + '/' + username;
