@@ -3,6 +3,7 @@
 var URL = 'https://d1w3fhkxysfgcn.cloudfront.net';
 
 var SettingStore = require('../stores/SettingStore');
+var PostStore = require('../stores/PostStore');
 var PostActions = require('../actions/PostActions');
 var DraftActions = require('../actions/DraftActions');
 var React = require('react-native');
@@ -74,16 +75,24 @@ class Post extends React.Component {
   }
 
   render() {
-    var noteText = '';
+    let noteText = '';
+    let post = this.props.post;
     if (this.props.post.isDraft) noteText = 'Draft';
     if (this.props.post.hasUnpublishedEdits) noteText = 'Editing';
     if (this.props.post.type === 'star') noteText = 'Starred';
+    if (post.type === 'star') {
+      noteText = 'Starred';
+      let splitURL = post.data.url.split('/');
+      let username = splitURL.shift();
+      let url = splitURL.join('/');
+      post = PostStore.getPost(username, url);
+    }
     return (
       <TouchableOpacity onPress={this.showOptions}>
         <View style={styles.post}>
           <Text style={styles.note}>{noteText}</Text>
-          <Text style={styles.text}>{this.props.post.data}</Text>
-          <Text style={styles.time}>{moment(this.props.post.updated).format('LLLL')}</Text>
+          <Text style={styles.text}>{post.data}</Text>
+          <Text style={styles.time}>{moment(updated).format('LLLL')}</Text>
         </View>
       </TouchableOpacity>
     );

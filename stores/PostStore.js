@@ -87,15 +87,7 @@ function createPost(post) {
   post.key = post.created;
   post.url = post.key;
   _users[username].posts.unshift(post.url);
-  if (post.type === 'star') {
-    let splitURL = post.data.url.split('/');
-    let starredPostUsername = splitURL.shift();
-    let starredPostURL = splitURL.join('/');
-    _posts[starredPostUsername][starredPostURL].type = 'star';
-    _posts[username][post.url] = _posts[starredPostUsername][starredPostURL];
-  } else {
-    _posts[username][post.url] = post;
-  }
+  _posts[username][post.url] = post;
   PostStore.emitChange();
 
   var url = APIURL + '/' + username;
@@ -149,19 +141,10 @@ function fetchUser(username) {
 function fetchPost(username, url) {
   return fetch(POST_URL + '/' + username + '/' + url).then(res => res.json()).then((post) => {
     if (!_posts[username]) _posts[username] = {};
-    if (post.type === 'star') {
-      fetch(POST_URL + '/' + post.data.url).then(res => res.json()).then((post) => {
-        post.type = 'star';
-        _posts[username][url] = post;
-        PostStore.emitChange();
-        updateAsyncStore();
-      });
-    } else {
-      post.url = url;
-      _posts[username][url] = post;
-      PostStore.emitChange();
-      updateAsyncStore();
-    }
+    post.url = url;
+    _posts[username][url] = post;
+    PostStore.emitChange();
+    updateAsyncStore();
   });
 }
 
