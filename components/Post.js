@@ -40,7 +40,7 @@ class Post extends React.Component {
     if (this.props.post.isDraft || this.props.post.hasUnpublishedEdits) options.message = this.props.post.data;
     else options.url = url;
     if (selectedOption === 'Star') {
-      let post = {type: 'star', data: {url: this.props.post.url}};
+      let post = {type: 'star', data: {url: this.props.post.url, username: this.props.post.username}};
       PostActions.create(post);
     } else if (selectedOption === 'Remove Star') {
       PostActions.del(this.props.post);
@@ -57,7 +57,7 @@ class Post extends React.Component {
   showOptions() {
     let username = SettingStore.getUsername();
     let params = {};
-    if (username === this.props.post.url.substr(0, username.length)) {
+    if (username === this.props.post.username) {
       params = {
         options: ['Share', 'Edit', 'Delete', 'Cancel'],
         destructiveButtonIndex: 2,
@@ -82,17 +82,14 @@ class Post extends React.Component {
     if (this.props.post.type === 'star') noteText = 'Starred';
     if (post.type === 'star') {
       noteText = 'Starred';
-      let splitURL = post.data.url.split('/');
-      let username = splitURL.shift();
-      let url = splitURL.join('/');
-      post = PostStore.getPost(username, url);
+      post = PostStore.getPost(post.data.username, post.data.url);
     }
     return (
       <TouchableOpacity onPress={this.showOptions}>
         <View style={styles.post}>
           <Text style={styles.note}>{noteText}</Text>
           <Text style={styles.text}>{post.data}</Text>
-          <Text style={styles.time}>{moment(updated).format('LLLL')}</Text>
+          <Text style={styles.time}>{moment(post.updated).format('LLLL')}</Text>
         </View>
       </TouchableOpacity>
     );
