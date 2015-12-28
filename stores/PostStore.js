@@ -164,6 +164,7 @@ var PostStore = assign({}, EventEmitter.prototype, {
     } else if (!_posts[username] || !_posts[username][postURL]) {
       fetchPost(username, postURL);
     } else {
+      _posts[username][postURL].username = username;
       return _posts[username][postURL];
     }
   },
