@@ -70,7 +70,13 @@ class Post extends React.Component {
         cancelButtonIndex: 2
       }
     }
-    ActionSheetIOS.showActionSheetWithOptions(params, (buttonIndex) => this.handleOptions(params.options[buttonIndex]));
+    let handleOptions = (optionsIndex) => {
+      let selectedOption = params.options[optionsIndex];
+      if (selectedOption !== 'Cancel') {
+        this.handleOptions(selectedOption);
+      }
+    };
+    ActionSheetIOS.showActionSheetWithOptions(params, handleOptions);
   }
 
   render() {
