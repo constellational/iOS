@@ -1,7 +1,7 @@
-var APIURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
+var APIURL = 'https://constellational.com/api/v1';
 var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
-var USER_URL = 'https://s3.amazonaws.com/constellational-store';
-var POST_URL = 'https://d2nxl7qthm5fu1.cloudfront.net';
+var USER_URL = 'https://s3.amazonaws.com/constellational-users';
+var POST_URL = 'https://d2gs3048w5buml.cloudfront.net';
 
 var SettingStore = require('../stores/SettingStore');
 var AppDispatcher = require('../dispatcher/AppDispatcher');

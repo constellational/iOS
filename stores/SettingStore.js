@@ -1,4 +1,4 @@
-var APIURL = 'https://1dhhcnzmxi.execute-api.us-east-1.amazonaws.com/v1';
+var APIURL = 'https://constellational.com/api/v1';
 var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
 var STORAGE_KEY = 'settings';
 
