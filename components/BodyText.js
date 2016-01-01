@@ -19,6 +19,7 @@ var styles = StyleSheet.create({
     fontFamily: 'System',
     fontWeight: '200',
     padding: 10,
+    color: '#4A525A',
   }
 });
 

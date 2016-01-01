@@ -127,6 +127,7 @@ var styles = StyleSheet.create({
     paddingTop: 0,
     fontSize: 18,
     fontFamily: 'System',
+    color: '#4A525A',
   },
   title: {
     paddingTop: 8,

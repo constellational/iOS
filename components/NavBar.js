@@ -45,6 +45,7 @@ var styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: 'System',
     textAlign: 'center',
+    color: '#4A525A',
   },
 });
 

@@ -112,7 +112,8 @@ var styles = StyleSheet.create({
   text: {
     fontSize: 18,
     fontFamily: 'System',
-    padding: 8
+    padding: 8,
+    color: '#4A525A',
   },
   note: {
     fontSize: 14,

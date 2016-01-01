@@ -29,9 +29,10 @@ var styles = StyleSheet.create({
     width: 150,
     textAlign: 'center',
     borderWidth: 0.5,
-    borderColor: 'black',
+    borderColor: '#4A525A',
     borderRadius: 5,
     padding: 12,
+    color: '#4A525A',
   }
 });
 

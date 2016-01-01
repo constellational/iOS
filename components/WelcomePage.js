@@ -183,8 +183,9 @@ var styles = StyleSheet.create({
     width: 200,
     textAlign: 'center',
     borderWidth: 0.5,
-    borderColor: 'black',
+    borderColor: '#4A525A',
     borderRadius: 5,
+    color: '#4A525A',
   },
   bottomSection: {
     marginBottom: 120,
