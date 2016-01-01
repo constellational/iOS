@@ -56,7 +56,9 @@ class Post extends React.Component {
 
   showOptions() {
     let params = {};
-    if (this.props.post.username === SettingStore.getUsername()) {
+    let username = SettingStore.getUsername();
+    let post = this.props.post;
+    if (post.isDraft || post.hasUnpublishedEdits || (post.username === username)) {
       params = {
         options: ['Share', 'Edit', 'Delete', 'Cancel'],
         destructiveButtonIndex: 2,
@@ -64,7 +66,7 @@ class Post extends React.Component {
       };
     } else {
       let options = ['Star', 'Share', 'Cancel'];
-      if (this.props.post.type === 'star') options[0] = 'Remove Star';
+      if (post.type === 'star') options[0] = 'Remove Star';
       params = {
         options: options,
         cancelButtonIndex: 2
