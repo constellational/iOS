@@ -1,4 +1,4 @@
-var APIURL = 'https://constellational.com/api/v1';
+var APIURL = 'https://nhecuchfn0.execute-api.us-west-2.amazonaws.com/v1';
 var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
 var USER_URL = 'https://s3.amazonaws.com/constellational-users';
 var POST_URL = 'https://d2gs3048w5buml.cloudfront.net';
