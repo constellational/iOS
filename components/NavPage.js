@@ -65,6 +65,7 @@ class NavPage extends React.Component {
     var list = ['All Posts'];
     if (!EditStore.isEmpty()) list.push('Currently Editing');
     if (!DraftStore.isEmpty()) list.push('Drafts');
+    if (PostStore.countStarredPosts() > 0) list.push('Starred Posts');
     list.push('Help');
     var history = HistoryStore.get().map((visit) => {
       if (visit.postURL) {

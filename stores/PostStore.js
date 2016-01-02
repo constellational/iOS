@@ -18,6 +18,16 @@ var CHANGE_EVENT = 'change';
 var _posts = null;
 var _users = null;
 var _requests = null;
+var _starredPostCount = () => {
+  Object.keys(_users).map(_
+  Object.keys(_posts).filter(
+
+function countStarredPosts() {
+  let username = SettingStore.getUsername();
+  let posts = Object.keys(_posts[username]);
+  let starredPosts = posts.filter(post => post.type === 'star');
+  return starredPosts.length;
+}
 
 function retryFailedRequests() {
   var promiseArr = _requests.map((req) => {
@@ -182,6 +192,8 @@ var PostStore = assign({}, EventEmitter.prototype, {
       return _users[username];
     }
   },
+
+  countStarredPosts: countStarredPosts,
 
   emitChange: function() {
     this.emit(CHANGE_EVENT);
