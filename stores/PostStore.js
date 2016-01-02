@@ -18,9 +18,6 @@ var CHANGE_EVENT = 'change';
 var _posts = null;
 var _users = null;
 var _requests = null;
-var _starredPostCount = () => {
-  Object.keys(_users).map(_
-  Object.keys(_posts).filter(
 
 function countStarredPosts() {
   let username = SettingStore.getUsername();
