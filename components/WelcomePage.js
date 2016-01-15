@@ -58,11 +58,8 @@ class WelcomePage extends React.Component {
   checkUsername(username) {
     var username = username.toLowerCase();
     this.setState({username: username});
-    var url = 'constellational.com/' + username;
+    var url = 'https://constellational.com/' + username;
     return fetch(url).then((res) => {
-      console.log(this.state.username);
-      console.log(url);
-      console.log(res.status);
       if (res.status !== 404) {
         this.setState({
           isUsernameAvailable: false,
