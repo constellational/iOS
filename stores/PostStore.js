@@ -20,10 +20,12 @@ var _users = null;
 var _requests = null;
 
 function countStarredPosts() {
-  let username = SettingStore.getUsername();
-  let posts = Object.keys(_posts[username]);
-  let starredPosts = posts.filter(post => post.type === 'star');
-  return starredPosts.length;
+  if (_posts) {
+    let username = SettingStore.getUsername();
+    let posts = Object.keys(_posts[username]);
+    let starredPosts = posts.filter(post => post.type === 'star');
+    return starredPosts.length;
+  }
 }
 
 function retryFailedRequests() {
