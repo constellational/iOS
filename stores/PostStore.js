@@ -22,9 +22,11 @@ var _requests = null;
 function countStarredPosts() {
   if (_posts) {
     let username = SettingStore.getUsername();
-    let posts = Object.keys(_posts[username]);
-    let starredPosts = posts.filter(post => post.type === 'star');
-    return starredPosts.length;
+    if (_posts[username]) {
+      let posts = Object.keys(_posts[username]);
+      let starredPosts = posts.filter(post => post.type === 'star');
+      return starredPosts.length;
+    }
   }
 }
 
