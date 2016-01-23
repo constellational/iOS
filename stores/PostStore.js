@@ -97,6 +97,7 @@ function createPost(post) {
   if (!post.id) post.id = post.created;
   post.key = post.created;
   post.url = post.key;
+  if (!_users[username].posts) _users[username].posts = [];
   _users[username].posts.unshift(post.url);
   _posts[username][post.url] = post;
   PostStore.emitChange();
