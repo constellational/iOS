@@ -79,20 +79,21 @@ class PostsPage extends React.Component {
       var edits = EditStore.getAll();
       return Object.keys(edits).map(id => edits[id]);
     } else {
-      var user = PostStore.getUser();
-      var posts = user.posts.map(url => PostStore.getPost(null, url));
+      let user = PostStore.getUser();
+      if (!user.posts) let posts = [];
+      else let posts = user.posts.map(url => PostStore.getPost(null, url));
       if (this.props.filter === 'Starred Posts') { 
         return posts.filter(post => post.type === 'star');
       } else {
-        var edits = EditStore.getAll();
+        let edits = EditStore.getAll();
         posts = posts.filter(post => !!post);
         posts = posts.map((post) => {
           if (edits[post.id]) return edits[post.id];
           else return post;
         });
-        var drafts = DraftStore.getAll();
-        var all = posts.concat(drafts);
-        var sorted = all.sort((a, b) => {
+        let drafts = DraftStore.getAll();
+        let all = posts.concat(drafts);
+        let sorted = all.sort((a, b) => {
           if (a.updated > b.updated) return -1;
           else if (a.updated < b.updated) return 1;
           else return 0;
