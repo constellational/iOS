@@ -80,8 +80,8 @@ class PostsPage extends React.Component {
       return Object.keys(edits).map(id => edits[id]);
     } else {
       let user = PostStore.getUser();
-      if (!user.posts) let posts = [];
-      else let posts = user.posts.map(url => PostStore.getPost(null, url));
+      let posts = [];
+      if (user.posts) posts = user.posts.map(url => PostStore.getPost(null, url));
       if (this.props.filter === 'Starred Posts') { 
         return posts.filter(post => post.type === 'star');
       } else {
