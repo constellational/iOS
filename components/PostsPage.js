@@ -23,9 +23,11 @@ class PostsPage extends React.Component {
   constructor(props, context) {
     super(props, context);
     if (this.props.username) HistoryActions.add({username: this.props.username, postURL: this.props.postURL, url: this.props.url});
-    var dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.createButton = (<CreateButton onPress={() => this.props.navigator.push('edit')}/>);
+    let dataSource = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
+    let createButton = (<CreateButton onPress={() => this.props.navigator.push('edit')}/>);
+    this.rightButton = createButton;
     this.backButton = (<BackButton onPress={this.props.navigator.pop} />);
+    this.getPosts = this.getPosts.bind(this);
     this.getAll = this.getAll.bind(this);
     this.state = {
       posts: dataSource.cloneWithRows(this.getAll())
@@ -56,50 +58,66 @@ class PostsPage extends React.Component {
     EditStore.removeChangeListener(this.onChange);
   }
 
+  movePostToTop(postURL, postID, posts) {
+    if (!postURL) {
+      // Find the postURL that contains the postID
+      posts.forEach((url) => {
+        if (url.indexOf(props.postID) > -1) postURL = url;
+      });
+    }
+    // Move it to be displayed on top
+    posts.splice(user.posts.indexOf(postURL), 1);
+    return posts.unshift(postURL);
+  }
+
+  getDrafts() {
+    return DraftStore.getAll();
+  }
+
+  getEdits() {
+    let edits = EditStore.getAll();
+    return Object.keys(edits).map(id => edits[id]);
+  }
+
+  getPosts() {
+    var user = PostStore.getUser(this.props.username);
+    let posts = user.posts;
+    if (this.props.postURL || this.props.postID) {
+      posts = movePostToTop(this.props.postURL, this.props.postID, posts);
+    }
+    posts = user.posts.map(url => PostStore.getPost(this.props.username, url));
+    return posts.filter(post => !!post);
+  }
+
+  getStarredPosts() {
+    let posts = getPosts();
+    return posts.filter(post => post.type === 'star');
+  }
+
+  sortPosts(posts) {
+    let sorted = posts.sort((a, b) => {
+      if (a.updated > b.updated) return -1;
+      else if (a.updated < b.updated) return 1;
+      else return 0;
+    });
+    return sorted;
+  }
+
   getAll() {
-    if (this.props.username) {
-      var user = PostStore.getUser(this.props.username);
-      var postURL = user.posts[0];
-      if (this.props.postURL) postURL = this.props.postURL;
-      else if (this.props.postID) {
-        // Find the postURL that contains the postID
-        user.posts.forEach((url) => {
-          if (url.indexOf(this.props.postID) > -1) postURL = url;
-        });
-      }
-      // Move it to be displayed on top
-      user.posts.splice(user.posts.indexOf(postURL), 1);
-      user.posts.unshift(postURL);
-      var posts = user.posts.map(url => PostStore.getPost(this.props.username, url));
-      return posts.filter(post => !!post);
-    } else if (this.props.filter === 'Drafts') {
-      var drafts = DraftStore.getAll();
-      return drafts;
-    } else if (this.props.filter === 'Currently Editing') {
-      var edits = EditStore.getAll();
-      return Object.keys(edits).map(id => edits[id]);
-    } else {
-      let user = PostStore.getUser();
-      let posts = [];
-      if (user.posts) posts = user.posts.map(url => PostStore.getPost(null, url));
-      if (this.props.filter === 'Starred Posts') { 
-        return posts.filter(post => post.type === 'star');
-      } else {
-        let edits = EditStore.getAll();
-        posts = posts.filter(post => !!post);
-        posts = posts.map((post) => {
-          if (edits[post.id]) return edits[post.id];
-          else return post;
-        });
-        let drafts = DraftStore.getAll();
-        let all = posts.concat(drafts);
-        let sorted = all.sort((a, b) => {
-          if (a.updated > b.updated) return -1;
-          else if (a.updated < b.updated) return 1;
-          else return 0;
-        });
-        return sorted;
-      }
+    if (this.props.username) return getPosts(this.props.username);
+    else if (this.props.filter === 'Drafts') return getDrafts();
+    else if (this.props.filter === 'Currently Editing') return getEdits();
+    else if (this.props.filter === 'Starred Posts') return getStarredPosts();
+    else {
+      let posts = getPosts();
+      let edits = EditStore.getAll();
+      posts = posts.map((post) => {
+        if (edits[post.id]) return edits[post.id];
+        else return post;
+      });
+      let drafts = DraftStore.getAll();
+      let all = posts.concat(drafts);
+      return sortPosts(all);
     }
   }
 
@@ -109,7 +127,7 @@ class PostsPage extends React.Component {
     else if (this.props.username) title = this.props.username;
     return (
       <View style={styles.page}>
-        <NavBar leftButton={this.backButton} title={title} rightButton={this.createButton}/>
+        <NavBar leftButton={this.backButton} title={title} rightButton={this.rightButton}/>
         <ListView
           automaticallyAdjustContentInsets={false}
           dataSource={this.state.posts}
