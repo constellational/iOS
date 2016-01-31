@@ -58,7 +58,7 @@ let FollowStore = assign({}, EventEmitter.prototype, {
 AppDispatcher.register(function(action) {
   switch(action.actionType) {
     case 'follow':
-      _following.push(action.username);
+      _following.unshift(action.username);
       FollowStore.emitChange();
       updateAsyncStore();
       break;
