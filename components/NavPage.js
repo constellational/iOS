@@ -18,9 +18,6 @@ const {
 } = React;
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-  },
   option: {
     padding: 10
   },
@@ -29,8 +26,7 @@ const styles = StyleSheet.create({
     fontFamily: 'System',
     padding: 8,
     color: '#4A525A',
-  },
- 
+  }
 });
 
 class NavPage extends React.Component {
@@ -100,7 +96,7 @@ class NavPage extends React.Component {
 
   render() {
     return (
-      <View style={styles.page}>
+      <View>
         <NavBar leftButton={this.backButton} title='Constellational' rightButton={this.createButton}/>
         <ListView
           automaticallyAdjustContentInsets={false}
