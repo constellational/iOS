@@ -1,10 +1,16 @@
-import AppDispatcher from '../dispatcher/AppDispatcher';
+import React from 'react-native';
 import { EventEmitter } from 'events';
+import moment from 'moment';
 import assign from 'object-assign';
-import { React, AsyncStorage} from 'react-native';
 
-let CHANGE_EVENT = 'change';
-let ASYNC_STORAGE_KEY = 'following';
+import AppDispatcher from '../dispatcher/AppDispatcher';
+
+const {
+    AsyncStorage,
+} = React;
+
+const CHANGE_EVENT = 'change';
+const ASYNC_STORAGE_KEY = 'following';
 
 let _following = null;
 

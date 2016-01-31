@@ -1,13 +1,15 @@
 'use strict';
 
-var React = require('react-native');
-var SettingStore = require('./stores/SettingStore');
-var WelcomePage = require('./components/WelcomePage');
-var NavPage = require('./components/NavPage');
-var EditPage = require('./components/EditPage');
-var PostsPage = require('./components/PostsPage');
+import React from 'react-native';
 
-var {
+import SettingStore from './stores/SettingStore';
+
+import EditPage from './components/EditPage';
+import NavPage from './components/NavPage';
+import PostsPage from './components/PostsPage';
+import WelcomePage from './components/WelcomePage';
+
+const {
   AppRegistry,
   Navigator
 } = React;

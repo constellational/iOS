@@ -1,6 +1,6 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
-var EditActions = {
+const EditActions = {
   save: function(post) {
     AppDispatcher.dispatch({
       actionType: 'save-edit',
@@ -14,7 +14,6 @@ var EditActions = {
       post: post
     });
   }
-
 };
 
-module.exports = EditActions;
+export default EditActions;

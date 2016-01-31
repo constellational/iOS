@@ -1,6 +1,6 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
-var DraftActions = {
+const DraftActions = {
   create: function(draft) {
     AppDispatcher.dispatch({
       actionType: 'create-draft',
@@ -24,4 +24,4 @@ var DraftActions = {
 
 };
 
-module.exports = DraftActions;
+export default DraftActions;

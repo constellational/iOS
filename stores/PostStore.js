@@ -1,23 +1,24 @@
-var APIURL = 'https://nhecuchfn0.execute-api.us-west-2.amazonaws.com/v1';
-var HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
-var USER_URL = 'https://s3.amazonaws.com/constellational-users';
-var POST_URL = 'https://d2gs3048w5buml.cloudfront.net';
+import React from 'react-native';
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
 
-var SettingStore = require('../stores/SettingStore');
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-var React = require('react-native');
+import AppDispatcher from '../dispatcher/AppDispatcher';
+import SettingStore from '../stores/SettingStore';
 
-var {
+const {
     AsyncStorage,
 } = React;
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var _posts = null;
-var _users = null;
-var _requests = null;
+const APIURL = 'https://nhecuchfn0.execute-api.us-west-2.amazonaws.com/v1';
+const HEADERS = {'Accept': 'application/json', 'Content-Type': 'application/json'};
+const USER_URL = 'https://s3.amazonaws.com/constellational-users';
+const POST_URL = 'https://d2gs3048w5buml.cloudfront.net';
+
+let _posts = null;
+let _users = null;
+let _requests = null;
 
 function countStarredPosts() {
   if (_posts) {
@@ -168,7 +169,7 @@ function updateAsyncStore() {
   });
 }
    
-var PostStore = assign({}, EventEmitter.prototype, {
+let PostStore = assign({}, EventEmitter.prototype, {
   getPost: function(username, postURL) {
     if (!username) username = SettingStore.getUsername();
     if (!_posts) {
@@ -233,4 +234,4 @@ AppDispatcher.register(function(action) {
   }
 });
 
-module.exports = PostStore;
+export default PostStore;

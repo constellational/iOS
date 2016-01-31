@@ -1,24 +1,13 @@
 'use strict'
 
-var React = require('react-native');
+import React from 'react-native';
 
-var {
+const {
   StyleSheet,
   Text,
 } = React;
 
-class BigButton extends React.Component {
-  render() {
-    return (<Text 
-      allowFontScaling={true}
-      style={styles.bigButton} 
-      onPress={this.props.onPress}>
-        {this.props.text}
-      </Text>);
-  }
-}
-
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   bigButton: {
     fontSize: 18,
     fontFamily: 'System',
@@ -36,4 +25,15 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = BigButton;
+class BigButton extends React.Component {
+  render() {
+    return (<Text 
+      allowFontScaling={true}
+      style={styles.bigButton} 
+      onPress={this.props.onPress}>
+        {this.props.text}
+      </Text>);
+  }
+}
+
+export default BigButton;

@@ -1,21 +1,13 @@
 'use strict';
 
-var React = require('react-native');
-var Button = require('react-native-button');
+import React from 'react-native';
+import Button from 'react-native-button';
 
-var {
+const {
   StyleSheet,
 } = React;
 
-class PostButton extends React.Component {
-  render() {
-    var text = 'Post';
-    if (!this.props.isDraft && this.props.edit) text = 'Update';
-    return (<Button onPress={this.props.onPress} style={styles.postButton} styleDisabled={styles.disabled} disabled={this.props.disabled}>{text}</Button>);
-  }
-}
-
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   postButton: {
     padding: 8,
     paddingRight: 20,
@@ -25,7 +17,14 @@ var styles = StyleSheet.create({
     paddingRight: 20,
     color: 'grey',
   }
-
 });
 
-module.exports = PostButton;
+class PostButton extends React.Component {
+  render() {
+    var text = 'Post';
+    if (!this.props.isDraft && this.props.edit) text = 'Update';
+    return (<Button onPress={this.props.onPress} style={styles.postButton} styleDisabled={styles.disabled} disabled={this.props.disabled}>{text}</Button>);
+  }
+}
+
+export default PostButton;

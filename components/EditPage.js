@@ -1,18 +1,20 @@
 'use strict'
 
-var SettingActions = require('../actions/SettingActions');
-var SettingStore = require('../stores/SettingStore');
-var PostActions = require('../actions/PostActions');
-var DraftActions = require('../actions/DraftActions');
-var EditActions = require('../actions/EditActions');
-var EditStore = require('../stores/EditStore');
-var NavBar = require('./NavBar');
-var PostButton = require('./PostButton');
-var CancelButton = require('./CancelButton');
+import React from 'react-native';
 
-var React = require('react-native');
+import SettingActions from '../actions/SettingActions';
+import PostActions from '../actions/PostActions';
+import DraftActions from '../actions/DraftActions';
+import EditActions from '../actions/EditActions';
 
-var {
+import EditStore from '../stores/EditStore';
+import SettingStore from '../stores/SettingStore';
+
+import NavBar from './NavBar';
+import PostButton from './PostButton';
+import CancelButton from './CancelButton';
+
+const {
   StyleSheet,
   Text,
   TextInput,
@@ -20,6 +22,27 @@ var {
   View,
   DeviceEventEmitter
 } = React;
+
+const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+    alignItems: 'stretch',
+  },
+  input: {
+    padding: 20,
+    paddingTop: 0,
+    fontSize: 18,
+    fontFamily: 'System',
+    color: '#4A525A',
+  },
+  title: {
+    paddingTop: 8,
+    fontSize: 16,
+    fontFamily: 'System',
+    color: 'grey',
+    textAlign: 'center',
+  },
+});
 
 class EditPage extends React.Component {
   constructor(props, context) {
@@ -117,25 +140,4 @@ class EditPage extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    alignItems: 'stretch',
-  },
-  input: {
-    padding: 20,
-    paddingTop: 0,
-    fontSize: 18,
-    fontFamily: 'System',
-    color: '#4A525A',
-  },
-  title: {
-    paddingTop: 8,
-    fontSize: 16,
-    fontFamily: 'System',
-    color: 'grey',
-    textAlign: 'center',
-  },
-});
-
-module.exports = EditPage;
+export default EditPage;

@@ -1,16 +1,17 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-var React = require('react-native');
-var moment = require('moment');
+import React from 'react-native';
+import { EventEmitter } from 'events';
+import moment from 'moment';
+import assign from 'object-assign';
 
-var {
+import AppDispatcher from '../dispatcher/AppDispatcher';
+
+const {
     AsyncStorage,
 } = React;
 
-var CHANGE_EVENT = 'change';
+const CHANGE_EVENT = 'change';
 
-var _edits = null;
+let _edits = null;
 
 function loadAsyncStore() {
   return AsyncStorage.getItem('edits').then(str => {
@@ -28,7 +29,7 @@ function updateAsyncStore() {
   });
 }
    
-var EditStore = assign({}, EventEmitter.prototype, {
+let EditStore = assign({}, EventEmitter.prototype, {
   isEmpty: function() {
     return !_edits;
   },
@@ -74,4 +75,4 @@ AppDispatcher.register(function(action) {
   }
 });
 
-module.exports = EditStore;
+export default EditStore;

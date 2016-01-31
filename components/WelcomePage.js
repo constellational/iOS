@@ -1,21 +1,47 @@
 'use strict'
 
-var SettingActions = require('../actions/SettingActions');
-var SettingStore = require('../stores/SettingStore');
-var React = require('react-native');
+import React from 'react-native';
 
-var Heading = require('./Heading');
-var Subheading = require('./Subheading');
-var BodyText = require('./BodyText');
-var BigButton = require('./BigButton');
+import SettingActions from '../actions/SettingActions';
+import SettingStore from '../stores/SettingStore';
 
-var {
+import Heading from './Heading';
+import Subheading from './Subheading';
+import BodyText from './BodyText';
+import BigButton from './BigButton';
+
+const {
   StyleSheet,
   Text,
   TextInput,
   View,
   LinkingIOS,
 } = React;
+
+const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textBox: {
+    fontSize: 18,
+    fontFamily: 'System',
+    fontWeight: '200',
+    alignSelf: 'center',
+    margin: 10,
+    height: 46,
+    width: 200,
+    textAlign: 'center',
+    borderWidth: 0.5,
+    borderColor: '#4A525A',
+    borderRadius: 5,
+    color: '#4A525A',
+  },
+  bottomSection: {
+    marginBottom: 120,
+  },
+});
 
 class WelcomePage extends React.Component {
   constructor(props, context) {
@@ -164,29 +190,4 @@ class WelcomePage extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  textBox: {
-    fontSize: 18,
-    fontFamily: 'System',
-    fontWeight: '200',
-    alignSelf: 'center',
-    margin: 10,
-    height: 46,
-    width: 200,
-    textAlign: 'center',
-    borderWidth: 0.5,
-    borderColor: '#4A525A',
-    borderRadius: 5,
-    color: '#4A525A',
-  },
-  bottomSection: {
-    marginBottom: 120,
-  },
-});
-
-module.exports = WelcomePage;
+export default WelcomePage;

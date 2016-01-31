@@ -1,19 +1,19 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-var React = require('react-native');
-var moment = require('moment');
+import React from 'react-native';
+import { EventEmitter } from 'events';
+import moment from 'moment';
+import assign from 'object-assign';
 
-var {
+import AppDispatcher from '../dispatcher/AppDispatcher';
+
+const {
     AsyncStorage,
 } = React;
 
+const CHANGE_EVENT = 'change';
+const ASYNC_STORAGE_KEY = 'drafts';
 
-var CHANGE_EVENT = 'change';
-var ASYNC_STORAGE_KEY = 'drafts';
-
-var _drafts = null;
-var _draftIDs = null;
+let _drafts = null;
+let _draftIDs = null;
 
 function loadAsyncStore() {
   return AsyncStorage.getItem('drafts').then(str => {
@@ -35,7 +35,7 @@ function updateAsyncStore() {
   });
 }
    
-var DraftStore = assign({}, EventEmitter.prototype, {
+let DraftStore = assign({}, EventEmitter.prototype, {
   isEmpty: function() {
     return !_drafts;
   },
@@ -94,4 +94,4 @@ AppDispatcher.register(function(action) {
   }
 });
 
-module.exports = DraftStore;
+export default DraftStore;

@@ -1,13 +1,21 @@
 'use strict';
 
-var React = require('react-native');
-var {Icon, } = require('react-native-icons');
+import React from 'react-native';
+import { Icon } from 'react-native-icons';
 
-var {
+const {
   StyleSheet,
   View,
-  TouchableOpacity,
+  TouchableOpacity
 } = React;
+
+const styles = StyleSheet.create({
+  navBarRightButton: {
+    marginRight: 10,
+    width: 32,
+    height: 32,
+  },
+});
 
 class CreateButton extends React.Component {
   render() {
@@ -25,13 +33,4 @@ class CreateButton extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
-  navBarRightButton: {
-    marginRight: 10,
-    width: 32,
-    height: 32,
-  },
-});
-
-module.exports = CreateButton;
-
+export default CreateButton;

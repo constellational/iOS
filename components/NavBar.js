@@ -1,32 +1,14 @@
 'use strict';
 
-var React = require('react-native');
+import React from 'react-native';
 
-var {
+const {
   StyleSheet,
   Text,
   View,
 } = React;
 
-class NavBar extends React.Component {
-  render() {
-    return (
-      <View style={styles.navBar}>
-        <View style={styles.left}>
-          {this.props.leftButton}
-        </View>
-        <View style={styles.center}>
-          <Text style={styles.title}>{this.props.title}</Text>
-        </View>
-        <View style={styles.right}>
-          {this.props.rightButton}
-        </View>
-      </View>
-    );
-  }
-}
-        
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   navBar: {
     paddingTop:30,
     paddingBottom:5,
@@ -49,4 +31,22 @@ var styles = StyleSheet.create({
   },
 });
 
-module.exports = NavBar;
+class NavBar extends React.Component {
+  render() {
+    return (
+      <View style={styles.navBar}>
+        <View style={styles.left}>
+          {this.props.leftButton}
+        </View>
+        <View style={styles.center}>
+          <Text style={styles.title}>{this.props.title}</Text>
+        </View>
+        <View style={styles.right}>
+          {this.props.rightButton}
+        </View>
+      </View>
+    );
+  }
+}
+
+export default NavBar;

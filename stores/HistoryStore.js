@@ -1,16 +1,16 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
-var EventEmitter = require('events').EventEmitter;
-var assign = require('object-assign');
-var React = require('react-native');
+import React from 'react-native';
+import { EventEmitter } from 'events';
+import assign from 'object-assign';
 
-var {
+import AppDispatcher from '../dispatcher/AppDispatcher';
+
+const {
     AsyncStorage,
 } = React;
 
+const CHANGE_EVENT = 'change';
 
-var CHANGE_EVENT = 'change';
-
-var _history = null;
+let _history = null;
 
 function loadAsyncStore() {
   return AsyncStorage.getItem('history').then(str => {
@@ -26,7 +26,7 @@ function updateAsyncStore() {
   });
 }
    
-var HistoryStore = assign({}, EventEmitter.prototype, {
+let HistoryStore = assign({}, EventEmitter.prototype, {
   get: function() {
     if (!_history) {
       loadAsyncStore();
@@ -73,4 +73,4 @@ AppDispatcher.register(function(action) {
   }
 });
 
-module.exports = HistoryStore;
+export default HistoryStore;

@@ -1,15 +1,17 @@
 'use strict'
 
-var URL = 'https://d1w3fhkxysfgcn.cloudfront.net';
+const URL = 'https://d1w3fhkxysfgcn.cloudfront.net';
 
-var SettingStore = require('../stores/SettingStore');
-var PostStore = require('../stores/PostStore');
-var PostActions = require('../actions/PostActions');
-var DraftActions = require('../actions/DraftActions');
-var React = require('react-native');
-var moment = require('moment');
+import React from 'react-native';
+import moment from 'moment';
 
-var {
+import PostActions from '../actions/PostActions';
+import DraftActions from '../actions/DraftActions';
+
+import PostStore from '../stores/PostStore';
+import SettingStore from '../stores/SettingStore';
+
+const {
   StyleSheet,
   Text,
   View,
@@ -17,6 +19,37 @@ var {
   AlertIOS,
   TouchableOpacity
 } = React;
+
+const styles = StyleSheet.create({
+  post: {
+    padding: 10
+  },
+  heading: {
+    fontSize: 42,
+    fontFamily: 'System',
+    padding: 10
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: 'System',
+    padding: 8,
+    color: '#4A525A',
+  },
+  note: {
+    fontSize: 14,
+    fontFamily: 'System',
+    padding: 8,
+    color: 'grey',
+    alignSelf: 'flex-end'
+  },
+  time: {
+    color: 'grey',
+    fontSize: 14,
+    fontFamily: 'System',
+    padding: 8,
+    alignSelf: 'flex-start'
+  }
+});
 
 class Post extends React.Component {
   constructor(props, context) {
@@ -102,35 +135,4 @@ class Post extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
-  post: {
-    padding: 10
-  },
-  heading: {
-    fontSize: 42,
-    fontFamily: 'System',
-    padding: 10
-  },
-  text: {
-    fontSize: 18,
-    fontFamily: 'System',
-    padding: 8,
-    color: '#4A525A',
-  },
-  note: {
-    fontSize: 14,
-    fontFamily: 'System',
-    padding: 8,
-    color: 'grey',
-    alignSelf: 'flex-end'
-  },
-  time: {
-    color: 'grey',
-    fontSize: 14,
-    fontFamily: 'System',
-    padding: 8,
-    alignSelf: 'flex-start'
-  }
-});
-
-module.exports = Post;
+export default Post;

@@ -1,6 +1,6 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
-var SettingActions = {
+const SettingActions = {
   signup: function(username, email) {
     AppDispatcher.dispatch({
       actionType: 'signup',
@@ -25,4 +25,4 @@ var SettingActions = {
   }
 };
 
-module.exports = SettingActions;
+export default SettingActions;

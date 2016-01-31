@@ -1,18 +1,22 @@
 'use strict';
 
-import { Component, StyleSheet } from 'react-native';
+import React from 'react-native';
 import Button from 'react-native-button';
 import FollowStore from '../stores/FollowStore'; 
 import FollowActions from '../actions/FollowActions';
 
-var styles = StyleSheet.create({
+const {
+  StyleSheet
+} = React;
+
+const styles = StyleSheet.create({
   button: {
     padding: 8,
     paddingRight: 20,
   }
 });
 
-class FollowButton extends Component {
+class FollowButton extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.onPress = this.onPress.bind(this);

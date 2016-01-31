@@ -1,6 +1,6 @@
-var AppDispatcher = require('../dispatcher/AppDispatcher');
+import AppDispatcher from '../dispatcher/AppDispatcher';
 
-var PostActions = {
+const PostActions = {
   create: function(post) {
     AppDispatcher.dispatch({
       actionType: 'create-post',
@@ -31,4 +31,4 @@ var PostActions = {
 
 };
 
-module.exports = PostActions;
+export default PostActions;

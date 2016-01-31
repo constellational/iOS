@@ -1,19 +1,13 @@
 'use strict'
 
-var React = require('react-native');
+import React from 'react-native';
 
-var {
+const {
   StyleSheet,
   Text,
 } = React;
 
-class Subheading extends React.Component {
-  render() {
-    return (<Text style={styles.subheading} allowFontScaling={true} onPress={this.props.onPress}>{this.props.text}</Text>);
-  }
-}
-
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   subheading: {
     fontSize: 24,
     fontFamily: 'System',
@@ -23,4 +17,15 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = Subheading;
+class Subheading extends React.Component {
+  render() {
+    return (<Text
+      style={styles.subheading}
+      allowFontScaling={true}
+      onPress={this.props.onPress}>
+      {this.props.text}
+    </Text>);
+  }
+}
+
+export default Subheading;

@@ -1,19 +1,37 @@
 'use strict'
 
-var PostStore = require('../stores/PostStore');
-var DraftStore = require('../stores/DraftStore');
-var EditStore = require('../stores/EditStore');
-var HistoryStore = require('../stores/HistoryStore');
-var NavBar = require('./NavBar');
-var React = require('react-native');
+import React from 'react-native';
 
-var {
+import PostStore from '../stores/PostStore';
+import DraftStore from '../stores/DraftStore';
+import EditStore from '../stores/EditStore';
+import HistoryStore from '../stores/HistoryStore';
+
+import NavBar from './NavBar';
+
+const {
   ListView,
   StyleSheet,
   Text,
   View,
   LinkingIOS,
 } = React;
+
+const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+  },
+  option: {
+    padding: 10
+  },
+  text: {
+    fontSize: 18,
+    fontFamily: 'System',
+    padding: 8,
+    color: '#4A525A',
+  },
+ 
+});
 
 class NavPage extends React.Component {
   constructor(props, context) {
@@ -117,20 +135,4 @@ class NavPage extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
-  page: {
-    flex: 1,
-  },
-  option: {
-    padding: 10
-  },
-  text: {
-    fontSize: 18,
-    fontFamily: 'System',
-    padding: 8,
-    color: '#4A525A',
-  },
- 
-});
-
-module.exports = NavPage;
+export default NavPage;

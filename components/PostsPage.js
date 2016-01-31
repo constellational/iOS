@@ -1,23 +1,33 @@
 'use strict'
-import FollowButton from './FollowButton';
-var PostStore = require('../stores/PostStore');
-var PostActions = require('../actions/PostActions');
-var DraftStore = require('../stores/DraftStore');
-var EditStore = require('../stores/EditStore');
-var SettingStore = require('../stores/SettingStore');
-var HistoryActions = require('../actions/HistoryActions');
-var NavBar = require('./NavBar');
-var CreateButton = require('./CreateButton');
-var BackButton = require('./BackButton');
-var Post = require('./Post');
-var React = require('react-native');
 
-var {
+import React from 'react-native';
+
+import PostActions from '../actions/PostActions';
+import HistoryActions from '../actions/HistoryActions';
+
+import DraftStore from '../stores/DraftStore';
+import EditStore from '../stores/EditStore';
+import PostStore from '../stores/PostStore';
+import SettingStore from '../stores/SettingStore';
+
+import BackButton from './BackButton';
+import CreateButton from './CreateButton';
+import FollowButton from './FollowButton';
+import NavBar from './NavBar';
+import Post from './Post';
+
+const {
   ListView,
   StyleSheet,
   Text,
   View,
 } = React;
+
+const styles = StyleSheet.create({
+  page: {
+    flex: 1,
+  },
+});
 
 class PostsPage extends React.Component {
   constructor(props, context) {
@@ -150,12 +160,4 @@ class PostsPage extends React.Component {
   }
 }
 
-var styles = StyleSheet.create({
-  page: {
-    flex: 1,
-  },
-  list: {
-  },
-});
-
-module.exports = PostsPage;
+export default PostsPage;

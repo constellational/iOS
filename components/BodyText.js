@@ -1,19 +1,13 @@
 'use strict'
 
-var React = require('react-native');
+import React from 'react-native';
 
-var {
+const {
   StyleSheet,
-  Text,
+  Text
 } = React;
 
-class BodyText extends React.Component {
-  render() {
-    return (<Text style={styles.bodyText} allowFontScaling={true} onPress={this.props.onPress}>{this.props.text}</Text>);
-  }
-}
-
-var styles = StyleSheet.create({
+let styles = StyleSheet.create({
   bodyText: {
     fontSize: 18,
     fontFamily: 'System',
@@ -23,4 +17,10 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = BodyText;
+class BodyText extends React.Component {
+  render() {
+    return (<Text style={styles.bodyText} allowFontScaling={true} onPress={this.props.onPress}>{this.props.text}</Text>);
+  }
+}
+
+export default BodyText;

@@ -1,6 +1,6 @@
 import AppDispatcher from '../dispatcher/AppDispatcher';
 
-let FollowActions = {
+const FollowActions = {
   follow: function(username) {
     AppDispatcher.dispatch({
       actionType: 'follow',
