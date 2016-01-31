@@ -27,6 +27,12 @@ const PostActions = {
       actionType: 'fetch-user',
       username: username
     });
+  },
+
+  fetchAll: function() {
+    AppDispatcher.dispatch({
+      actionType: 'fetch-all'
+    });
   }
 
 };

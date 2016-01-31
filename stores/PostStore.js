@@ -3,6 +3,8 @@ import { EventEmitter } from 'events';
 import assign from 'object-assign';
 
 import AppDispatcher from '../dispatcher/AppDispatcher';
+import FollowStore from '../stores/FollowStore';
+import HistoryStore from '../stores/HistoryStore';
 import SettingStore from '../stores/SettingStore';
 
 const {
@@ -161,6 +163,24 @@ function fetchPost(username, url) {
   });
 }
 
+function fetchAll() {
+  let following = FollowStore.getAll();
+  let history = HistoryStore.get().map(visit => visit.username);
+  let usernames = following.concat(history);
+  let promiseArr = usernames.map(fetchUser);
+  // Update post list for each user
+  return Promise.all(promiseArr).then(() => {
+    let promiseArr = usernames.map((username) => {
+      let posts = _users[username].posts;
+      let promiseArr = posts.map((url) => fetchPost(username, url));
+      // Fetch all posts for specific user
+      return Promise.all(promiseArr);
+    });
+    // Fetch all posts for every user
+    return Promise.all(promiseArr);
+  });
+}
+
 function updateAsyncStore() {
   return AsyncStorage.setItem('posts', JSON.stringify(_posts)).then(() => {
     if (_users) return AsyncStorage.setItem('users', JSON.stringify(_users));
@@ -229,6 +249,10 @@ AppDispatcher.register(function(action) {
       var username = action.username;
       if (!username) username = SettingStore.getUsername();
       fetchUser(username);
+      break;
+
+    case 'fetch-all':
+      fetchAll().then(updateAsyncStore);
       break;
 
   }

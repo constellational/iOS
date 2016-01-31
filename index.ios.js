@@ -2,6 +2,7 @@
 
 import React from 'react-native';
 
+import PostActions from './actions/PostActions';
 import SettingStore from './stores/SettingStore';
 
 import EditPage from './components/EditPage';
@@ -36,6 +37,7 @@ class Constellational extends React.Component {
 
   render() {
     SettingStore.loadSettings();
+    PostActions.fetchAll();
     return (<Navigator
       initialRoute={{id: 'welcome'}}
       renderScene={this.renderScene}
